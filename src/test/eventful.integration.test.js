@@ -19,9 +19,9 @@ describe('Concerts for ' + LOCATION, function(){
         return eventful.getEventsByLocation(LOCATION)
             .then(events => {
                 console.log('events', events.length);
-                events.forEach(event => console.log('event', event.artist, event.date));
+                console.log('event 1', events[0]);
                 events.should.not.be.empty;
-                events.forEach(event => event.should.have.any.keys('artist', 'title', 'venue', 'date', 'url'))
+                events.forEach(event => event.should.have.any.keys('artist', 'title', 'venue', 'date', 'url', 'imageLargeUrl', 'imageMediumUrl'))
             });
     })
 });

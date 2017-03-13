@@ -22,6 +22,7 @@ const getEventsByLocation = (location) => {
             sort_order: SORT_ORDER.POPULARITY,
             date: FROM + '-' + TO,
             page_size: PAGE_SIZE,
+            image_sizes: 'medium,large',
             include: 'popularity',
             location: location
         },
@@ -41,19 +42,27 @@ const getEventsByLocation = (location) => {
             }
             const relevantEventInfo = [];
             events.filter(event => event.performers)
-                .sort((a, b) => a.start_time > b.start_time)
                 .forEach(event => {
                     const artist = event.performers.performer.name || event.performers.performer[0].name;
                     const venue = event.venue_name;
                     const title = event.title;
                     const date = formatDateToDMY(event.start_time);
                     const url = event.url;
+
+                    const imageLargeUrl = event.image.large.url;
+                    let imageMediumUrl = event.image.medium.url;
+                    if (event.image.medium.width < 720) {
+                        imageMediumUrl = event.image.large.url;
+                    }
+
                     relevantEventInfo.push({
                         artist,
                         title,
                         venue,
                         date,
-                        url
+                        url,
+                        imageLargeUrl,
+                        imageMediumUrl
                     })
                 });
             return relevantEventInfo;

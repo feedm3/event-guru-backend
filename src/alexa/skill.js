@@ -35,14 +35,11 @@ const handlers = {
                     if (!events || events.length < 1) {
                         this.emit(':tell', 'Ich habe leider keine Konzerte in ' + city + ' gefunden.');
                     } else {
-                        let outputString = 'Ich habe ' + events.length + ' Konzerte in ' + city + ' gefunden. ';
-
-                        outputString += getEventSpeechOutput(events[0]);
-
                         this.attributes['currentEventIndex'] = 0;
                         this.attributes['events'] = events;
                         this.attributes['city'] = city;
-                        this.emit(':ask', outputString, ' Willst du das Lied zum nächsten Konzert hören?');
+
+                        this.emit('nextEventIntent');
                     }
                 });
         }
@@ -79,9 +76,27 @@ const handlers = {
             this.attributes['currentEventIndex'] = nextIndex;
 
             const event = events[nextIndex];
-            addPreviewTrackToEvent(event).then(eventWithTrack => {
-                const outputString = getEventSpeechOutput(eventWithTrack);
-                this.emit(':ask', outputString, ' Willst du das Lied zum nächsten Konzert hören?');
+
+            addPreviewTrackToEvent(event).then(event => {
+                let conclusion = '';
+                if (nextIndex == 0) {
+                    conclusion =  'Ich habe ' + events.length + ' Konzerte in ' + city + ' gefunden. ';
+                }
+
+                const speechOutput = conclusion + getEventSpeechOutput(event);
+                const repromt = 'Willst du das Lied zum nächsten Konzert hören?';
+                const cardTitle = event.artist;
+                const cardContent = event.artist + ' am ' + event.date + ' in ' + event.venue + ': ' + event.url;
+                const cardImages = {
+                    smallImageUrl: event.imageMediumUrl.replace('http', 'https'),
+                    largeImageUrl: event.imageLargeUrl.replace('http', 'https')
+                };
+                this.emit(':askWithCard',
+                    speechOutput,
+                    repromt,
+                    cardTitle,
+                    cardContent,
+                    cardImages);
             });
         } else {
             this.attributes['currentEventIndex'] = 0;
