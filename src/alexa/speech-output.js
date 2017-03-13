@@ -1,17 +1,17 @@
 'use strict';
 
 const englishOutput = {
-    'SKILL_NAME': 'Cuecloud',
-    'WELCOME_MESSAGE': 'Welcome to cue cloud. For which location do you want concerts?',
-    'HELP_MESSAGE': "You can start cue cloud by saying 'start cue cloud'",
+    'SKILL_NAME': 'Event Genius',
+    'WELCOME_MESSAGE': 'Welcome to event genius . For which location do you want concerts?',
+    'HELP_MESSAGE': "You can start event genius by saying 'start event genius'",
     'HELP_REPROMPT': 'How can I help you?',
     'STOP_MESSAGE': 'See you!'
 };
 
 const germanOutput = {
-    'SKILL_NAME': 'Cuecloud',
-    'WELCOME_MESSAGE': 'Willkommen! Für welche Stadt möchtest du Konzertinfos?',
-    'HELP_MESSAGE': "Sage einfach 'öffne konzerte'",
+    'SKILL_NAME': 'Event Guru',
+    'WELCOME_MESSAGE': 'Willkommen beim Event Guru! Für welche Stadt möchtest du Konzertinfos?',
+    'HELP_MESSAGE': "Sage einfach 'öffne event guru'",
     'HELP_REPROMPT': 'Wie kann ich dir helfen?',
     'STOP_MESSAGE': 'Bis bald!'
 };

@@ -1,3 +1,3 @@
-# cuecloud
+# Event Guru
 
-Alexa skill to listen to upcoming concerts nearby.
+Alexa skill to listen to upcoming concerts in your city.
