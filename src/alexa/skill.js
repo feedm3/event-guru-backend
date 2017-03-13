@@ -86,7 +86,7 @@ const handlers = {
                 const speechOutput = conclusion + getEventSpeechOutput(event);
                 const repromt = 'Willst du das Lied zum nächsten Konzert hören?';
                 const cardTitle = event.artist;
-                const cardContent = event.artist + ' am ' + event.dateUser + ' in ' + event.venue + ': ' + event.url.split('?')[0];
+                const cardContent = event.artist + '\n' + event.dateUser + '\n' + event.venue + '\n' + event.url.split('?')[0];
                 const cardImages = {
                     smallImageUrl: event.imageMediumUrl.replace('http', 'https'),
                     largeImageUrl: event.imageLargeUrl.replace('http', 'https')
