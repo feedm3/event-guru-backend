@@ -1,6 +1,6 @@
 'use strict';
 
-require('dotenv').config();
+require('dotenv-safe').load();
 
 const Alexa = require('alexa-sdk');
 const songs = require('../songs/songs');
