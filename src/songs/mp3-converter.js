@@ -7,7 +7,6 @@ const randomString = require('randomstring');
 
 // the path must be relative to the root project src path for aws lambda. on local you
 // need the relative path from the executing js script
-const FFMPEG_BIN = './bin/ffmpeg_linux64';
 const RESULT_DIR = '/tmp';
 
 /**
@@ -32,10 +31,9 @@ const convertMp3 = (mp3Link) => {
 
         const resultFileName = randomString.generate({ length:10, charset: 'alphabetic'}) + '.mp3';
         const resultFileUri = RESULT_DIR + '/' + resultFileName;
-        console.log('ffmpeg', FFMPEG_BIN);
-        console.log('file', resultFileUri);
 
-        execFile(FFMPEG_BIN, [
+        // note: if you upload the binary from a windows machine it can result in conflicts and errors!
+        execFile(process.env.PATH_FFMPEG_BIN, [
             '-i', mp3Link,
             '-b:a', '48k',
             '-y',
