@@ -70,8 +70,7 @@ const handlers = {
         this.emit(':responseReady');
     },
     'Unhandled'() {
-        console.error('Unhandled error in alexa skill');
-        this.emit(':tell', 'Ein Fehler ist aufgetreten');
+        console.error('Unhandled error in alexa skill', this);
     },
 
     // internal intents

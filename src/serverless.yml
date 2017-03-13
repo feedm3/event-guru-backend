@@ -4,6 +4,7 @@ package:
   exclude:
     - bin/ffmpeg_mac
     - bin/ffmpeg_win.exe
+    - test
 
 provider:
   name: aws

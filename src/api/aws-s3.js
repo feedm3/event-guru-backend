@@ -15,7 +15,8 @@ const uploadFile = (fileUri, fileName) => {
     return new Promise((resolve, reject) => {
         const s3FileParams = {
             Key: fileName,
-            Body: fs.readFileSync(fileUri)
+            Body: fs.readFileSync(fileUri),
+            Bucket: process.env.S3_PREVIEW_MP3_BUCKET
         };
         s3.upload(s3FileParams, (err, data) => {
             if (err) {
@@ -38,7 +39,8 @@ const uploadFile = (fileUri, fileName) => {
 const fileExists = (fileName) => {
     return new Promise((resolve, reject) => {
         const s3FileParams = {
-            Key: fileName
+            Key: fileName,
+            Bucket: process.env.S3_PREVIEW_MP3_BUCKET
         };
         s3.headObject(s3FileParams, (err, data) => {
             if (err) {
@@ -53,7 +55,8 @@ const fileExists = (fileName) => {
 const getFileUrl = (fileName) => {
     return new Promise((resolve, reject) => {
         const s3FileParams = {
-            Key: fileName
+            Key: fileName,
+            Bucket: process.env.S3_PREVIEW_MP3_BUCKET
         };
         s3.headObject(s3FileParams, (err, data) => {
             if (err) {
