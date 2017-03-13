@@ -86,7 +86,7 @@ const handlers = {
                 const speechOutput = conclusion + getEventSpeechOutput(event);
                 const repromt = 'Willst du das Lied zum nächsten Konzert hören?';
                 const cardTitle = event.artist;
-                const cardContent = event.artist + ' am ' + event.date + ' in ' + event.venue + ': ' + event.url;
+                const cardContent = event.artist + ' am ' + event.dateUser + ' in ' + event.venue + ': ' + event.url.split('?')[0];
                 const cardImages = {
                     smallImageUrl: event.imageMediumUrl.replace('http', 'https'),
                     largeImageUrl: event.imageLargeUrl.replace('http', 'https')
@@ -107,10 +107,10 @@ const handlers = {
 
 const getEventSpeechOutput = (event) => {
     return event.artist +
-        ' am <say-as interpret-as="date" format="dmy">' + event.date + '</say-as>' +
+        ' am <say-as interpret-as="date" format="dmy">' + event.dateAlexaDMY + '</say-as>' +
         ' in ' + event.venue +
         '<audio src="' + event.topTrackPreviewUrl + '"></audio><break time="0.5s"/>' +
-        '<break time="0.5s"/> Willst du das Lied zum nächsten Konzert hören?';
+        '<break time="0.2s"/> Willst du das Lied zum nächsten Konzert hören?';
 };
 
 const addPreviewTrackToEvent = (event) => {

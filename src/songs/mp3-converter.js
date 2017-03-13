@@ -17,7 +17,6 @@ const RESULT_DIR = '/tmp';
  */
 const convert = (mp3ToConvertUri) => {
     return convertMp3(mp3ToConvertUri)
-        .then(uri => logFileStats(uri))
         .catch(error => console.error('File could not be converted', error));
 };
 

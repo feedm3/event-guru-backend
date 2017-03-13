@@ -46,12 +46,15 @@ const getEventsByLocation = (location) => {
                     const artist = event.performers.performer.name || event.performers.performer[0].name;
                     const venue = event.venue_name;
                     const title = event.title;
-                    const date = formatDateToDMY(event.start_time);
+                    const date = event.start_time;
+                    const dateAlexaDMY = formatDateForAlexa(event.start_time);
+                    const dateUser = formatDateForUser(event.start_time);
                     const url = event.url;
 
-                    const imageLargeUrl = event.image.large.url;
-                    let imageMediumUrl = event.image.medium.url;
-                    if (event.image.medium.width < 720) {
+                    const placeholderImageUrl = 'http';
+                    const imageLargeUrl = event.image ? event.image.large.url : placeholderImageUrl;
+                    let imageMediumUrl = event.image ? event.image.medium.url : placeholderImageUrl;
+                    if (event.image && event.image.medium.width < 720) {
                         imageMediumUrl = event.image.large.url;
                     }
 
@@ -60,6 +63,8 @@ const getEventsByLocation = (location) => {
                         title,
                         venue,
                         date,
+                        dateAlexaDMY,
+                        dateUser,
                         url,
                         imageLargeUrl,
                         imageMediumUrl
@@ -73,6 +78,10 @@ module.exports = {
     getEventsByLocation
 };
 
-const formatDateToDMY = (eventfulDate) => {
+const formatDateForAlexa = (eventfulDate) => {
     return moment(eventfulDate).format('DD-MM-YYYY');
+};
+
+const formatDateForUser = (date) => {
+    return moment(date).format('Do MMMM YYYY');
 };
