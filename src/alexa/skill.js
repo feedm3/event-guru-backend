@@ -35,14 +35,7 @@ const handlers = {
                     if (!events || events.length < 1) {
                         this.emit(':tell', 'Ich habe leider keine Konzerte in ' + city + ' gefunden.');
                     } else {
-                        let outputString = 'Ich habe ' + events.length + ' Konzerte in ' + city + ' gefunden. Und zwar von ';
-                        events.forEach((event, index) => {
-                            if (index !== events.length - 1) {
-                                outputString += event.artist + ', ';
-                            } else {
-                                outputString += " und " + event.artist+ '. ';
-                            }
-                        });
+                        let outputString = 'Ich habe ' + events.length + ' Konzerte in ' + city + ' gefunden. ';
 
                         outputString += getEventSpeechOutput(events[0]);
 
@@ -98,13 +91,17 @@ const handlers = {
 };
 
 const getEventSpeechOutput = (event) => {
-    return 'Du hörst nun ' + event.artist +
+    return event.artist +
+        ' am <say-as interpret-as="date" format="dmy">' + event.date + '</say-as>' +
+        ' in ' + event.venue +
         '<audio src="' + event.topTrackPreviewUrl + '"></audio><break time="0.5s"/>' +
-        event.artist + ' tritt in ' + event.venue + ' auf' +
         '<break time="0.5s"/> Willst du das Lied zum nächsten Konzert hören?';
 };
 
 const addPreviewTrackToEvent = (event) => {
+    if (!event) {
+        return {};
+    }
     return songs.getPreviewTrackUrl(event.artist)
         .then(url => {
             event.topTrackPreviewUrl = url;

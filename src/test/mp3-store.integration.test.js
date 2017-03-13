@@ -20,7 +20,7 @@ describe('Preview track for ' + ARTIST, function(){
             .then((url) => {
                 url.should.be.a('string');
                 url.should.endWith('.mp3');
-                url.should.start.with('https://')
+                url.should.startWith('https://')
             });
     })
 });

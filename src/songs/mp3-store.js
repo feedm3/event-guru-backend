@@ -15,7 +15,6 @@ const getPreviewTrackUrl = (artist) => {
     return s3.fileExists(fileName)
         .then(exists => {
             if (exists) {
-                console.log('preview track found on s3', fileName);
                 return s3.getFileUrl(fileName);
             }
             return spotify.getArtistId(artist)
