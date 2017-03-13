@@ -3,7 +3,7 @@
 require('dotenv-safe').load();
 
 const Alexa = require('alexa-sdk');
-const songs = require('../songs/songs');
+const songs = require('../songs/mp3-store');
 const speechOutput = require('./speech-output');
 const events = require('../events/events');
 
@@ -28,6 +28,9 @@ const handlers = {
             this.emit(':ask', "Ich habe die Stadt nicht verstanden. Für weche Stadt möchtest du nochmal Konzertinfos?");
         } else {
             events.fetchEvents(city)
+                .then(events => {
+                    return addPreviewTrackToEvent(events[0]).then(event => events)
+                })
                 .then(events => {
                     if (!events || events.length < 1) {
                         this.emit(':tell', 'Ich habe leider keine Konzerte in ' + city + ' gefunden.');
@@ -70,7 +73,7 @@ const handlers = {
         this.emit(':responseReady');
     },
     'Unhandled'() {
-        console.error('Unhandled error in alexa skill', this);
+        console.error('Unhandled error in alexa skill', this.event.request.error);
     },
 
     // internal intents
@@ -79,14 +82,16 @@ const handlers = {
         const events = this.attributes['events'];
         const city = this.attributes['city'];
 
-        if (events.length > nextIndex) {
+        if (events.length >= nextIndex) {
             this.attributes['currentEventIndex'] = nextIndex;
 
             const event = events[nextIndex];
-
-            const outputString = getEventSpeechOutput(event);
-            this.emit(':ask', outputString, ' Willst du das Lied zum nächsten Konzert hören?');
+            addPreviewTrackToEvent(event).then(eventWithTrack => {
+                const outputString = getEventSpeechOutput(eventWithTrack);
+                this.emit(':ask', outputString, ' Willst du das Lied zum nächsten Konzert hören?');
+            });
         } else {
+            this.attributes['currentEventIndex'] = 0;
             this.emit(':tell', 'Es gibt keine weiteren Konzerte mehr in ' + city);
         }
     }
@@ -97,4 +102,12 @@ const getEventSpeechOutput = (event) => {
         '<audio src="' + event.topTrackPreviewUrl + '"></audio><break time="0.5s"/>' +
         event.artist + ' tritt in ' + event.venue + ' auf' +
         '<break time="0.5s"/> Willst du das Lied zum nächsten Konzert hören?';
+};
+
+const addPreviewTrackToEvent = (event) => {
+    return songs.getPreviewTrackUrl(event.artist)
+        .then(url => {
+            event.topTrackPreviewUrl = url;
+            return event;
+        });
 };

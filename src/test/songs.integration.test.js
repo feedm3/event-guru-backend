@@ -1,6 +1,6 @@
 'use strict';
 
-const songs = require('../songs/songs');
+const songs = require('../songs/mp3-store');
 
 require('dotenv-safe').load({
     path: '.env.test',
