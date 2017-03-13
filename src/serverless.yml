@@ -1,8 +1,9 @@
-service: alexa-skill-cuecloud
+service: alexa-skill-event-guru
 
 package:
   exclude:
     - bin/ffmpeg_mac
+    - bin/ffmpeg_win.exe
 
 provider:
   name: aws
@@ -44,45 +45,3 @@ functions:
     description: Alexa skill to listen to concerts nearby
     events:
       - alexaSkill
-  # Auth
-  showLoginPage:
-    handler: auth/auth.lambda.showLoginPage
-    events:
-      - http: GET login
-  authorizeToken:
-    handler: auth/auth.authorizeToken
-    events:
-      - http: GET authorize/token
-  authorizeByCode:
-    handler: auth/auth.authorizeByCode
-    events:
-      - http: GET authorize/commit-code
-  # Email
-  sendEmail:
-    handler: mail/email.send
-    events:
-      - http: POST emails
-  # Events
-  getEvents:
-    handler: events/events.getEvents
-    events:
-      - http: GET events
-  # Convert
-#  getMp3:
-#    handler: mp3Converter.convert
-#    events:
-#      - http:
-#          path: convert
-#          method: get
-#          integration: lambda
-#          request:
-#            parameters:
-#              querystrings:
-#                mp3Url: true
-#          response:
-#            template: $input.path('$')
-#            statusCodes:
-#              301:
-#                pattern: ''
-#                headers:
-#                  Location: integration.response.body.headers.Location

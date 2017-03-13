@@ -1,18 +1,18 @@
 'use strict';
 
+require('dotenv').config();
+
 const Alexa = require('alexa-sdk');
 const songs = require('../songs/songs');
 const speechOutput = require('./speech-output');
 const events = require('../events/events');
-
-// TODO Put all paths into env script (also set path to ffmpeg into env vars)
 
 // needed for aws lambda to find our binaries
 process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'];
 
 exports.handler = (event, context, callback) => {
     const alexa = Alexa.handler(event, context);
-    alexa.appId = 'amzn1.ask.skill.baee0e61-2728-43f5-97d5-b8e3d43cbc63';
+    alexa.appId = process.env.ALEXA_APP_ID;
     alexa.registerHandlers(handlers);
     alexa.resources = speechOutput;
     alexa.execute();

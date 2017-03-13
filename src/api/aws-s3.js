@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const AWS = require('aws-sdk');
-const s3 = new AWS.S3({ params: { Bucket: 'spotify-preview-mp3s-for-alexa' } });
+const s3 = new AWS.S3({ params: { Bucket: process.env.S3_PREVIEW_MP3_BUCKET } });
 
 /**
  * Upload a file to S3

@@ -1,7 +1,6 @@
 'use strict';
 
 const request = require('request-promise');
-const config = require('../config/config.json');
 
 const SORT_ORDER = {
     POPULARITY: 'popularity',
@@ -16,7 +15,7 @@ const getEventsByLocation = (location) => {
         method: 'get',
         url: 'http://api.eventful.com/json/events/search',
         qs: {
-            app_key: config.eventful.apiKey,
+            app_key: process.env.EVENTFUL_API_KEY,
             sort_order: SORT_ORDER.POPULARITY,
             location: location
         },

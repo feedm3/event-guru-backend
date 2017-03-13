@@ -73,5 +73,5 @@ jspm_packages
 
 ## Custom
 .serverless
-src/config/config.json
-src/config/firebase-admin.json
+src/config
+.env

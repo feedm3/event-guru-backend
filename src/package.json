@@ -1,7 +1,7 @@
 {
-  "name": "alexa-skill-cuecloud",
+  "name": "alexa-skill-event-guru",
   "version": "1.0.0",
-  "description": "Alexa skill to listen to upcoming concerts nearby.",
+  "description": "Alexa skill to listen to upcoming concerts in your city.",
   "main": "index.js",
   "scripts": {
     "deploy:init": "serverless deploy",
@@ -13,7 +13,6 @@
     "alexa",
     "amazon",
     "echo",
-    "cuecloud",
     "concerts",
     "musik",
     "music",
@@ -24,18 +23,19 @@
     "events",
     "genius",
     "spotify",
-    "eventful"
+    "eventful",
+    "event",
+    "gure"
   ],
   "license": "MIT",
   "dependencies": {
     "alexa-sdk": "^1.0.7",
-    "aws-sdk": "^2.13.0",
-    "firebase-admin": "^4.1.1",
-    "jsonwebtoken": "^7.3.0",
-    "random-id": "0.0.2",
-    "request": "^2.79.0",
+    "aws-sdk": "^2.27.0",
+    "dotenv": "^4.0.0",
+    "randomstring": "^1.1.5",
+    "request": "^2.81.0",
     "request-promise": "^4.1.1",
-    "serverless": "^1.7.0",
+    "serverless": "^1.8.0",
     "spotify-web-api-node": "^2.3.6"
   }
 }

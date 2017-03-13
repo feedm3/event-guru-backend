@@ -3,7 +3,7 @@
 const fs = require('fs');
 const execFile = require('child_process').execFile;
 const lambda = require('../api/aws-lambda');
-const randomId = require('random-id');
+const randomString = require('randomstring');
 
 // the path must be relative to the root project src path for aws lambda. on local you
 // need the relative path from the executing js script
@@ -30,8 +30,10 @@ const convertMp3 = (mp3Link) => {
     return new Promise((resolve, reject) => {
         console.log('Converting ' + mp3Link);
 
-        const resultFileName = randomId(0, '0') + '.mp3';
+        const resultFileName = randomString.generate({ length:10, charset: 'alphabetic'}) + '.mp3';
         const resultFileUri = RESULT_DIR + '/' + resultFileName;
+        console.log('ffmpeg', FFMPEG_BIN);
+        console.log('file', resultFileUri);
 
         execFile(FFMPEG_BIN, [
             '-i', mp3Link,
