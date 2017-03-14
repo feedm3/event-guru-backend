@@ -35,7 +35,7 @@ const handlers = {
                     if (!events || events.length < 1) {
                         this.emit(':tell', 'Ich habe leider keine Konzerte in ' + city + ' gefunden.');
                     } else {
-                        this.attributes['currentEventIndex'] = 0;
+                        this.attributes['currentEventIndex'] = -1;
                         this.attributes['events'] = events;
                         this.attributes['city'] = city;
 
