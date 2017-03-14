@@ -35,7 +35,7 @@ const handlers = {
                     if (!events || events.length < 1) {
                         this.emit(':tell', 'Ich habe leider keine Konzerte in ' + city + ' gefunden.');
                     } else {
-                        this.attributes['currentEventIndex'] = -1;
+                        this.attributes['currentEventIndex'] = 0;
                         this.attributes['events'] = events;
                         this.attributes['city'] = city;
 
@@ -68,18 +68,18 @@ const handlers = {
 
     // internal intents
     'nextEventIntent'() {
-        const nextIndex = this.attributes['currentEventIndex'] + 1;
+        const currentIndex = this.attributes['currentEventIndex'];
         const events = this.attributes['events'];
         const city = this.attributes['city'];
 
-        if (events.length >= nextIndex) {
-            this.attributes['currentEventIndex'] = nextIndex;
+        if (events.length >= currentIndex) {
+            this.attributes['currentEventIndex'] = currentIndex + 1;
 
-            const event = events[nextIndex];
+            const event = events[currentIndex];
 
             addPreviewTrackToEvent(event).then(event => {
                 let conclusion = '';
-                if (nextIndex == 0) {
+                if (currentIndex == 0) {
                     conclusion =  'Ich habe ' + events.length + ' Konzerte in ' + city + ' gefunden. ';
                 }
 
