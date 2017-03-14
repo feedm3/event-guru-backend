@@ -75,3 +75,4 @@ jspm_packages
 .serverless
 src/config
 .env
+.env.test
