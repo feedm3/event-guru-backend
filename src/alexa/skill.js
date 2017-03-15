@@ -3,7 +3,7 @@
 require('dotenv-safe').load();
 
 const Alexa = require('alexa-sdk');
-const songs = require('../songs/mp3-store');
+const mp3Store = require('../songs/mp3-store');
 const speechOutput = require('./speech-output');
 const events = require('../events/events');
 
@@ -130,7 +130,7 @@ const addPreviewTrackToEvent = (event) => {
     if (!event) {
         return Promise.resolve({});
     }
-    return songs.getPreviewTrackUrl(event.artist)
+    return mp3Store.getPreviewTrackUrl(event.artist)
         .then(url => {
             event.topTrackPreviewUrl = url;
             return event;

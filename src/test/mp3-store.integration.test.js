@@ -1,6 +1,6 @@
 'use strict';
 
-const songs = require('../songs/mp3-store');
+const mp3Store = require('../songs/mp3-store');
 
 require('dotenv-safe').load({
     path: '.env.test',
@@ -16,7 +16,7 @@ describe('Preview track for ' + ARTIST, function(){
     it('should be found', function() {
         this.timeout(10000);
 
-        return songs.getPreviewTrackUrl(ARTIST)
+        return mp3Store.getPreviewTrackUrl(ARTIST)
             .then((url) => {
                 url.should.be.a('string');
                 url.should.endWith('.mp3');

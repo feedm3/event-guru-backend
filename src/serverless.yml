@@ -19,7 +19,7 @@ resources:
     Mp3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: spotify-preview-mp3s-for-alexa
+        BucketName: event-guru-store
         AccessControl: PublicReadWrite
     Mp3BucketPolicy:
       Type: AWS::S3::BucketPolicy

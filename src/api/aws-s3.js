@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const AWS = require('aws-sdk');
-const s3 = new AWS.S3({ params: { Bucket: process.env.S3_PREVIEW_MP3_BUCKET } });
+const s3 = new AWS.S3();
 
 /**
  * Upload a file to S3
@@ -16,7 +16,7 @@ const uploadFile = (fileUri, fileName) => {
         const s3FileParams = {
             Key: fileName,
             Body: fs.readFileSync(fileUri),
-            Bucket: process.env.S3_PREVIEW_MP3_BUCKET
+            Bucket: process.env.EVENT_GURU_BUCKET
         };
         s3.upload(s3FileParams, (err, data) => {
             if (err) {
@@ -40,7 +40,7 @@ const fileExists = (fileName) => {
     return new Promise((resolve, reject) => {
         const s3FileParams = {
             Key: fileName,
-            Bucket: process.env.S3_PREVIEW_MP3_BUCKET
+            Bucket: process.env.EVENT_GURU_BUCKET
         };
         s3.headObject(s3FileParams, (err, data) => {
             if (err) {
@@ -56,7 +56,7 @@ const getFileUrl = (fileName) => {
     return new Promise((resolve, reject) => {
         const s3FileParams = {
             Key: fileName,
-            Bucket: process.env.S3_PREVIEW_MP3_BUCKET
+            Bucket: process.env.EVENT_GURU_BUCKET
         };
         s3.headObject(s3FileParams, (err, data) => {
             if (err) {
