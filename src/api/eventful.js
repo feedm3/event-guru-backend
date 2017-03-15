@@ -37,6 +37,7 @@ const getPagedEventsByLocation = (location, pageNumber) => {
             include: 'popularity',
             location: location,
             category: CATEGORIES
+            //keywords: 'electronic'
         },
         json: true
     };

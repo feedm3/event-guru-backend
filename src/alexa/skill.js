@@ -27,22 +27,28 @@ const handlers = {
         if (!city) {
             this.emit(':ask', "Ich habe die Stadt nicht verstanden. Für weche Stadt möchtest du nochmal Konzertinfos?");
         } else {
-            events.fetchPagedEvents(city, 1)
-                .then(data => {
-                    if (data.eventCount === 0) {
-                        this.emit(':tell', 'Ich habe leider keine Konzerte in ' + city + ' gefunden.');
-                    } else {
-                        this.attributes['currentEventIndex'] = 0;
-                        this.attributes['currentPageNumber'] = 1;
-                        this.attributes['city'] = city;
-                        this.attributes['events'] = data.events;
-                        this.attributes['eventCount'] = data.eventCount;
-                        this.attributes['pageCount'] = data.pageCount;
-
-                        this.emit('nextEventIntent');
-                    }
-                });
+            this.attributes['city'] = city;
+            this.emit('FetchEvents');
         }
+    },
+    'FetchEvents'() {
+        const city = this.attributes['city'];
+        const pageNumber = this.attributes['currentPageNumber'] + 1 || 1;
+        events.fetchPagedEvents(city, pageNumber)
+            .then(data => {
+                if (data.eventCount === 0) {
+                    this.emit(':tell', 'Ich habe leider keine Konzerte in ' + city + ' gefunden.');
+                } else {
+                    this.attributes['currentEventIndex'] = 0;
+                    this.attributes['currentPageNumber'] = pageNumber;
+                    this.attributes['city'] = city;
+                    this.attributes['events'] = data.events;
+                    this.attributes['eventCount'] = data.eventCount;
+                    this.attributes['pageCount'] = data.pageCount;
+
+                    this.emit('nextEventIntent');
+                }
+            });
     },
     'AMAZON.YesIntent'() {
         this.emit('nextEventIntent');
@@ -69,9 +75,11 @@ const handlers = {
     // internal intents
     'nextEventIntent'() {
         const currentIndex = this.attributes['currentEventIndex'];
+        const currentPageNumber = this.attributes['currentPageNumber'];
         const events = this.attributes['events'];
         const city = this.attributes['city'];
         const eventCount = this.attributes['eventCount'];
+        const pageCount = this.attributes['pageCount'];
 
         if (events.length > currentIndex) {
             this.attributes['currentEventIndex'] = currentIndex + 1;
@@ -87,7 +95,7 @@ const handlers = {
                 const speechOutput = conclusion + getEventSpeechOutput(event);
                 const repromt = 'Willst du das Lied zum nächsten Konzert hören?';
                 const cardTitle = event.artist;
-                const cardContent = event.dateUser + '\nOrt: ' + event.venue + '\r\n' + event.url.split('?')[0];
+                const cardContent = event.dateUser + '\nOrt: ' + event.venue + '\n' + event.url.split('?')[0];
                 const cardImages = {
                     smallImageUrl: event.imageMediumUrl.replace('http', 'https'),
                     largeImageUrl: event.imageLargeUrl.replace('http', 'https')
@@ -100,8 +108,12 @@ const handlers = {
                     cardImages);
             });
         } else {
-            this.attributes['currentEventIndex'] = 0;
-            this.emit(':tell', 'Es gibt leider keine weiteren Konzerte mehr in ' + city);
+            if (pageCount == currentPageNumber) {
+                this.emit(':tell', 'Es gibt leider keine weiteren Konzerte mehr in ' + city);
+            } else {
+                this.attributes['currentEventIndex'] = 0;
+                this.emit('FetchEvents');
+            }
         }
     }
 };
