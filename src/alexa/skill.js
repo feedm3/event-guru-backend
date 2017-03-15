@@ -27,17 +27,17 @@ const handlers = {
         if (!city) {
             this.emit(':ask', "Ich habe die Stadt nicht verstanden. Für weche Stadt möchtest du nochmal Konzertinfos?");
         } else {
-            events.fetchEvents(city)
-                .then(events => {
-                    return addPreviewTrackToEvent(events[0]).then(event => events)
-                })
-                .then(events => {
-                    if (!events || events.length < 1) {
+            events.fetchPagedEvents(city, 1)
+                .then(data => {
+                    if (data.eventCount === 0) {
                         this.emit(':tell', 'Ich habe leider keine Konzerte in ' + city + ' gefunden.');
                     } else {
                         this.attributes['currentEventIndex'] = 0;
-                        this.attributes['events'] = events;
+                        this.attributes['currentPageNumber'] = 1;
                         this.attributes['city'] = city;
+                        this.attributes['events'] = data.events;
+                        this.attributes['eventCount'] = data.eventCount;
+                        this.attributes['pageCount'] = data.pageCount;
 
                         this.emit('nextEventIntent');
                     }
@@ -71,8 +71,9 @@ const handlers = {
         const currentIndex = this.attributes['currentEventIndex'];
         const events = this.attributes['events'];
         const city = this.attributes['city'];
+        const eventCount = this.attributes['eventCount'];
 
-        if (events.length >= currentIndex) {
+        if (events.length > currentIndex) {
             this.attributes['currentEventIndex'] = currentIndex + 1;
 
             const event = events[currentIndex];
@@ -80,13 +81,13 @@ const handlers = {
             addPreviewTrackToEvent(event).then(event => {
                 let conclusion = '';
                 if (currentIndex == 0) {
-                    conclusion =  'Ich habe ' + events.length + ' Konzerte in ' + city + ' gefunden. ';
+                    conclusion =  'Ich habe ' + eventCount + ' Konzerte in ' + city + ' gefunden. ';
                 }
 
                 const speechOutput = conclusion + getEventSpeechOutput(event);
                 const repromt = 'Willst du das Lied zum nächsten Konzert hören?';
                 const cardTitle = event.artist;
-                const cardContent = event.artist + '\n' + event.dateUser + '\n' + event.venue + '\n' + event.url.split('?')[0];
+                const cardContent = event.dateUser + '\nOrt: ' + event.venue + '\r\n' + event.url.split('?')[0];
                 const cardImages = {
                     smallImageUrl: event.imageMediumUrl.replace('http', 'https'),
                     largeImageUrl: event.imageLargeUrl.replace('http', 'https')
@@ -100,7 +101,7 @@ const handlers = {
             });
         } else {
             this.attributes['currentEventIndex'] = 0;
-            this.emit(':tell', 'Es gibt keine weiteren Konzerte mehr in ' + city);
+            this.emit(':tell', 'Es gibt leider keine weiteren Konzerte mehr in ' + city);
         }
     }
 };
@@ -115,7 +116,7 @@ const getEventSpeechOutput = (event) => {
 
 const addPreviewTrackToEvent = (event) => {
     if (!event) {
-        return {};
+        return Promise.resolve({});
     }
     return songs.getPreviewTrackUrl(event.artist)
         .then(url => {
