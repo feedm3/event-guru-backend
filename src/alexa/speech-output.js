@@ -1,34 +1,45 @@
 'use strict';
 
-const englishOutput = {
-    'SKILL_NAME': 'Event Genius',
-    'WELCOME_MESSAGE': 'Welcome to event genius . For which location do you want concerts?',
-    'HELP_MESSAGE': "You can start event genius by saying 'start event genius'",
-    'HELP_REPROMPT': 'How can I help you?',
-    'STOP_MESSAGE': 'See you!'
+const englishUsOutput = {
+    'SKILL_NAME': 'Event Guru',
+    'WELCOME_MESSAGE': 'Welcome to Event Guru!',
+    'WHAT_CITY': 'In which city you want to visit a concert?',
+    'TO_MANY_CONCERTS': 'I have found a lot of concerts.',
+    'WHAT_GENRE': 'For which genre do you want to filter the concerts?',
+    'HELP_MESSAGE': '',
+    'HELP_REPROMPT': '',
+    'STOP_MESSAGE': 'See you soon on event guru!',
+    'DEV_LOCALE': 'en'
+};
+
+const englishUkOutput = {
+    'DEV_LOCALE': 'en-gb'
 };
 
 const germanOutput = {
     'SKILL_NAME': 'Event Guru',
-    'WELCOME_MESSAGE': 'Willkommen beim Event Guru! Für welche Stadt möchtest du Konzertinfos?',
-    'HELP_MESSAGE': "Sage einfach 'öffne event guru'",
+    'WELCOME_MESSAGE': 'Willkommen beim Event Guru!',
+    'WHAT_CITY': 'In welcher Stadt möchtest du gerne auf ein Konzert?',
+    'TO_MANY_CONCERTS': 'Ich habe sehr viele Konzerte gefunden.',
+    'WHAT_GENRE': 'Nach welchem Genre möchtest du die Konterte filtern?',
+    'HELP_MESSAGE': 'Event Guru sucht für dich nach Konzerten in einer Stadt deiner wahl. Werden sehr viele Konzerte gefunden darfst du diese noch nach ' +
+                    'einem Genre filtern. Viel Spaß!',
     'HELP_REPROMPT': 'Wie kann ich dir helfen?',
-    'STOP_MESSAGE': 'Bis bald!'
+    'STOP_MESSAGE': 'Bis bald beim Event Guru!',
+    'DEV_LOCALE': 'de'
 };
 
 const speechOutput = {
-    'en-GB': {
-        'translation': englishOutput
-    },
     'en-US': {
-        'translation': englishOutput
+        'translation': englishUsOutput
+    },
+    'en-GB': {
+        // we use the us translation as default and only overwrite specific ones
+        'translation': Object.assign({}, englishUsOutput, englishUkOutput)
     },
     'de-DE': {
         'translation': germanOutput
     }
 };
-
-// for easier development we put the output directly onto the speechOutput object
-Object.assign(speechOutput, germanOutput);
 
 module.exports = speechOutput;
