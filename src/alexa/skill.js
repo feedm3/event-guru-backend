@@ -4,6 +4,7 @@ require('dotenv-safe').load();
 
 const Alexa = require('alexa-sdk');
 const mp3Store = require('../songs/mp3-store');
+const imageStore = require('../images/image-store');
 const speechOutput = require('./speech-output');
 const events = require('../events/events');
 
@@ -86,27 +87,29 @@ const handlers = {
 
             const event = events[currentIndex];
 
-            addPreviewTrackToEvent(event).then(event => {
-                let conclusion = '';
-                if (currentIndex == 0) {
-                    conclusion =  'Ich habe ' + eventCount + ' Konzerte in ' + city + ' gefunden. ';
-                }
+            addPreviewTrackToEvent(event)
+                .then(event => addHttpsImagesToEvent(event))
+                .then(event => {
+                    let conclusion = '';
+                    if (currentIndex == 0) {
+                        conclusion =  'Ich habe ' + eventCount + ' Konzerte in ' + city + ' gefunden. ';
+                    }
 
-                const speechOutput = conclusion + getEventSpeechOutput(event);
-                const repromt = 'Willst du das Lied zum nächsten Konzert hören?';
-                const cardTitle = event.artist;
-                const cardContent = event.dateUser + '\nOrt: ' + event.venue + '\n' + event.url.split('?')[0];
-                const cardImages = {
-                    smallImageUrl: event.imageMediumUrl.replace('http', 'https'),
-                    largeImageUrl: event.imageLargeUrl.replace('http', 'https')
-                };
-                this.emit(':askWithCard',
-                    speechOutput,
-                    repromt,
-                    cardTitle,
-                    cardContent,
-                    cardImages);
-            });
+                    const speechOutput = conclusion + getEventSpeechOutput(event);
+                    const repromt = 'Willst du das Lied zum nächsten Konzert hören?';
+                    const cardTitle = event.artist;
+                    const cardContent = event.dateUser + '\nOrt: ' + event.venue + '\n' + event.url.split('?')[0];
+                    const cardImages = {
+                        smallImageUrl: event.imageMediumUrl,
+                        largeImageUrl: event.imageLargeUrl
+                    };
+                    this.emit(':askWithCard',
+                        speechOutput,
+                        repromt,
+                        cardTitle,
+                        cardContent,
+                        cardImages);
+                });
         } else {
             if (pageCount == currentPageNumber) {
                 this.emit(':tell', 'Es gibt leider keine weiteren Konzerte mehr in ' + city);
@@ -135,4 +138,21 @@ const addPreviewTrackToEvent = (event) => {
             event.topTrackPreviewUrl = url;
             return event;
         });
+};
+
+const addHttpsImagesToEvent = (event) => {
+    if (!event ||
+        (event.imageLargeUrl.startsWith('https://') &&
+        event.imageMediumUrl.startsWith('https://'))) {
+        return Promise.resolve({});
+    }
+    return imageStore.proxyImage(event.imageLargeUrl)
+        .then(largeUrl => {
+            event.imageLargeUrl = largeUrl;
+            return imageStore.proxyImage(event.imageMediumUrl);
+        })
+        .then(mediumUrl => {
+            event.imageMediumUrl = mediumUrl;
+            return event;
+        })
 };
