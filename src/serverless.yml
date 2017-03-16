@@ -21,6 +21,13 @@ resources:
       Properties:
         BucketName: event-guru-store
         AccessControl: PublicReadWrite
+        CorsConfiguration:
+          CorsRules:
+          - AllowedMethods:
+              - GET
+            AllowedOrigins:
+              - http://ask-ifr-download.s3.amazonaws.com
+
     Mp3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
