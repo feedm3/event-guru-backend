@@ -42,4 +42,4 @@ const speechOutput = {
     }
 };
 
-module.exports = speechOutput;
+module.exports = germanOutput;

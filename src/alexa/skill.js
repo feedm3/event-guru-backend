@@ -8,6 +8,9 @@ const imageStore = require('../images/image-store');
 const speechOutput = require('./speech-output');
 const events = require('../events/events');
 
+// set the global date format
+require('moment').locale(speechOutput.DEV_LOCALE);
+
 // needed for aws lambda to find our binaries
 process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'];
 
