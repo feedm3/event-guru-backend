@@ -7,15 +7,26 @@ const s3 = new AWS.S3();
 /**
  * Upload a file to S3
  *
- * @param fileUri the file to upload
+ * @param fileUri uri to the file to upload
  * @param fileName the name of the file to upload
  * @returns {Promise} resolved with the location url
  */
 const uploadFile = (fileUri, fileName) => {
+    return uploadData(fs.readFileSync(fileUri), fileName);
+};
+
+/**
+ * Upload a file to S3
+ *
+ * @param data the file to upload
+ * @param fileName the name of the file to upload
+ * @returns {Promise} resolved with the location url
+ */
+const uploadData = (data, fileName) => {
     return new Promise((resolve, reject) => {
         const s3FileParams = {
             Key: fileName,
-            Body: fs.readFileSync(fileUri),
+            Body: data,
             Bucket: process.env.EVENT_GURU_BUCKET
         };
         s3.upload(s3FileParams, (err, data) => {
@@ -72,6 +83,7 @@ const getFileUrl = (fileName) => {
 
 module.exports = {
     uploadFile,
+    uploadData,
     fileExists,
     getFileUrl
 };
