@@ -98,7 +98,7 @@ const handlers = {
                     const speechOutput = conclusion + getEventSpeechOutput(event);
                     const repromt = 'Willst du das Lied zum nächsten Konzert hören?';
                     const cardTitle = event.artist;
-                    const cardContent = event.dateUser + '\nOrt: ' + event.venue + '\n' + event.url.split('?')[0];
+                    const cardContent = getCardContent(event);
                     const cardImages = {
                         smallImageUrl: event.imageMediumUrl,
                         largeImageUrl: event.imageLargeUrl
@@ -127,6 +127,13 @@ const getEventSpeechOutput = (event) => {
         ' in ' + event.venue +
         '<audio src="' + event.topTrackPreviewUrl + '"></audio><break time="0.5s"/>' +
         '<break time="0.2s"/> Willst du das Lied zum nächsten Konzert hören?';
+};
+
+const getCardContent = (event) => {
+    return event.dateUser + '\n' +
+        'Ort: ' + event.venue + '\n'
+        + event.url.split('?')[0] + '\n'
+        + 'Events by Eventful'
 };
 
 const addPreviewTrackToEvent = (event) => {
