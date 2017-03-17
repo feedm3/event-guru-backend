@@ -136,7 +136,7 @@ const getCardContent = (event) => {
     return event.dateUser + '\n' +
         'Ort: ' + event.venue + '\n'
         + event.url.split('?')[0] + '\n'
-        + 'Events by Eventful'
+        + event.poweredBy;
 };
 
 const addPreviewTrackToEvent = (event) => {

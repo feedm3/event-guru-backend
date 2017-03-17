@@ -3,6 +3,7 @@
 const request = require('request-promise');
 const moment = require('moment');
 
+const POWERED_BY = "Events by Eventful";
 const PAGE_SIZE = 5;
 const CATEGORIES = 'music';
 const SORT_ORDER = {
@@ -119,7 +120,8 @@ const extractRelevantEventInfo = (events) => {
             dateUser,
             url,
             imageLargeUrl,
-            imageMediumUrl
+            imageMediumUrl,
+            poweredBy: POWERED_BY
         }
     });
 };
