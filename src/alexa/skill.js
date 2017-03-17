@@ -3,8 +3,6 @@
 require('dotenv-safe').load();
 
 const Alexa = require('alexa-sdk');
-const mp3Store = require('../songs/mp3-store');
-const imageStore = require('../images/image-store');
 const speechOutput = require('./speech-output');
 const events = require('../events/events');
 
@@ -90,8 +88,7 @@ const handlers = {
 
             const event = events[currentIndex];
 
-            addPreviewTrackToEvent(event)
-                .then(event => addHttpsImagesToEvent(event))
+            events.improveExternalInformation(event)
                 .then(event => {
                     let conclusion = '';
                     if (currentIndex == 0) {
@@ -137,32 +134,4 @@ const getCardContent = (event) => {
         'Ort: ' + event.venue + '\n'
         + event.url.split('?')[0] + '\n'
         + event.poweredBy;
-};
-
-const addPreviewTrackToEvent = (event) => {
-    if (!event) {
-        return Promise.resolve({});
-    }
-    return mp3Store.getPreviewTrackUrl(event.artist)
-        .then(url => {
-            event.topTrackPreviewUrl = url;
-            return event;
-        });
-};
-
-const addHttpsImagesToEvent = (event) => {
-    if (!event ||
-        (event.imageLargeUrl.startsWith('https://') &&
-        event.imageMediumUrl.startsWith('https://'))) {
-        return Promise.resolve({});
-    }
-    return imageStore.proxyImage(event.imageLargeUrl)
-        .then(largeUrl => {
-            event.imageLargeUrl = largeUrl;
-            return imageStore.proxyImage(event.imageMediumUrl);
-        })
-        .then(mediumUrl => {
-            event.imageMediumUrl = mediumUrl;
-            return event;
-        })
 };
