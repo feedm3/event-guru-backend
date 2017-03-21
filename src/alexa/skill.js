@@ -122,16 +122,16 @@ const handlers = {
 };
 
 const getEventSpeechOutput = (event) => {
+    const FIRST_CHARS_TO_BE_REMOVED = 3;
     return event.artist +
-        ' am <say-as interpret-as="date" format="dmy">' + event.dateAlexaDMY + '</say-as>' +
-        ' in ' + event.venue +
-        '<audio src="' + event.topTrackPreviewUrl + '"></audio><break time="0.5s"/>' +
-        '<break time="0.2s"/> Willst du das Lied zum nächsten Konzert hören?';
+        ' im <say-as interpret-as="date" format="my">' + event.dateAlexaDMY.substring(FIRST_CHARS_TO_BE_REMOVED) + '</say-as>' +
+        '<audio src="' + event.topTrackPreviewUrl + '"></audio>' +
+        '<break time="0.2s"/> Möchtest du das nächsten Konzert hören?';
 };
 
 const getCardContent = (event) => {
     return event.dateUser + '\n' +
-        'Ort: ' + event.venue + '\n'
-        + event.url.split('?')[0] + '\n'
-        + event.poweredBy;
+        'Ort: ' + event.venue + '\n' +
+        'Mehr Infos: ' + event.shortUrl + '\n' +
+        event.poweredBy;
 };

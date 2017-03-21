@@ -3,6 +3,7 @@
 const eventful = require('../api/eventful');
 const mp3Store = require('../songs/mp3-store');
 const spotify = require('../api/spotify');
+const bitly = require('../api/bitly');
 
 const fetchPagedEvents = (location, pageNumber) => {
     return eventful.getPagedEventsByLocation(location, pageNumber)
@@ -13,7 +14,8 @@ const fetchPagedEvents = (location, pageNumber) => {
 
 const improveExternalInformation = (event) => {
     return addPreviewTrack(event)
-        .then(event => addArtistImages(event));
+        .then(event => addArtistImages(event))
+        .then(event => shortenUrl(event));
 };
 
 module.exports = {
@@ -47,4 +49,12 @@ const addArtistImages = (event) => {
                 });
             return event;
         });
+};
+
+const shortenUrl = (event) => {
+    return bitly.shorten(event.url)
+        .then(shortUrl => {
+            event.shortUrl = shortUrl;
+            return event;
+        })
 };
