@@ -16,7 +16,7 @@ const TO = moment().add(3, 'months').format('YYYY-MM-DD');
  * @param pageNumber starting at 1
  * @returns {Promise.<Object>} the result with events, the total found items (count) and the number of pages
  */
-const getPagedEventsByLocation = (locationLongLat, pageNumber) => {
+const getPagedEventsByLocationLongLat = (locationLongLat, pageNumber) => {
     if (!locationLongLat ||
         !locationLongLat.long ||
         !locationLongLat.lat) {
@@ -55,6 +55,11 @@ const getPagedEventsByLocation = (locationLongLat, pageNumber) => {
         });
 };
 
+const getPagedEventsByLocation = (location, pageNumber) => {
+    return getLongLatFromLocation(location)
+        .then(longLat => getPagedEventsByLocationLongLat(longLat, pageNumber));
+};
+
 const getLongLatFromLocation = (locationName) => {
     const options = {
         method: 'get',
@@ -81,6 +86,7 @@ const getLongLatFromLocation = (locationName) => {
 
 module.exports = {
     getPagedEventsByLocation,
+    getPagedEventsByLocationLongLat,
     getLongLatFromLocation
 };
 

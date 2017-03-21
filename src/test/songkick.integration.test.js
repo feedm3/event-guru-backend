@@ -46,7 +46,7 @@ describe('Location search for ' + LOCATION_NOT_EXISTS.NAME, function() {
 
 describe('Concerts for ' + LOCATION.NAME, function(){
     it('should be found', function() {
-        return songkick.getPagedEventsByLocation(LOCATION.GEO, PAGE_NUMBER)
+        return songkick.getPagedEventsByLocationLongLat(LOCATION.GEO, PAGE_NUMBER)
             .then(data => {
                 data.eventCount.should.be.a('number');
                 data.pageCount.should.be.a('number');
@@ -58,7 +58,7 @@ describe('Concerts for ' + LOCATION.NAME, function(){
 
 describe('Concerts for ' + LOCATION_NOT_EXISTS.NAME, function() {
     it('should return 0 eventCount', function() {
-        return songkick.getPagedEventsByLocation(LOCATION_NOT_EXISTS.GEO, PAGE_NUMBER)
+        return songkick.getPagedEventsByLocationLongLat(LOCATION_NOT_EXISTS.GEO, PAGE_NUMBER)
             .then(data => {
                 data.eventCount.should.be.a('number');
                 data.eventCount.should.equal(0);
@@ -69,7 +69,7 @@ describe('Concerts for ' + LOCATION_NOT_EXISTS.NAME, function() {
 
 describe('Concerts for an missing location', function() {
     it('should throw an error', function() {
-        return songkick.getPagedEventsByLocation(null, PAGE_NUMBER)
+        return songkick.getPagedEventsByLocationLongLat(null, PAGE_NUMBER)
             .catch(err => {
                 err.should.be.a('Error');
             })

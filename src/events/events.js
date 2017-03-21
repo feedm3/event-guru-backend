@@ -1,12 +1,12 @@
 'use strict';
 
-const eventful = require('../api/eventful');
+const songkick = require('../api/songkick');
 const mp3Store = require('../songs/mp3-store');
 const spotify = require('../api/spotify');
 const bitly = require('../api/bitly');
 
 const fetchPagedEvents = (location, pageNumber) => {
-    return eventful.getPagedEventsByLocation(location, pageNumber)
+    return songkick.getPagedEventsByLocation(location, pageNumber)
         .catch((error) => {
             console.log('Error getting events', error);
         });
