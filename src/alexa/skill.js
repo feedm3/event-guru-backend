@@ -4,7 +4,7 @@ require('dotenv-safe').load();
 
 const Alexa = require('alexa-sdk');
 const speechOutput = require('./speech-output');
-const events = require('../events/events');
+const eventsApi = require('../events/events');
 
 // set the global date format
 require('moment').locale(speechOutput.DEV_LOCALE);
@@ -22,7 +22,7 @@ exports.handler = (event, context, callback) => {
 
 const handlers = {
     'LaunchRequest' () {
-        this.emit(':ask', this.t('WELCOME_MESSAGE'), this.t('WELCOME_MESSAGE'));
+        this.emit(':ask', speechOutput.WELCOME_MESSAGE + ' ' + speechOutput.WHAT_CITY, speechOutput.WHAT_CITY);
     },
     'EventsInCityIntent' () {
         const city = this.event.request.intent.slots.city.value;
@@ -36,7 +36,7 @@ const handlers = {
     'FetchEvents'() {
         const city = this.attributes['city'];
         const pageNumber = this.attributes['currentPageNumber'] + 1 || 1;
-        events.fetchPagedEvents(city, pageNumber)
+        eventsApi.fetchPagedEvents(city, pageNumber)
             .then(data => {
                 if (data.eventCount === 0) {
                     this.emit(':tell', 'Ich habe leider keine Konzerte in ' + city + ' gefunden.');
@@ -88,7 +88,7 @@ const handlers = {
 
             const event = events[currentIndex];
 
-            events.improveExternalInformation(event)
+            eventsApi.improveExternalInformation(event)
                 .then(event => {
                     let conclusion = '';
                     if (currentIndex == 0) {
