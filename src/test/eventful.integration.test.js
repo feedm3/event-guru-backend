@@ -6,9 +6,6 @@ require('dotenv-safe').load({
     path: '.env.test',
     allowEmptyValues: true
 });
-const chai = require('chai');
-chai.use(require('chai-string'));
-chai.should();
 
 const LOCATION = 'München';
 const LOCATION_NOT_EXISTS = 'fesf';
@@ -21,7 +18,6 @@ describe('Concerts for ' + LOCATION, function(){
             .then(data => {
                 data.eventCount.should.be.a('number');
                 data.pageCount.should.be.a('number');
-
                 data.events.should.not.be.empty;
                 data.events.forEach(event => event.should.have.any.keys('artist', 'title', 'venue', 'date', 'url', 'imageLargeUrl', 'imageMediumUrl'))
             });
@@ -35,7 +31,6 @@ describe('Concerts for ' + LOCATION_NOT_EXISTS, function() {
             .then(data => {
                 data.eventCount.should.be.a('number');
                 data.eventCount.should.equal(0);
-
                 data.events.should.be.empty;
             })
     });

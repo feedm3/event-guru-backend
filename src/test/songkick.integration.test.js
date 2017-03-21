@@ -6,9 +6,6 @@ require('dotenv-safe').load({
     path: '.env.test',
     allowEmptyValues: true
 });
-const chai = require('chai');
-chai.use(require('chai-string'));
-chai.should();
 
 const LOCATION = {
     NAME: 'München',

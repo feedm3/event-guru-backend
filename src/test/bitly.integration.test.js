@@ -14,7 +14,6 @@ const LINK = 'https://www.golem.de/news/preisschild-media-markt-nennt-7-998-euro
 
 describe('Link', function(){
     it('should be shortened', function() {
-
         return bitly.shorten(LINK)
             .then(url => {
                 url.should.startWith('http://bit.ly');

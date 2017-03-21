@@ -8,7 +8,7 @@ const spotify = new SpotifyWebApi();
 
 const getArtistId = (artist) => {
     return spotify.searchArtists(artist)
-        .then(function(data) {
+        .then(data => {
             const result = data.body.artists;
             const items = result.items;
 
@@ -21,7 +21,7 @@ const getArtistId = (artist) => {
 
 const getArtistTopTrackPreviewUrl = (artistId) => {
     return spotify.getArtistTopTracks(artistId, DEFAULT_COUNTRY)
-        .then(function(data) {
+        .then(data => {
             const tracks = data.body.tracks;
 
             if (tracks) {
@@ -32,16 +32,10 @@ const getArtistTopTrackPreviewUrl = (artistId) => {
         })
 };
 
-const getArtistTopTrackSpotifyUri = (artistId) => {
-    return spotify.getArtistTopTracks(artistId, DEFAULT_COUNTRY)
-        .then(function(data) {
-            const tracks = data.body.tracks;
-
-            if (tracks) {
-                const topTrack = tracks[0];
-                return topTrack.uri;
-            }
-            return '';
+const getArtist = (artistId) => {
+    return spotify.getArtist(artistId)
+        .then(data => {
+            return data.body;
         })
 };
 
@@ -53,7 +47,7 @@ const getIdFromPreviewUrl = (mp3PreviewUrl) => {
 
 module.exports = {
     getArtistId,
+    getArtist,
     getArtistTopTrackPreviewUrl,
-    getArtistTopTrackSpotifyUri,
     getIdFromPreviewUrl
 };
