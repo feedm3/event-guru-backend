@@ -34,7 +34,6 @@ const getPagedEventsByLocation = (location, pageNumber) => {
             date: FROM + '-' + TO,
             page_number: pageNumber,
             page_size: PAGE_SIZE,
-            image_sizes: 'medium,large',
             include: 'popularity',
             location: location,
             category: CATEGORIES
@@ -103,14 +102,6 @@ const extractRelevantEventInfo = (events) => {
         const dateAlexaDMY = formatDateForAlexa(event.start_time);
         const dateUser = formatDateForUser(event.start_time);
         const url = event.url;
-
-        const placeholderImageUrl = 'http';
-        const imageLargeUrl = event.image ? event.image.large.url : placeholderImageUrl;
-        let imageMediumUrl = event.image ? event.image.medium.url : placeholderImageUrl;
-        if (event.image && event.image.medium.width < 720) {
-            imageMediumUrl = event.image.large.url;
-        }
-
         return {
             artist,
             title,
@@ -119,8 +110,6 @@ const extractRelevantEventInfo = (events) => {
             dateAlexaDMY,
             dateUser,
             url,
-            imageLargeUrl,
-            imageMediumUrl,
             poweredBy: POWERED_BY
         }
     });

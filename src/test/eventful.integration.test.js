@@ -19,7 +19,7 @@ describe('Concerts for ' + LOCATION, function(){
                 data.eventCount.should.be.a('number');
                 data.pageCount.should.be.a('number');
                 data.events.should.not.be.empty;
-                data.events.forEach(event => event.should.have.any.keys('artist', 'title', 'venue', 'date', 'url', 'imageLargeUrl', 'imageMediumUrl'))
+                data.events.forEach(event => event.should.have.any.keys('artist', 'title', 'venue', 'date', 'url'))
             });
     });
 

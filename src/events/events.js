@@ -2,7 +2,7 @@
 
 const eventful = require('../api/eventful');
 const mp3Store = require('../songs/mp3-store');
-const imageStore = require('../images/image-store');
+const spotify = require('../api/spotify');
 
 const fetchPagedEvents = (location, pageNumber) => {
     return eventful.getPagedEventsByLocation(location, pageNumber)
@@ -13,7 +13,7 @@ const fetchPagedEvents = (location, pageNumber) => {
 
 const improveExternalInformation = (event) => {
     return addPreviewTrack(event)
-        .then(event => convertHttpToHttpsImages(event));
+        .then(event => addArtistImages(event));
 };
 
 module.exports = {
@@ -32,19 +32,19 @@ const addPreviewTrack = (event) => {
         });
 };
 
-const convertHttpToHttpsImages = (event) => {
-    if (!event ||
-        (event.imageLargeUrl.startsWith('https://') &&
-        event.imageMediumUrl.startsWith('https://'))) {
-        return Promise.resolve({});
-    }
-    return imageStore.proxyImage(event.imageLargeUrl)
-        .then(largeUrl => {
-            event.imageLargeUrl = largeUrl;
-            return imageStore.proxyImage(event.imageMediumUrl);
-        })
-        .then(mediumUrl => {
-            event.imageMediumUrl = mediumUrl;
+const addArtistImages = (event) => {
+    return spotify.getArtistId(event.artist)
+        .then(id => spotify.getArtist(id))
+        .then(artist => {
+            artist.images
+                .sort(image => image.width) // smallest image first
+                .forEach(image => {
+                    if (image.width < 720) {
+                        event.imageMediumUrl = image.url;
+                    } else {
+                        event.imageLargeUrl = image.url;
+                    }
+                });
             return event;
-        })
+        });
 };

@@ -18,6 +18,7 @@ describe('Requesting artist info', function(){
     it('should return a object with artist info', function() {
         return spotify.getArtist(ARTIST_ID)
             .then(artist => {
+                console.log('artit', artist);
                 artist.should.have.any.keys('images', 'popularity', 'genres');
             })
     });

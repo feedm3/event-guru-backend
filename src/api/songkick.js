@@ -93,14 +93,6 @@ const extractRelevantEventInfo = (events) => {
         const dateAlexaDMY = formatDateForAlexa(date);
         const dateUser = formatDateForUser(date);
         const url = event.uri;
-
-        const placeholderImageUrl = 'http://shashgrewal.com/wp-content/uploads/2015/05/default-placeholder.png';
-        const imageLargeUrl = event.image ? event.image.large.url : placeholderImageUrl;
-        let imageMediumUrl = event.image ? event.image.medium.url : placeholderImageUrl;
-        if (event.image && event.image.medium.width < 720) {
-            imageMediumUrl = event.image.large.url;
-        }
-
         return {
             artist,
             title,
@@ -109,8 +101,6 @@ const extractRelevantEventInfo = (events) => {
             dateAlexaDMY,
             dateUser,
             url,
-            imageLargeUrl,
-            imageMediumUrl,
             poweredBy: POWERED_BY
         }
     });

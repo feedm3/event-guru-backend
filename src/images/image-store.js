@@ -1,5 +1,7 @@
 'use strict';
 
+// THIS SCRIPT IS NOT USED ANYMORE
+
 const s3 = require('../api/aws-s3');
 
 // the request and request-promise library both dont support correct data pipelining
