@@ -1,15 +1,12 @@
 'use strict';
 
-const songkick = require('../api/songkick');
+const eventsStore = require('./events-store');
 const mp3Store = require('../songs/mp3-store');
 const spotify = require('../api/spotify');
 const bitly = require('../api/bitly');
 
 const fetchPagedEvents = (location, pageNumber) => {
-    return songkick.getPagedEventsByLocation(location, pageNumber)
-        .catch((error) => {
-            console.log('Error getting events', error);
-        });
+    return eventsStore.fetchPagedEvents(location, pageNumber);
 };
 
 const improveExternalInformation = (event) => {
