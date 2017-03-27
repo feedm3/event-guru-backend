@@ -4,25 +4,29 @@ const request = require('request-promise');
 const moment = require('moment');
 
 const POWERED_BY = "Concerts by Songkick";
-const PAGE_SIZE = 5;
-
-const FROM = moment().format('YYYY-MM-DD');
-const TO = moment().add(3, 'months').format('YYYY-MM-DD');
+const DEFAULT_PAGE_NUMBER = 1;
+const DEFAULT_PAGE_SIZE = 5;
 
 /**
  * Get events by location. Every paged search will return 5 concerts.
  *
- * @param locationLongLat object with long and lat geo info
- * @param pageNumber starting at 1
+ * @param locationLongLat - object with long and lat geo info
+ * @param pageNumber - starting at 1
+ * @param pageSize - number of events per query (max 50)
  * @returns {Promise.<Object>} the result with events, the total found items (count) and the number of pages
  */
-const getPagedEventsByLocationLongLat = (locationLongLat, pageNumber) => {
+const getPagedEventsByLocationLongLat = (locationLongLat, pageNumber, pageSize) => {
     if (!locationLongLat ||
         !locationLongLat.long ||
         !locationLongLat.lat) {
         return Promise.reject(new Error('You must provide a long and lat geo location'));
     }
-    pageNumber = pageNumber || 1;
+    pageNumber = pageNumber || DEFAULT_PAGE_NUMBER;
+    pageSize = pageSize || DEFAULT_PAGE_SIZE;
+
+    const FROM = moment().format('YYYY-MM-DD');
+    const TO = moment().add(3, 'months').format('YYYY-MM-DD');
+
     const options = {
         method: 'get',
         url: 'http://api.songkick.com/api/3.0/events.json',
@@ -31,7 +35,7 @@ const getPagedEventsByLocationLongLat = (locationLongLat, pageNumber) => {
             location: 'geo:' + locationLongLat.lat + ',' + locationLongLat.long,
             min_date: FROM,
             max_date: TO,
-            per_page: PAGE_SIZE,
+            per_page: pageSize,
             page: pageNumber
         },
         json: true
@@ -55,9 +59,9 @@ const getPagedEventsByLocationLongLat = (locationLongLat, pageNumber) => {
         });
 };
 
-const getPagedEventsByLocation = (location, pageNumber) => {
+const getPagedEventsByLocation = (location, pageNumber, pageSize) => {
     return getLongLatFromLocation(location)
-        .then(longLat => getPagedEventsByLocationLongLat(longLat, pageNumber));
+        .then(longLat => getPagedEventsByLocationLongLat(longLat, pageNumber, pageSize));
 };
 
 const getLongLatFromLocation = (locationName) => {
@@ -91,29 +95,36 @@ module.exports = {
 };
 
 const extractRelevantEventInfo = (events) => {
-    return events.map(event => {
-        const artist = event.performance[0].artist.displayName;
-        const venue = event.venue.displayName;
-        const title = event.displayName;
-        const date = event.start.datetime;
-        const dateAlexaDMY = formatDateForAlexa(date);
-        const dateUser = formatDateForUser(date);
-        const url = event.uri;
-        return {
-            artist,
-            title,
-            venue,
-            date,
-            dateAlexaDMY,
-            dateUser,
-            url,
-            poweredBy: POWERED_BY
+    const timeToLive = moment().add(1, 'days').unix();
+
+    return events
+        .filter(event => event.type === 'Concert')
+        .map(event => {
+            const artist = event.performance[0].artist.displayName;
+            const popularity = event.popularity;
+            const venue = event.venue.displayName;
+            const title = event.displayName;
+            const date = event.start.datetime || event.start.date; // event.start.date is formatted with YYYY-MM-DD
+            const dateAlexaDM = formatDateForAlexa(date);
+            const dateUser = formatDateForUser(date);
+            const url = event.uri;
+            return {
+                artist,
+                popularity,
+                title,
+                venue,
+                date,
+                dateAlexaDM,
+                dateUser,
+                url,
+                timeToLive,
+                poweredBy: POWERED_BY
         }
     });
 };
 
 const formatDateForAlexa = (date) => {
-    return moment(date).format('DD-MM-YYYY');
+    return moment(date).format('DD-MM');
 };
 
 const formatDateForUser = (date) => {

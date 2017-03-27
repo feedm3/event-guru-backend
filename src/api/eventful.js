@@ -99,7 +99,7 @@ const extractRelevantEventInfo = (events) => {
         const venue = event.venue_name;
         const title = event.title;
         const date = event.start_time;
-        const dateAlexaDMY = formatDateForAlexa(event.start_time);
+        const dateAlexaDM = formatDateForAlexa(event.start_time);
         const dateUser = formatDateForUser(event.start_time);
         const url = event.url;
         return {
@@ -107,7 +107,7 @@ const extractRelevantEventInfo = (events) => {
             title,
             venue,
             date,
-            dateAlexaDMY,
+            dateAlexaDM,
             dateUser,
             url,
             poweredBy: POWERED_BY
