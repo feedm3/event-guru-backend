@@ -2,12 +2,17 @@
 
 const SpotifyWebApi = require('spotify-web-api-node');
 const url = require('url');
+const request = require('request-promise');
 const DEFAULT_COUNTRY = 'DE'; // format: ISO 3166-1 alpha-2
 
-const spotify = new SpotifyWebApi();
+const spotify = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET
+});
 
 const getArtistId = (artist) => {
-    return spotify.searchArtists(artist)
+    return refreshAccessToken()
+        .then(() => spotify.searchArtists(artist))
         .then(data => {
             const result = data.body.artists;
             const items = result.items;
@@ -17,10 +22,15 @@ const getArtistId = (artist) => {
             }
             return '';
         })
+        .catch(err => {
+            console.error('Cant get artist id from spotify', err);
+            return '';
+        })
 };
 
 const getArtistTopTrackPreviewUrl = (artistId) => {
-    return spotify.getArtistTopTracks(artistId, DEFAULT_COUNTRY)
+    return refreshAccessToken()
+        .then(() => spotify.getArtistTopTracks(artistId, DEFAULT_COUNTRY))
         .then(data => {
             const tracks = data.body.tracks;
 
@@ -33,9 +43,14 @@ const getArtistTopTrackPreviewUrl = (artistId) => {
 };
 
 const getArtist = (artistId) => {
-    return spotify.getArtist(artistId)
+    return refreshAccessToken()
+        .then(() => spotify.getArtist(artistId))
         .then(data => {
             return data.body;
+        })
+        .catch(err => {
+            console.error('Cant get artist from spotify', err);
+            return '';
         })
 };
 
@@ -50,4 +65,13 @@ module.exports = {
     getArtist,
     getArtistTopTrackPreviewUrl,
     getIdFromPreviewUrl
+};
+
+const refreshAccessToken = () => {
+    return spotify.clientCredentialsGrant()
+        .then((data) => {
+            spotify.setAccessToken(data.body['access_token']);
+        }, (err) => {
+            console.error('Could not refresh spotify access token', err);
+        });
 };
