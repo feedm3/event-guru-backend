@@ -80,11 +80,15 @@ const getLongLatFromLocation = (locationName) => {
             if (data.error) {
                 return Promise.reject(new Error('Songkick API could not be requested', data));
             }
-            const city = data.resultsPage.results.location[0].city;
-            return {
-                long: city.lng,
-                lat: city.lat
-            };
+            if (data.resultsPage.results.location) {
+                const city = data.resultsPage.results.location[0].city;
+                return {
+                    long: city.lng,
+                    lat: city.lat
+                };
+            } else {
+                throw new Error('Could not find city ' + locationName);
+            }
         })
 };
 
