@@ -9,6 +9,10 @@ module.exports = {
         this.handler.state = STATES.CITY_SEARCH_MODE;
         this.emit(':ask', speechOutput.NO_SESSION.WELCOME + speechOutput.NO_SESSION.WHAT_CITY, speechOutput.NO_SESSION.WHAT_CITY_REPROMT);
     },
+    'EventsInCityIntent'() {
+        this.handler.state = STATES.CITY_SEARCH_MODE;
+        this.emitWithState('EventsInCityIntent');
+    },
 
     // ----------------------- helper methods
     'FetchEvents'(city) {
