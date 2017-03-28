@@ -13,22 +13,22 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
         this.emitWithState('NextEventIntent');
     },
     'NextEventIntent'() {
-        const currentIndex = this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX];
+        const currentEventIndex = this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] || 0;
         const currentPageNumber = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER];
         const events = this.attributes[SESSION_ATTRIBUTES.EVENTS];
         const city = this.attributes[SESSION_ATTRIBUTES.CITY];
         const eventCount = this.attributes[SESSION_ATTRIBUTES.EVENT_COUNT];
         const pageCount = this.attributes[SESSION_ATTRIBUTES.PAGE_COUNT];
 
-        if (events.length > currentIndex) {
-            this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = currentIndex + 1;
+        if (events.length > currentEventIndex) {
+            this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = currentEventIndex + 1;
 
-            const event = events[currentIndex];
+            const event = events[currentEventIndex];
 
             eventsApi.improveExternalInformation(event)
                 .then(event => {
                     let searchSummary = '';
-                    if (currentIndex === 0) {
+                    if (currentEventIndex === 0 && currentPageNumber === 1) {
                         if (eventCount < 20) {
                             searchSummary = speechOutput.EVENT_BROWSING.CONCERTS_SUMMARY(city, eventCount);
                         } else if (eventCount < 70) {

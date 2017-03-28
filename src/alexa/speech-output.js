@@ -30,12 +30,12 @@ const germanOutput = {
         NOTHING_FOUND:(city) => `Ich habe für ${city} leider keine Konzerte gefunden. In welcher anderen Stadt soll ich suchen? `
     },
     EVENT_BROWSING: {
-        CONCERTS_SUMMARY: (city, count) => `Ich habe ${count} Konzerte in ${city} für die nächsten 3 Monate gefunden und sie nach Bekanntheitsgrad sortiert. Tipp: Mit dem Befehl - "Alexa Weiter" - kannst du direkt zum nächsten Konzert springen. Los gehts: `,
-        MANY_CONCERTS_SUMMARY:(city) => `Ich habe viele Konzerte in ${city} für die nächsten 3 Monate gefunden und sie nach Bekanntheitsgrad sortiert. Tipp: Mit dem Befehl - "Alexa Weiter" - kannst du direkt zum nächsten Konzert springen. Los gehts: `,
-        VERY_MUCH_CONCERTS_SUMMARY:(city) => `Ich habe sehr viele Konzerte in ${city} für die nächsten 3 Monate gefunden und sie nach Bekanntheitsgrad sortiert. Tipp: Mit dem Befehl - "Alexa Weiter" - kannst du direkt zum nächsten Konzert springen. Los gehts: `,
+        CONCERTS_SUMMARY: (city, count) => `Ich habe ${count} Konzerte in ${city} für die nächsten 3 Monate gefunden und sie nach Bekanntheitsgrad sortiert. Tipp: Mit dem Befehl - "Alexa Weiter" - kannst du direkt zum nächsten Konzert springen. Lass uns starten: `,
+        MANY_CONCERTS_SUMMARY:(city) => `Ich habe viele Konzerte in ${city} für die nächsten 3 Monate gefunden und sie nach Bekanntheitsgrad sortiert. Tipp: Mit dem Befehl - "Alexa Weiter" - kannst du direkt zum nächsten Konzert springen. Lass uns starten: `,
+        VERY_MUCH_CONCERTS_SUMMARY:(city) => `Ich habe sehr viele Konzerte in ${city} für die nächsten 3 Monate gefunden und sie nach Bekanntheitsgrad sortiert. Tipp: Mit dem Befehl - "Alexa Weiter" - kannst du direkt zum nächsten Konzert springen. Lass uns starten: `,
         NO_MORE_CONCERTS: 'Ich habe leider keine weiteren Konzerte mehr für dich. ',
         CONCERT: (artist, date, location, trackUrl) => `${artist} am <say-as interpret-as="date" format="dm">${date}</say-as>, ${location} <audio src="${trackUrl}"></audio>`,
-        ASK_NEXT_CONCERT: 'Weiter zum nächsten Konzert? ',
+        ASK_NEXT_CONCERT: '<break time="0.2s" />Weiter zum nächsten Konzert? ',
         HELP: 'Aktuell kannst du die Konzerte nur eines nach dem anderen durch hören. Die Sortierung ändern oder genauer suchen geht noch nicht, kommt aber bald! ',
         UNHANDLED: 'Ich habe dich leider nicht verstanden. '
     },

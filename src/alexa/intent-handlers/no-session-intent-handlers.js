@@ -22,7 +22,6 @@ module.exports = {
                 if (data.eventCount === 0) {
                     this.emitWithState(':ask', speechOutput.CITY_SEARCH.NOTHING_FOUND(city), speechOutput.NO_SESSION.WHAT_CITY_REPROMT);
                 } else {
-                    this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = 0;
                     this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = pageNumber;
                     this.attributes[SESSION_ATTRIBUTES.CITY] = city;
                     this.attributes[SESSION_ATTRIBUTES.EVENTS] = data.events;
