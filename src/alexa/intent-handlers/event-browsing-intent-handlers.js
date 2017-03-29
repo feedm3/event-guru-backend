@@ -4,6 +4,7 @@ const Alexa = require('alexa-sdk');
 const speechOutput = require('../speech-output');
 const eventsApi = require('../../events/events');
 const amazonLogin = require('../../api/amazon-login');
+const mailService = require('../../api/aws-ses');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
 module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
@@ -69,9 +70,22 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
         if (accessToken) {
             amazonLogin.fetchUser(accessToken)
                 .then(user => {
-                    console.log('Mail sent to customer');
-                    // TODO send mail here
-                    this.emit(':ask', speechOutput.EVENT_BROWSING.MORE_INFOS + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
+                    const currentEventIndex = this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] || 0;
+                    const events = this.attributes[SESSION_ATTRIBUTES.EVENTS];
+                    const event = events[currentEventIndex];
+
+                    eventsApi.improveExternalInformation(event)
+                        .then(() => mailService.sendMail(user.email,
+                            formatMailSubject(event),
+                            {
+                                html: formatMailHtml(user.name, event),
+                                text: formatMailText(user.name, event)
+                            }))
+                        .then(data => console.log('Mail sent to customer'))
+                        .catch(err => console.error('Could not send mail to customer', err))
+                        .then(() => {
+                            this.emit(':ask', speechOutput.EVENT_BROWSING.MORE_INFOS + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
+                        });
                 })
         }
         else {
@@ -107,4 +121,30 @@ const formatCardContent = (event) => {
         'Ort: ' + event.venue + '\n' +
         'Mehr Infos: ' + event.shortUrl + '\n' +
         event.poweredBy;
+};
+
+const formatMailSubject = (event) => {
+    return 'More infos from event guru for ' + event.artist + ' @ ' + event.venue;
+};
+
+const formatMailHtml = (username, event) => {
+    return 'Hi ' + username + '<br><br>' +
+        'you currently used Event Guru on Amazon Alexa® and requested more information to a concert. Here it is:<br><br>' +
+        event.artist + '<br>' +
+        event.venue + '<br>' +
+        '<a href="' + event.shortUrl + '">' + event.shortUrl + '</a><br>' +
+        event.poweredBy + '<br><br>' +
+        'Have a nice day,' + '<br>' +
+        'Event Guru'
+};
+
+const formatMailText = (username, event) => {
+    return 'Hi ' + username + ',\n' +
+            'you currently used Event Guru on Amazon Alexa® and requested more information to a concert. Here it is:\r\n\r\n' +
+            event.artist + '\r\n' +
+            event.venue + '\r\n' +
+            event.shortUrl + '\r\n' +
+            event.poweredBy + '\r\n\r\n' +
+            'Have a nice day,' + '\r\n' +
+            'Event Guru'
 };
