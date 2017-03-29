@@ -3,6 +3,7 @@
 const Alexa = require('alexa-sdk');
 const speechOutput = require('../speech-output');
 const eventsApi = require('../../events/events');
+const amazonLogin = require('../../api/amazon-login');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
 module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
@@ -59,6 +60,22 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
                 this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = 0;
                 this.emit('FetchEvents', city);
             }
+        }
+    },
+
+    // ----------------------- more infos
+    'MoreInformation'() {
+        const accessToken = this.event.session.user.accessToken;
+        if (accessToken) {
+            amazonLogin.fetchUser(accessToken)
+                .then(user => {
+                    console.log('Mail sent to customer');
+                    // TODO send mail here
+                    this.emit(':ask', speechOutput.EVENT_BROWSING.MORE_INFOS + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
+                })
+        }
+        else {
+            this.emit(':askWithLinkAccountCard', speechOutput.EVENT_BROWSING.MORE_INFOS_BEFORE_LOG_IN + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
         }
     },
 

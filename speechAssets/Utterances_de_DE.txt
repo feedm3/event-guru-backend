@@ -1,8 +1,22 @@
 EventsInCityIntent wer spielt in {city}
-EventsInCityIntent nach Konzerten in {city}
-EventsInCityIntent nach Konzerte in {city}
-EventsInCityIntent Konzerte in {city}
+EventsInCityIntent nach konzerten in {city}
+EventsInCityIntent nach konzerte in {city}
+EventsInCityIntent konzerte in {city}
 EventsInCityIntent in {city}
 EventsInCityIntent {city}
-EventsInCityIntent nach Events in {city}
-EventsInCityIntent nach Musik in {city}
+EventsInCityIntent nach events in {city}
+EventsInCityIntent nach musik in {city}
+
+MoreInformation mehr informationen
+MoreInformation dazu will ich mehr wissen
+MoreInformation da will ich hin
+MoreInformation da will ich gehen
+MoreInformation da will ich mehr dazu wissen
+MoreInformation das interessiert mich
+MoreInformation da hab ich lust hin zu gehen
+MoreInformation da möchte ich gerne hin
+MoreInformation da würde ich gerne hin gehen
+MoreInformation gib mir mehr informationen dazu
+MoreInformation auf dieses konzert will ich hin
+MoreInformation das konzert interessiert mich
+MoreInformation zu dem konzert will ich mehr wissen

@@ -45,7 +45,11 @@ module.exports = {
 
     // ----------------------- error handling
     'Unhandled'() {
-        console.error('Unhandled error during no session mode', this.attributes);
-        this.emit(':ask', speechOutput.NO_SESSION.UNHANDLED + speechOutput.NO_SESSION.WHAT_CITY, speechOutput.NO_SESSION.WHAT_CITY_REPROMT);
+        if (this.handler.state) {
+            this.emitWithState('Unhandled');
+        } else {
+            console.error('Unhandled error during no session mode', this.attributes);
+            this.emit(':ask', speechOutput.NO_SESSION.UNHANDLED + speechOutput.NO_SESSION.WHAT_CITY, speechOutput.NO_SESSION.WHAT_CITY_REPROMT);
+        }
     }
 };

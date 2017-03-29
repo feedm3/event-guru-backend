@@ -10,6 +10,9 @@
       ]
     },
     {
+      "intent": "MoreInformation"
+    },
+    {
       "intent": "AMAZON.NoIntent"
     },
     {
