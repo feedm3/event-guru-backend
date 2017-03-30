@@ -81,7 +81,6 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
                                 html: formatMailHtml(user.name, event),
                                 text: formatMailText(user.name, event)
                             }))
-                        .then(data => console.log('Mail sent to customer'))
                         .catch(err => console.error('Could not send mail to customer', err))
                         .then(() => {
                             this.emit(':ask', speechOutput.EVENT_BROWSING.MORE_INFOS + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);

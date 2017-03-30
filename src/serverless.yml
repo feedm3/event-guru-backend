@@ -60,3 +60,10 @@ functions:
     description: Alexa skill to listen to concerts nearby
     events:
       - alexaSkill
+  # EMail bounce and complaint handling
+  email-bounce-handler:
+    handler: mail/aws-ses-notifications.handler
+    events:
+      - sns: email-bounces
+      - sns: email-complaints
+      - sns: email-deliveries
