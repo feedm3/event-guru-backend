@@ -14,16 +14,60 @@ provider:
   memorySize: 512
   cfLogs: true
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: Allow
       Action:
-        - "ses:SendEmail"
-        - "ses:SendRawEmail"
+        - ses:SendEmail
+        - ses:SendRawEmail
+      Resource:
+        - '*'
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
       Resource:
         - '*'
 
 resources:
   Resources:
-    Mp3Bucket:
+    EventGuruSessionDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: userId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        TableName: event-guru-session
+
+    EventGuruEventsCacheDynamoDbTable:
+          Type: 'AWS::DynamoDB::Table'
+          DeletionPolicy: Retain
+          Properties:
+            AttributeDefinitions:
+              -
+                AttributeName: location
+                AttributeType: S
+            KeySchema:
+              -
+                AttributeName: location
+                KeyType: HASH
+            ProvisionedThroughput:
+              ReadCapacityUnits: 5
+              WriteCapacityUnits: 5
+            TableName: event-guru-events-cache
+
+    EventGuruBucket:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: event-guru-store
@@ -35,11 +79,11 @@ resources:
             AllowedOrigins:
               - http://ask-ifr-download.s3.amazonaws.com
 
-    Mp3BucketPolicy:
+    EventGuruBucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
         Bucket:
-          Ref: Mp3Bucket
+          Ref: EventGuruBucket
         PolicyDocument:
           Statement:
             - Action:
@@ -50,7 +94,7 @@ resources:
                 Fn::Join:
                   - ''
                   - - 'arn:aws:s3:::'
-                    - Ref: Mp3Bucket
+                    - Ref: EventGuruBucket
                     - '/*'
 
 functions:
