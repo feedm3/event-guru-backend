@@ -42,12 +42,14 @@ const sendMail = (recipient, subject, { html, text }) => {
     })
 };
 
-const html = "Hi<br>this is a test";
-const text = "Hi this is a line this not";
-sendMail('piano.fabian@t-online.de', 'Event Guru @ Bruno Mars', { html, text })
-    .then(data => console.log('data', data))
-    .catch(err => console.error('error', err))
-    .then(() => console.log('finally'));
+/*
+* const html = "Hi<br>this is a test";
+* const text = "Hi this is a line this not";
+* sendMail('piano.fabian@t-online.de', 'Event Guru @ Bruno Mars', { html, text })
+*     .then(data => console.log('data', data))
+*     .catch(err => console.error('error', err))
+*     .then(() => console.log('finally'));
+*/
 
 module.exports = {
     sendMail

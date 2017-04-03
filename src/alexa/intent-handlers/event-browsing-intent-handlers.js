@@ -8,6 +8,13 @@ const mailService = require('../../api/aws-ses');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
 module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
+    'LaunchRequest'() {
+        const city = this.attributes[SESSION_ATTRIBUTES.CITY];
+        this.emit(':ask', speechOutput.EVENT_BROWSING.LAUNCH_REQUEST(city), speechOutput.EVENT_BROWSING.LAUNCH_REQUEST(city));
+    },
+    'WantToContinueIntent'() {
+        this.emitWithState('NextEventIntent');
+    },
     'AMAZON.YesIntent'() {
         this.emitWithState('NextEventIntent');
     },
@@ -65,7 +72,7 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
     },
 
     // ----------------------- more infos
-    'MoreInformation'() {
+    'MoreInformationIntent'() {
         const accessToken = this.event.session.user.accessToken;
         if (accessToken) {
             amazonLogin.fetchUser(accessToken)
@@ -98,6 +105,12 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
     },
 
     // ----------------------- cancel handling
+    'StartNewSearchIntent'() {
+        this.attribues = {};
+        this.handler.state = '';
+        this.emitWithState('LaunchRequest');
+    }
+    ,
     'AMAZON.NoIntent'() {
         this.emitWithState('AMAZON.CancelIntent');
     },

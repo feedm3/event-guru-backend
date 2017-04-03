@@ -10,7 +10,13 @@
       ]
     },
     {
-      "intent": "MoreInformation"
+      "intent": "MoreInformationIntent"
+    },
+    {
+      "intent": "WantToContinueIntent"
+    },
+    {
+      "intent": "StartNewSearchIntent"
     },
     {
       "intent": "AMAZON.NoIntent"

@@ -7,16 +7,40 @@ EventsInCityIntent {city}
 EventsInCityIntent nach events in {city}
 EventsInCityIntent nach musik in {city}
 
-MoreInformation mehr informationen
-MoreInformation dazu will ich mehr wissen
-MoreInformation da will ich hin
-MoreInformation da will ich gehen
-MoreInformation da will ich mehr dazu wissen
-MoreInformation das interessiert mich
-MoreInformation da hab ich lust hin zu gehen
-MoreInformation da möchte ich gerne hin
-MoreInformation da würde ich gerne hin gehen
-MoreInformation gib mir mehr informationen dazu
-MoreInformation auf dieses konzert will ich hin
-MoreInformation das konzert interessiert mich
-MoreInformation zu dem konzert will ich mehr wissen
+MoreInformationIntent mehr informationen
+MoreInformationIntent dazu will ich mehr wissen
+MoreInformationIntent da will ich hin
+MoreInformationIntent da will ich gehen
+MoreInformationIntent da will ich mehr dazu wissen
+MoreInformationIntent das interessiert mich
+MoreInformationIntent da hab ich lust hin zu gehen
+MoreInformationIntent da möchte ich gerne hin
+MoreInformationIntent da würde ich gerne hin gehen
+MoreInformationIntent gib mir mehr informationen dazu
+MoreInformationIntent auf dieses konzert will ich hin
+MoreInformationIntent auf dieses konzert will ich gehen
+MoreInformationIntent das konzert interessiert mich
+MoreInformationIntent zu dem konzert will ich mehr wissen
+MoreInformationIntent von dem konzert will ich mehr wissen
+
+WantToContinueIntent ich möchte weiter machen
+WantToContinueIntent ich will weiter machen
+WantToContinueIntent ich möchte an der letzen stelle weiter machen
+WantToContinueIntent mach weiter
+WantToContinueIntent da wo ich das letzte mal war
+WantToContinueIntent mach an der stelle vom letzten mal weiter
+
+StartNewSearchIntent eine neue suche starten
+StartNewSearchIntent ich will eine neue suche starten
+StartNewSearchIntent neue suche starten
+StartNewSearchIntent suche starten
+StartNewSearchIntent ich will neu suchen
+StartNewSearchIntent ich will nach einem neuen konzert suchen
+StartNewSearchIntent ich will von vorne anfangen zu suchen
+StartNewSearchIntent ich will nach einem anderen konzert suchen
+StartNewSearchIntent ich will wo anders hin
+StartNewSearchIntent ich will von vorne anfangen
+StartNewSearchIntent von vorne anfangen
+StartNewSearchIntent von vorne anfangen anfangen zu suchen
+StartNewSearchIntent nach einem anderen konzert suchen
+StartNewSearchIntent wo anders hin
