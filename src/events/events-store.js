@@ -1,17 +1,27 @@
 'use strict';
 
 const songkick = require('../api/songkick');
-const AWS = require('aws-sdk');
-AWS.config.update({
-    region: "eu-west-1",
-});
-const dynamoDbClient = new AWS.DynamoDB.DocumentClient();
+const dyanmoDb = require('../api/aws-dynamo-db');
 
 const PAGE_SIZE = 5;
 
 const fetchPagedEvents = (location, pageNumber) => {
     pageNumber = pageNumber < 1 ? 0 : pageNumber;
-    return fetchAllEvents(location)
+
+    return dyanmoDb.getEvents(location)
+        .then(eventsDataFromDb => {
+            if (eventsDataFromDb.eventCount === 0) {
+                // data is not in db
+                return fetchAllEvents(location)
+                    .then(eventsData => {
+                        return dyanmoDb.putEvents(location, eventsData)
+                            .then(() => eventsData)
+                    })
+            } else {
+                // data was in db
+                return eventsDataFromDb;
+            }
+        })
         .then(eventsData => {
             return {
                 events: eventsData.events.slice((pageNumber - 1) * PAGE_SIZE, pageNumber * PAGE_SIZE),

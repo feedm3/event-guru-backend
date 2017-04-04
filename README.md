@@ -8,6 +8,7 @@ Requirements for _/src_:
 - AWS credentials as environment variables
 - A .env file with all variables from the .env.example
 - For tests a .env.test file with all variables from the .env.example
+- Enable TTL on the `event-guru-events-cache` dynamodb table
 
 ### Mail with AWS SES
 
