@@ -40,7 +40,7 @@ const fetchAllEvents = (location) => {
     const MAX_PAGES = 10;
     return songkick.getPagedEventsByLocation(location, 1, SONGKICK_MAX_PAGE_SIZE)
         .then(eventsData => {
-            const pageCount = eventsData.pageCount < MAX_PAGES ? eventsData.pageCount : MAX_PAGES;
+            const pageCount = eventsData.pageCount;
             const eventsPromises = [];
             for (let page = 2; page <= pageCount; page++) {
                 eventsPromises.push(songkick.getPagedEventsByLocation(location, page, SONGKICK_MAX_PAGE_SIZE)
@@ -52,7 +52,7 @@ const fetchAllEvents = (location) => {
                 .then(() => {
                     eventsData.events.sort((a, b) => b.popularity - a.popularity);
                     return {
-                        events: eventsData.events,
+                        events: eventsData.events.slice(0, SONGKICK_MAX_PAGE_SIZE * MAX_PAGES),
                         eventCount: eventsData.events.length,
                         pageCount: pageCount
                     };
