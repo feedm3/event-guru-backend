@@ -10,7 +10,7 @@ const fetchPagedEvents = (location, pageNumber) => {
 
     return dyanmoDb.getEvents(location)
         .then(eventsDataFromDb => {
-            if (eventsDataFromDb.eventCount === 0) {
+            if (!eventsDataFromDb || eventsDataFromDb.eventCount === 0) {
                 // data is not in db
                 return fetchAllEvents(location)
                     .then(eventsData => {
