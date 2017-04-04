@@ -9,6 +9,10 @@ const TABLE_NAME = process.env.EVENT_GURU_EVENTS_CACHE_TABLE;
 const dynamoDbClient = new AWS.DynamoDB.DocumentClient();
 
 const getEvents = (location) => {
+    if (!location) {
+        return Promise.reject(new Error('Location must be set'));
+    }
+
     const searchParams = {
         TableName: TABLE_NAME,
         KeyConditionExpression: "#location = :location",
@@ -16,14 +20,11 @@ const getEvents = (location) => {
             "#location": "location"
         },
         ExpressionAttributeValues: {
-            ":location": location
+            ":location": location.toLowerCase()
         }
     };
 
     return new Promise((resolve, reject) => {
-        if (!location) {
-            reject(new Error('Location must not be null'));
-        }
         dynamoDbClient.query(searchParams, (err, data) => {
             if (err) {
                 reject(err);
@@ -43,11 +44,15 @@ const getEvents = (location) => {
 };
 
 const putEvents = (location, eventsData) => {
+    if (!location) {
+        return Promise.reject(new Error('Location must be set'));
+    }
+
     const endOfTodayInSeconds = moment().endOf('day').unix();
     const params = {
         TableName: TABLE_NAME,
         Item: {
-            location: location,
+            location: location.toLowerCase(),
             eventsData: eventsData,
             ttl: endOfTodayInSeconds
         }

@@ -14,7 +14,7 @@ chai.should();
 describe.only('Getting the events the first time', function(){
     it('should should store them in dynamodb', function() {
         this.timeout(6000);
-        return events.fetchPagedEvents('Munich', 1)
+        return events.fetchPagedEvents('berlin', 1)
             .then(eventsData => {
                 eventsData.should.be.an('object');
                 eventsData.should.have.keys('eventCount', 'events', 'pageCount');

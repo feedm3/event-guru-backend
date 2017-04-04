@@ -37,10 +37,10 @@ module.exports = {
 
 const fetchAllEvents = (location) => {
     const SONGKICK_MAX_PAGE_SIZE = 50;
+    const MAX_PAGES = 10;
     return songkick.getPagedEventsByLocation(location, 1, SONGKICK_MAX_PAGE_SIZE)
         .then(eventsData => {
-            const pageCount = eventsData.pageCount;
-
+            const pageCount = eventsData.pageCount < MAX_PAGES ? eventsData.pageCount : MAX_PAGES;
             const eventsPromises = [];
             for (let page = 2; page <= pageCount; page++) {
                 eventsPromises.push(songkick.getPagedEventsByLocation(location, page, SONGKICK_MAX_PAGE_SIZE)

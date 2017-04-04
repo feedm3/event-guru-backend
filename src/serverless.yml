@@ -111,3 +111,9 @@ functions:
       - sns: email-bounces
       - sns: email-complaints
       - sns: email-deliveries
+
+  events-preload:
+    handler: events/events-preload.run
+    timeout: 300
+    events:
+      - schedule: cron(5 0 * * ? *) # every 5 minutes every midnight
