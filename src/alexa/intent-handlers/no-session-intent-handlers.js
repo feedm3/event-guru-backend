@@ -21,13 +21,15 @@ module.exports = {
             .then(data => {
                 if (data.eventCount === 0) {
                     this.emitWithState(':ask', speechOutput.CITY_SEARCH.NOTHING_FOUND(city), speechOutput.NO_SESSION.WHAT_CITY_REPROMT);
+                    this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = 0;
+                    this.attributes[SESSION_ATTRIBUTES.CITY] = undefined;
+                    this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = {};
                 } else {
+                    console.log('events found');
                     this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = pageNumber;
                     this.attributes[SESSION_ATTRIBUTES.CITY] = city;
-                    this.attributes[SESSION_ATTRIBUTES.EVENTS] = data.events;
-                    this.attributes[SESSION_ATTRIBUTES.EVENT_COUNT] = data.eventCount;
-                    this.attributes[SESSION_ATTRIBUTES.PAGE_COUNT] = data.pageCount;
-
+                    this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = data;
+                    console.log('events saved');
                     // to the next state
                     this.handler.state = STATES.EVENT_BROWSING_MODE;
                     this.emitWithState('NextEventIntent');

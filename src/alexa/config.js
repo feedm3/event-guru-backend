@@ -10,10 +10,8 @@ const STATES = {
 const SESSION_ATTRIBUTES = {
     CURRENT_EVENT_INDEX: 'currentEventIndex',
     CURRENT_PAGE_NUMBER: 'currentPageNumber',
-    EVENTS: 'events',
-    CITY: 'city',
-    EVENT_COUNT: 'eventCount',
-    PAGE_COUNT: 'pageCount'
+    EVENTS_DATA: 'eventsData',
+    CITY: 'city'
 };
 
 module.exports = {

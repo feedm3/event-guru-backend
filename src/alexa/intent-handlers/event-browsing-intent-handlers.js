@@ -24,10 +24,11 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
     'NextEventIntent'() {
         const currentEventIndex = this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] || 0;
         const currentPageNumber = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER];
-        const events = this.attributes[SESSION_ATTRIBUTES.EVENTS];
+        const eventsData = this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA];
         const city = this.attributes[SESSION_ATTRIBUTES.CITY];
-        const eventCount = this.attributes[SESSION_ATTRIBUTES.EVENT_COUNT];
-        const pageCount = this.attributes[SESSION_ATTRIBUTES.PAGE_COUNT];
+        const events = eventsData.events;
+        const eventCount = eventsData.eventCount;
+        const pageCount = eventsData.pageCount;
 
         if (events.length > currentEventIndex) {
             this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = currentEventIndex + 1;
@@ -78,7 +79,7 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
             amazonLogin.fetchUser(accessToken)
                 .then(user => {
                     const currentEventIndex = this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] || 0;
-                    const events = this.attributes[SESSION_ATTRIBUTES.EVENTS];
+                    const events = this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA].events;
                     const event = events[currentEventIndex];
 
                     eventsApi.improveExternalInformation(event)
@@ -106,7 +107,10 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
 
     // ----------------------- cancel handling
     'StartNewSearchIntent'() {
-        this.attribues = {};
+        this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = 0;
+        this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = 0;
+        this.attributes[SESSION_ATTRIBUTES.CITY] = undefined;
+        this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = {};
         this.handler.state = '';
         this.emitWithState('LaunchRequest');
     }
