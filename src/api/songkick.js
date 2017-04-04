@@ -3,6 +3,8 @@
 const request = require('request-promise');
 const moment = require('moment');
 
+const ALLOWED_COUNTRY = 'Germany';
+
 const POWERED_BY = "Concerts by Songkick";
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 5;
@@ -81,7 +83,10 @@ const getLongLatFromLocation = (locationName) => {
                 return Promise.reject(new Error('Songkick API could not be requested', data));
             }
             if (data.resultsPage.results.location) {
-                const city = data.resultsPage.results.location[0].city;
+                const locations = data.resultsPage.results.location;
+                const germanLocations = locations.filter(location => location.city && location.city.country && location.city.country.displayName === ALLOWED_COUNTRY)
+                    .filter(location => location.city.lat);
+                const city = germanLocations[0].city;
                 return {
                     long: city.lng,
                     lat: city.lat

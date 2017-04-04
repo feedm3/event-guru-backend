@@ -10,6 +10,10 @@ Requirements for _/src_:
 - For tests a .env.test file with all variables from the .env.example
 - Enable TTL on the `event-guru-events-cache` dynamodb table
 
+## Notes
+- Only 500 events are stored to any location, even if there are more
+- Only german cities are used!
+
 ### Mail with AWS SES
 
 You have to react to bounce and complaint messages. We do this via SNS which is connected to

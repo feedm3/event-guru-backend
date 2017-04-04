@@ -11,7 +11,7 @@ chai.use(require('chai-string'));
 chai.should();
 
 
-describe.only('Getting the events the first time', function(){
+describe('Getting the events the first time', function(){
     it('should should store them in dynamodb', function() {
         this.timeout(6000);
         return events.fetchPagedEvents('berlin', 1)
