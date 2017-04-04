@@ -11,7 +11,7 @@ chai.use(require('chai-string'));
 chai.should();
 
 
-describe.only('Getting the events', function(){
+describe('Getting the events', function(){
     it('should return a paged result', function() {
         const PAGE = 1;
         const PAGE_SIZE = 5;
@@ -20,7 +20,6 @@ describe.only('Getting the events', function(){
             .then(eventsData => {
                 eventsData.should.include.keys('eventCount', 'events', 'pageCount');
                 eventsData.events.should.have.length(PAGE_SIZE);
-                console.log('eventsData', eventsData);
             })
     });
 });
