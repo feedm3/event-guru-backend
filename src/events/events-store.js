@@ -6,7 +6,7 @@ const dyanmoDb = require('../api/aws-dynamo-db');
 const PAGE_SIZE = 5;
 
 const fetchPagedEvents = (location, pageNumber) => {
-    pageNumber = pageNumber < 1 ? 0 : pageNumber;
+    pageNumber = pageNumber < 1 ? 1 : pageNumber;
 
     return dyanmoDb.getEvents(location)
         .then(eventsDataFromDb => {

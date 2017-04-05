@@ -6,35 +6,28 @@ const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
 module.exports = {
     'LaunchRequest' () {
-        this.handler.state = STATES.CITY_SEARCH_MODE;
-        this.emit(':ask', speechOutput.NO_SESSION.WELCOME + speechOutput.NO_SESSION.WHAT_CITY, speechOutput.NO_SESSION.WHAT_CITY_REPROMT);
+        const numberOfVisits = this.attributes[SESSION_ATTRIBUTES.NUMBER_OF_VISITS] || 1;
+        this.attributes[SESSION_ATTRIBUTES.NUMBER_OF_VISITS] = numberOfVisits + 1;
+
+        if (numberOfVisits === 1) {
+            this.emit('GoToCitySearchFirstTimeIntent');
+        } else {
+            this.emit('GoToCitySearchIntent');
+        }
     },
+    'GoToCitySearchFirstTimeIntent'() {
+        this.handler.state = STATES.CITY_SEARCH_MODE;
+        this.emit(':ask', speechOutput.NO_SESSION.WELCOME + speechOutput.CITY_SEARCH.ASK, speechOutput.CITY_SEARCH.ASK_REPROMT);
+    },
+    'GoToCitySearchIntent'() {
+        this.handler.state = STATES.CITY_SEARCH_MODE;
+        this.emit(':ask', speechOutput.NO_SESSION.WELCOME_BACK + speechOutput.CITY_SEARCH.ASK, speechOutput.CITY_SEARCH.ASK_REPROMT);
+    },
+
+    // ----------------------- direct intent
     'EventsInCityIntent'() {
         this.handler.state = STATES.CITY_SEARCH_MODE;
         this.emitWithState('EventsInCityIntent');
-    },
-
-    // ----------------------- helper methods
-    'FetchEvents'(city) {
-        const pageNumber = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] + 1 || 1;
-        eventsApi.fetchPagedEvents(city, pageNumber)
-            .then(data => {
-                if (data.eventCount === 0) {
-                    this.emitWithState(':ask', speechOutput.CITY_SEARCH.NOTHING_FOUND(city), speechOutput.NO_SESSION.WHAT_CITY_REPROMT);
-                    this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = 0;
-                    this.attributes[SESSION_ATTRIBUTES.CITY] = undefined;
-                    this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = {};
-                } else {
-                    console.log('events found');
-                    this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = pageNumber;
-                    this.attributes[SESSION_ATTRIBUTES.CITY] = city;
-                    this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = data;
-                    console.log('events saved');
-                    // to the next state
-                    this.handler.state = STATES.EVENT_BROWSING_MODE;
-                    this.emitWithState('NextEventIntent');
-                }
-            });
     },
 
     // ----------------------- stop handling
@@ -42,6 +35,7 @@ module.exports = {
         this.emit('AMAZON.StopIntent');
     },
     'AMAZON.StopIntent'(){
+        this.handler.state = undefined;
         this.emit(':tell', speechOutput.NO_SESSION.STOP);
     },
 
@@ -50,7 +44,7 @@ module.exports = {
         if (this.handler.state) {
             this.emitWithState('Unhandled');
         } else {
-            console.error('Unhandled error during no session mode', this.attributes);
+            console.error('Unhandled error during no session mode');
             this.emit(':ask', speechOutput.NO_SESSION.UNHANDLED + speechOutput.NO_SESSION.WHAT_CITY, speechOutput.NO_SESSION.WHAT_CITY_REPROMT);
         }
     }

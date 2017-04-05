@@ -11,7 +11,8 @@ const SESSION_ATTRIBUTES = {
     CURRENT_EVENT_INDEX: 'currentEventIndex',
     CURRENT_PAGE_NUMBER: 'currentPageNumber',
     EVENTS_DATA: 'eventsData',
-    CITY: 'city'
+    CITY: 'city',
+    NUMBER_OF_VISITS: 'numberOfVisits'
 };
 
 module.exports = {

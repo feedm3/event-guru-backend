@@ -2,34 +2,48 @@
 
 const Alexa = require('alexa-sdk');
 const speechOutput = require('../speech-output');
-const { STATES } = require('../config');
+const { SESSION_ATTRIBUTES, STATES } = require('../config');
 
 module.exports = Alexa.CreateStateHandler(STATES.CITY_SEARCH_MODE, {
+    'LaunchRequest'() {
+        this.emit('LaunchRequest');
+    },
     'EventsInCityIntent' () {
         const city = this.event.request.intent.slots.city.value;
         if (!city) {
-            this.emit(':ask', "Ich habe die Stadt nicht verstanden. Für weche Stadt möchtest du nochmal Konzertinfos?");
+            this.emitWithState('Unhandled');
         } else {
-            this.emit('FetchEvents', city);
+            this.emitWithState('StartEventsBrowsingIntent', city);
         }
+    },
+    'StartEventsBrowsingIntent'(city) {
+        this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = 0;
+        this.attributes[SESSION_ATTRIBUTES.CITY] = city;
+
+        this.handler.state = STATES.EVENT_BROWSING_MODE;
+        this.emitWithState('FetchEventsIntent');
     },
 
     // ----------------------- help handling
     'AMAZON.HelpIntent'(){
-        this.emit(':ask', speechOutput.NO_SESSION.HELP + speechOutput.NO_SESSION.WHAT_CITY, speechOutput.NO_SESSION.WHAT_CITY_REPROMT);
+        this.emit(':ask', speechOutput.CITY_SEARCH.HELP + speechOutput.CITY_SEARCH.ASK_REPROMT, speechOutput.CITY_SEARCH.ASK_REPROMT);
     },
 
     // ----------------------- stop handling
     'AMAZON.CancelIntent'(){
-        this.emit('AMAZON.CancelIntent');
+        this.emitWithState('AMAZON.StopIntent');
+    },
+    'SessionEndedRequest'() {
+        this.emitWithState('AMAZON.StopIntent');
     },
     'AMAZON.StopIntent'(){
+        this.handler.state = undefined;
         this.emit('AMAZON.StopIntent');
     },
 
     // ----------------------- error handling
     'Unhandled'() {
-        console.error('Unhandled error during city search mode', this.attributes);
-        this.emit(':ask', speechOutput.NO_SESSION.UNHANDLED + speechOutput.NO_SESSION.WHAT_CITY, speechOutput.NO_SESSION.WHAT_CITY_REPROMT);
+        console.error('Unhandled error during city search mode');
+        this.emit(':ask', speechOutput.CITY_SEARCH.UNHANDLED + speechOutput.CITY_SEARCH.ASK_REPROMT, speechOutput.CITY_SEARCH.ASK_REPROMT);
     }
 });

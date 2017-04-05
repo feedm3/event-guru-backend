@@ -9,8 +9,7 @@ const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
 module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
     'LaunchRequest'() {
-        const city = this.attributes[SESSION_ATTRIBUTES.CITY];
-        this.emit(':ask', speechOutput.EVENT_BROWSING.LAUNCH_REQUEST(city), speechOutput.EVENT_BROWSING.LAUNCH_REQUEST(city));
+        this.emit(':ask', speechOutput.EVENT_BROWSING.LAUNCH_REQUEST(this.attributes[SESSION_ATTRIBUTES.CITY]), speechOutput.EVENT_BROWSING.LAUNCH_REQUEST(this.attributes[SESSION_ATTRIBUTES.CITY]))
     },
     'WantToContinueIntent'() {
         this.emitWithState('NextEventIntent');
@@ -20,6 +19,28 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
     },
     'AMAZON.NextIntent'() {
         this.emitWithState('NextEventIntent');
+    },
+    'FetchEventsIntent'() {
+        const city = this.attributes[SESSION_ATTRIBUTES.CITY];
+        const pageNumber = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER];
+        eventsApi.fetchPagedEvents(city, pageNumber)
+            .then(data => {
+                this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = 0;
+
+                if (data.eventCount === 0) {
+                    this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = 0;
+                    this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = {};
+
+                    this.handler.state = STATES.CITY_SEARCH_MODE;
+                    this.emit(':ask', speechOutput.CITY_SEARCH.NOTHING_FOUND(city), speechOutput.CITY_SEARCH.ASK_REPROMT);
+                } else {
+                    this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = pageNumber;
+                    this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = data;
+
+                    // to the next state
+                    this.emitWithState('NextEventIntent');
+                }
+            });
     },
     'NextEventIntent'() {
         const currentEventIndex = this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] || 0;
@@ -66,8 +87,8 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
             if (pageCount === currentPageNumber) {
                 this.emit(':tell', speechOutput.EVENT_BROWSING.NO_MORE_CONCERTS);
             } else {
-                this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = 0;
-                this.emit('FetchEvents', city);
+                this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] + 1;
+                this.emit('FetchEventsIntent');
             }
         }
     },
@@ -111,10 +132,9 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
         this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = 0;
         this.attributes[SESSION_ATTRIBUTES.CITY] = undefined;
         this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = {};
-        this.handler.state = '';
-        this.emitWithState('LaunchRequest');
-    }
-    ,
+        this.handler.state = undefined;
+        this.emit('LaunchRequest');
+    },
     'AMAZON.NoIntent'() {
         this.emitWithState('AMAZON.CancelIntent');
     },
@@ -127,12 +147,14 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
 
     // ----------------------- error handling
     'Unhandled'() {
-        console.error('Unhandled error during event browsing mode', this.attributes);
+        console.error('Unhandled error during event browsing mode');
         this.emit(':ask', speechOutput.EVENT_BROWSING.UNHANDLED + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
     }
 });
 
 const formatCardContent = (event) => {
+    // benutzer datauf hinweisen dass er mit "Alexa, mehr Infos" die Daten per Mail bekommen kann
+
     return event.dateUser + '\n' +
         'Ort: ' + event.venue + '\n' +
         'Mehr Infos: ' + event.shortUrl + '\n' +
