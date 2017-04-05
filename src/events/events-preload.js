@@ -22,7 +22,7 @@ module.exports.run = (event, context, callback) => {
 
     const fetchEventsPromises = [];
     CITIES_TO_PRELOAD.forEach(city => {
-        fetchEventsPromises.push(eventsStore.fetchPagedEvents(city, 1));
+        fetchEventsPromises.push(eventsStore.updateEvents(city));
     });
     return Promise.all(fetchEventsPromises)
         .then(() => {

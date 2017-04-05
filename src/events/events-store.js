@@ -31,8 +31,19 @@ const fetchPagedEvents = (location, pageNumber) => {
         })
 };
 
+const updateEvents = (location) => {
+    return fetchAllEvents(location)
+        .then(eventsData => {
+            return dyanmoDb.putEvents(location, eventsData)
+                .catch(err => {
+                    console.log('Could not update events data for ' + location, err);
+                })
+        })
+};
+
 module.exports = {
-    fetchPagedEvents
+    fetchPagedEvents,
+    updateEvents
 };
 
 const fetchAllEvents = (location) => {
