@@ -6,8 +6,8 @@
   "scripts": {
     "deploy:init": "serverless deploy",
     "deploy:remove": "serverless remove",
-    "deploy": "serverless deploy function --function alexaSKil",
-    "invoke": "serverless invoke --function alexaSKil",
+    "deploy": "serverless deploy function --function alexaSkill",
+    "invoke": "serverless invoke --function alexaSkill",
     "logs:tail": "serverless logs --tail --function alexaSkill",
     "test": "mocha --recursive"
   },
@@ -31,7 +31,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "alexa-sdk": "^1.0.7",
+    "alexa-sdk": "^1.0.8",
     "aws-sdk": "^2.38.0",
     "dotenv-safe": "^4.0.3",
     "moment": "^2.18.1",
