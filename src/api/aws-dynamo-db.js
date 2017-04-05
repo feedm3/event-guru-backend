@@ -48,7 +48,7 @@ const putEvents = (location, eventsData) => {
         return Promise.reject(new Error('Location must be set'));
     }
 
-    const endOfTodayInSeconds = moment().endOf('day').unix();
+    const endOfTodayInSeconds = moment().endOf('day').utc(true).unix();
     const params = {
         TableName: TABLE_NAME,
         Item: {
