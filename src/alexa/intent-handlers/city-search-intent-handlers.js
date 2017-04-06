@@ -2,12 +2,16 @@
 
 const Alexa = require('alexa-sdk');
 const speechOutput = require('../speech-output');
+const moment = require('moment');
 const { SESSION_ATTRIBUTES, STATES } = require('../config');
 
 module.exports = Alexa.CreateStateHandler(STATES.CITY_SEARCH_MODE, {
     'LaunchRequest'() {
+        const lastVisit = this.attributes[SESSION_ATTRIBUTES.LAST_VISIT] || new Date();
+        this.attributes[SESSION_ATTRIBUTES.LAST_VISIT] = new Date();
+
         const city = this.attributes[SESSION_ATTRIBUTES.CITY];
-        if (!city) {
+        if (!city || moment().diff(moment(lastVisit), 'days') >= 1) {
             this.emit('LaunchRequest');
         } else {
             this.handler.state = STATES.CITY_SEARCH_LAUNCH_MODE;

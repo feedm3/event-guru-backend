@@ -2,10 +2,12 @@
 
 const speechOutput = require('../speech-output');
 const cardBuilder = require('../util/card-builder');
+const moment = require('moment');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
 module.exports = {
     'LaunchRequest' () {
+        this.attributes[SESSION_ATTRIBUTES.LAST_VISIT] = new Date();
         const numberOfVisits = this.attributes[SESSION_ATTRIBUTES.NUMBER_OF_VISITS] || 1;
         this.attributes[SESSION_ATTRIBUTES.NUMBER_OF_VISITS] = numberOfVisits + 1;
 

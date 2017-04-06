@@ -13,7 +13,8 @@ const SESSION_ATTRIBUTES = {
     CURRENT_PAGE_NUMBER: 'currentPageNumber',
     EVENTS_DATA: 'eventsData',
     CITY: 'city',
-    NUMBER_OF_VISITS: 'numberOfVisits'
+    NUMBER_OF_VISITS: 'numberOfVisits',
+    LAST_VISIT: 'lastVisit'
 };
 
 module.exports = {
