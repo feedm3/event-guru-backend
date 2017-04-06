@@ -1,11 +1,13 @@
-EventsInCityIntent wer spielt in {city}
-EventsInCityIntent nach konzerten in {city}
-EventsInCityIntent nach konzerte in {city}
-EventsInCityIntent konzerte in {city}
 EventsInCityIntent in {city}
 EventsInCityIntent {city}
-EventsInCityIntent nach events in {city}
-EventsInCityIntent nach musik in {city}
+EventsInCityIntent ich würde gerne in {city} auf ein konzert gehen
+EventsInCityIntent ich will in {city} auf ein konzert gehen
+EventsInCityIntent am liebsten in {city}
+
+DirectEventSearchIntent nach events in {city}
+DirectEventSearchIntent wer spielt in {city}
+DirectEventSearchIntent nach konzerten in {city}
+DirectEventSearchIntent nach konzerte in {city}
 
 MoreInformationIntent mehr informationen
 MoreInformationIntent dazu will ich mehr wissen
@@ -23,6 +25,9 @@ MoreInformationIntent das konzert interessiert mich
 MoreInformationIntent zu dem konzert will ich mehr wissen
 MoreInformationIntent zu dem konzert will ich mehr wissen
 MoreInformationIntent schick mir die infos per mail
+MoreInformationIntent schick mir die infos bitte per mail
+MoreInformationIntent schick mir das konzert per mail
+MoreInformationIntent schick mir das letzte konzert per mail
 MoreInformationIntent mehr infos per mail
 MoreInformationIntent mehr infos per e-mail
 MoreInformationIntent mehr infos per email
@@ -32,6 +37,10 @@ MoreInformationIntent par mail
 MoreInformationIntent par e-mail
 MoreInformationIntent par email
 MoreInformationIntent par i mail
+MoreInformationIntent kaufe karten
+MoreInformationIntent kaufe karten dafür
+MoreInformationIntent kaufe mir karten dafür
+MoreInformationIntent kaufe mir eine karte
 
 WantToContinueIntent ich möchte weiter machen
 WantToContinueIntent ich will weiter machen
@@ -39,6 +48,9 @@ WantToContinueIntent ich möchte an der letzen stelle weiter machen
 WantToContinueIntent mach weiter
 WantToContinueIntent da wo ich das letzte mal war
 WantToContinueIntent mach an der stelle vom letzten mal weiter
+WantToContinueIntent mach mit dem nächsten Konzert weiter
+WantToContinueIntent nächstes Konzert
+WantToContinueIntent ich will mit dem nächsten Konzert weiter machen
 
 StartNewSearchIntent eine neue suche starten
 StartNewSearchIntent ich will eine neue suche starten
@@ -54,3 +66,5 @@ StartNewSearchIntent von vorne anfangen
 StartNewSearchIntent von vorne anfangen anfangen zu suchen
 StartNewSearchIntent nach einem anderen konzert suchen
 StartNewSearchIntent wo anders hin
+StartNewSearchIntent ich will diesmal wo anderst hin
+StartNewSearchIntent ich will diesmal wo anderst suchen

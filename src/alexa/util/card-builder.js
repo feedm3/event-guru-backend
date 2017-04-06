@@ -27,12 +27,11 @@ const buildEventsOverviewCard = (location, numberOfEvents) => {
 };
 
 const buildEventCard = (event, city) => {
-    console.log('Date user,', event.dateUser);
     const title = event.artist;
     let content = `${event.venue}, ${capitalizeEveryFirstWord(city)} \n` +
         `${event.dateUser} \n` +
         `Karten: ${event.shortUrl} \n` +
-        `"Alexa, mehr Infos per Mail" \n` +
+        `"Alexa, schick mir das Konzert per Mail" \n` +
         `${event.poweredBy}`;
     const images = {
         smallImageUrl: event.imageMediumUrl,

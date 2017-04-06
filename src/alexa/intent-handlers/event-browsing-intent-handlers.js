@@ -8,19 +8,9 @@ const mailService = require('../../api/aws-ses');
 const cardBuilder = require('../util/card-builder');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
+// "Wiederhole" Intent
+
 module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
-    'LaunchRequest'() {
-        this.emit(':ask', speechOutput.EVENT_BROWSING.LAUNCH_REQUEST(this.attributes[SESSION_ATTRIBUTES.CITY]), speechOutput.EVENT_BROWSING.LAUNCH_REQUEST(this.attributes[SESSION_ATTRIBUTES.CITY]))
-    },
-    'WantToContinueIntent'() {
-        this.emitWithState('NextEventIntent');
-    },
-    'AMAZON.YesIntent'() {
-        this.emitWithState('NextEventIntent');
-    },
-    'AMAZON.NextIntent'() {
-        this.emitWithState('NextEventIntent');
-    },
     'FetchEventsIntent'() {
         const city = this.attributes[SESSION_ATTRIBUTES.CITY];
         const pageNumber = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER];
@@ -43,9 +33,18 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
                 }
             });
     },
+    'AMAZON.YesIntent'() {
+        this.emitWithState('NextEventIntent');
+    },
+    'AMAZON.NextIntent'() {
+        this.emitWithState('NextEventIntent');
+    },
+    'WantToContinueIntent'() {
+        this.emitWithState('NextEventIntent');
+    },
     'NextEventIntent'() {
         const currentEventIndex = this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] || 0;
-        const currentPageNumber = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER];
+        const currentPageNumber = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] || 1;
         const eventsData = this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA];
         const city = this.attributes[SESSION_ATTRIBUTES.CITY];
         const events = eventsData.events;
@@ -122,21 +121,7 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
         this.emit(':ask', speechOutput.EVENT_BROWSING.HELP + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT , speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
     },
 
-    // ----------------------- direct intent handling
-    'EventsInCityIntent'() {
-        // this clashes when we ask to user to continue becuase it understands "weiter" as a city
-        this.emit('EventsInCityIntent');
-    },
-
     // ----------------------- cancel handling
-    'StartNewSearchIntent'() {
-        this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = 0;
-        this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = 0;
-        this.attributes[SESSION_ATTRIBUTES.CITY] = undefined;
-        this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = {};
-        this.handler.state = undefined;
-        this.emit('LaunchRequest');
-    },
     'AMAZON.NoIntent'() {
         this.emitWithState('AMAZON.CancelIntent');
     },
@@ -144,7 +129,12 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
         this.emitWithState('AMAZON.CancelIntent');
     },
     'AMAZON.CancelIntent'(){
-        this.emit(':tell', speechOutput.NO_SESSION.STOP);
+        this.handler.state = STATES.CITY_SEARCH_MODE;
+        this.emit(':tell', speechOutput.NO_SESSION.GOODBYE);
+    },
+    'SessionEndedRequest'() {
+        this.handler.state = STATES.CITY_SEARCH_MODE;
+        this.emit(':saveState', true);
     },
 
     // ----------------------- error handling

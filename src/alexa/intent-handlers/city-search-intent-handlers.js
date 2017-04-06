@@ -6,7 +6,13 @@ const { SESSION_ATTRIBUTES, STATES } = require('../config');
 
 module.exports = Alexa.CreateStateHandler(STATES.CITY_SEARCH_MODE, {
     'LaunchRequest'() {
-        this.emit('LaunchRequest');
+        const city = this.attributes[SESSION_ATTRIBUTES.CITY];
+        if (!city) {
+            this.emit('LaunchRequest');
+        } else {
+            this.handler.state = STATES.CITY_SEARCH_LAUNCH_MODE;
+            this.emitWithState('AskContinueOrNewIntent');
+        }
     },
     'EventsInCityIntent' () {
         const city = this.event.request.intent.slots.city.value;
@@ -33,12 +39,18 @@ module.exports = Alexa.CreateStateHandler(STATES.CITY_SEARCH_MODE, {
     'AMAZON.CancelIntent'(){
         this.emitWithState('AMAZON.StopIntent');
     },
-    'SessionEndedRequest'() {
-        this.emitWithState('AMAZON.StopIntent');
-    },
     'AMAZON.StopIntent'(){
         this.handler.state = undefined;
         this.emit('AMAZON.StopIntent');
+    },
+    'SessionEndedRequest'() {
+        this.handler.state = undefined;
+        this.emit(':saveState', true);
+    },
+
+    // ----------------------- direct intent handling
+    'DirectEventSearchIntent'() {
+        this.emit('EventsInCityIntent');
     },
 
     // ----------------------- error handling

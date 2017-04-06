@@ -9,7 +9,9 @@ module.exports = {
         const numberOfVisits = this.attributes[SESSION_ATTRIBUTES.NUMBER_OF_VISITS] || 1;
         this.attributes[SESSION_ATTRIBUTES.NUMBER_OF_VISITS] = numberOfVisits + 1;
 
+        console.log('Number of visits', numberOfVisits);
         if (numberOfVisits === 1) {
+            // "Tip" nur die ersten 2-3 mal geben, dafür aber ein erweiterten Tip mit Email hinweis.
             this.emit('GoToCitySearchFirstTimeIntent');
         } else {
             this.emit('GoToCitySearchIntent');
@@ -35,7 +37,7 @@ module.exports = {
     },
 
     // ----------------------- direct intent
-    'EventsInCityIntent'() {
+    'DirectEventSearchIntent'() {
         this.handler.state = STATES.CITY_SEARCH_MODE;
         this.emitWithState('EventsInCityIntent');
     },
@@ -46,7 +48,7 @@ module.exports = {
     },
     'AMAZON.StopIntent'(){
         this.handler.state = undefined;
-        this.emit(':tell', speechOutput.NO_SESSION.STOP);
+        this.emit(':tell', speechOutput.NO_SESSION.GOODBYE);
     },
 
     // ----------------------- error handling

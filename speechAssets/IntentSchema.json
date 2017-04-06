@@ -10,6 +10,15 @@
       ]
     },
     {
+      "intent": "DirectEventSearchIntent",
+      "slots": [
+        {
+          "name": "city",
+          "type": "AMAZON.DE_CITY"
+        }
+      ]
+    },
+    {
       "intent": "MoreInformationIntent"
     },
     {
