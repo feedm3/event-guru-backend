@@ -2,6 +2,7 @@
 
 const request = require('request-promise');
 const moment = require('moment');
+const LOCALE = require('../alexa/speech-output').DEV_LOCALE;
 
 const ALLOWED_COUNTRY = 'Germany';
 
@@ -137,5 +138,5 @@ const formatDateForAlexa = (date) => {
 };
 
 const formatDateForUser = (date) => {
-    return moment(date).format('Do MMMM YYYY');
+    return moment(date).locale(LOCALE).format('dddd, Do MMMM YYYY');
 };

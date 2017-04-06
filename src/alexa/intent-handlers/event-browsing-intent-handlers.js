@@ -5,6 +5,7 @@ const speechOutput = require('../speech-output');
 const eventsApi = require('../../events/events');
 const amazonLogin = require('../../api/amazon-login');
 const mailService = require('../../api/aws-ses');
+const cardBuilder = require('../util/card-builder');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
 module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
@@ -70,18 +71,13 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
                     }
 
                     const eventSummary = speechOutput.EVENT_BROWSING.CONCERT(event.artist, event.dateAlexaDM, event.venue, event.topTrackPreviewUrl) + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT;
-                    const cardTitle = event.artist;
-                    const cardContent = formatCardContent(event);
-                    const cardImages = {
-                        smallImageUrl: event.imageMediumUrl,
-                        largeImageUrl: event.imageLargeUrl
-                    };
+                    const card = cardBuilder.buildEventCard(event, city);
                     this.emit(':askWithCard',
                         searchSummary + eventSummary,
                         speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT,
-                        cardTitle,
-                        cardContent,
-                        cardImages);
+                        card.title,
+                        card.content,
+                        card.images);
                 });
         } else {
             if (pageCount === currentPageNumber) {
@@ -128,6 +124,7 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
 
     // ----------------------- direct intent handling
     'EventsInCityIntent'() {
+        // this clashes when we ask to user to continue becuase it understands "weiter" as a city
         this.emit('EventsInCityIntent');
     },
 
@@ -156,15 +153,6 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
         this.emit(':ask', speechOutput.EVENT_BROWSING.UNHANDLED + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
     }
 });
-
-const formatCardContent = (event) => {
-    // benutzer datauf hinweisen dass er mit "Alexa, mehr Infos" die Daten per Mail bekommen kann
-
-    return event.dateUser + '\n' +
-        'Ort: ' + event.venue + '\n' +
-        'Mehr Infos: ' + event.shortUrl + '\n' +
-        event.poweredBy;
-};
 
 const formatMailSubject = (event) => {
     return 'More infos from event guru for ' + event.artist + ' @ ' + event.venue;

@@ -21,7 +21,17 @@ MoreInformationIntent auf dieses konzert will ich hin
 MoreInformationIntent auf dieses konzert will ich gehen
 MoreInformationIntent das konzert interessiert mich
 MoreInformationIntent zu dem konzert will ich mehr wissen
-MoreInformationIntent von dem konzert will ich mehr wissen
+MoreInformationIntent zu dem konzert will ich mehr wissen
+MoreInformationIntent schick mir die infos per mail
+MoreInformationIntent mehr infos per mail
+MoreInformationIntent mehr infos per e-mail
+MoreInformationIntent mehr infos per email
+MoreInformationIntent mehr infos per email
+MoreInformationIntent mehr infos per i mail
+MoreInformationIntent par mail
+MoreInformationIntent par e-mail
+MoreInformationIntent par email
+MoreInformationIntent par i mail
 
 WantToContinueIntent ich möchte weiter machen
 WantToContinueIntent ich will weiter machen

@@ -1,7 +1,7 @@
 'use strict';
 
 const speechOutput = require('../speech-output');
-const eventsApi = require('../../events/events');
+const cardBuilder = require('../util/card-builder');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
 module.exports = {
@@ -16,12 +16,22 @@ module.exports = {
         }
     },
     'GoToCitySearchFirstTimeIntent'() {
+        const card = cardBuilder.buildWelcomeCard();
         this.handler.state = STATES.CITY_SEARCH_MODE;
-        this.emit(':ask', speechOutput.NO_SESSION.WELCOME + speechOutput.CITY_SEARCH.ASK, speechOutput.CITY_SEARCH.ASK_REPROMT);
+        this.emit(':askWithCard',
+            speechOutput.NO_SESSION.WELCOME + speechOutput.CITY_SEARCH.ASK,
+            speechOutput.CITY_SEARCH.ASK_REPROMT,
+            card.title,
+            card.content);
     },
     'GoToCitySearchIntent'() {
+        const card = cardBuilder.buildWelcomeCard();
         this.handler.state = STATES.CITY_SEARCH_MODE;
-        this.emit(':ask', speechOutput.NO_SESSION.WELCOME_BACK + speechOutput.CITY_SEARCH.ASK, speechOutput.CITY_SEARCH.ASK_REPROMT);
+        this.emit(':askWithCard',
+            speechOutput.NO_SESSION.WELCOME_BACK + speechOutput.CITY_SEARCH.ASK,
+            speechOutput.CITY_SEARCH.ASK_REPROMT,
+            card.title,
+            card.content);
     },
 
     // ----------------------- direct intent
