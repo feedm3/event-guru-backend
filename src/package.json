@@ -26,7 +26,9 @@
     "genius",
     "spotify",
     "event",
-    "gure"
+    "songkick",
+    "explore",
+    "exploration"
   ],
   "license": "MIT",
   "dependencies": {
