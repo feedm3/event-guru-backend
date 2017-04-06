@@ -116,4 +116,4 @@ functions:
     handler: events/events-preload.run
     timeout: 300
     events:
-      - schedule: cron(5 0 * * ? *) # every 5 minutes every midnight
+      - schedule: cron(1 0 * * ? *) # 00:01 every midnight
