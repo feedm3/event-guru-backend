@@ -126,6 +126,11 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
         this.emit(':ask', speechOutput.EVENT_BROWSING.HELP + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT , speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
     },
 
+    // ----------------------- direct intent handling
+    'EventsInCityIntent'() {
+        this.emit('EventsInCityIntent');
+    },
+
     // ----------------------- cancel handling
     'StartNewSearchIntent'() {
         this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = 0;
