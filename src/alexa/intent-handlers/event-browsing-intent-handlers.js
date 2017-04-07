@@ -53,7 +53,6 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
             this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = currentEventIndex + 1;
 
             const event = events[currentEventIndex];
-
             eventsApi.improveExternalInformation(event)
                 .then(event => {
                     let searchSummary = '';
@@ -81,7 +80,7 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
                 this.emit(':tell', speechOutput.EVENT_BROWSING.NO_MORE_CONCERTS);
             } else {
                 this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] + 1;
-                this.emit('FetchEventsIntent');
+                this.emitWithState('FetchEventsIntent');
             }
         }
     },

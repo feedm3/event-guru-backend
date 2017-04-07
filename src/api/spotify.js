@@ -23,7 +23,7 @@ const getArtistId = (artist) => {
             return '';
         })
         .catch(err => {
-            console.error('Cant get artist id from spotify', err);
+            console.error('Cant get artist id from spotify. Artist ' + artist, err);
             return '';
         })
 };
@@ -49,7 +49,7 @@ const getArtist = (artistId) => {
             return data.body;
         })
         .catch(err => {
-            console.error('Cant get artist from spotify', err);
+            console.error('Cant get artist from spotify. Artist ID: ' + artistId, err);
             return '';
         })
 };

@@ -51,6 +51,8 @@ WantToContinueIntent da wo ich das letzte mal war
 WantToContinueIntent mach an der stelle vom letzten mal weiter
 WantToContinueIntent mach mit dem nächsten Konzert weiter
 WantToContinueIntent nächstes Konzert
+WantToContinueIntent weitermachen
+WantToContinueIntent weiter machen
 WantToContinueIntent ich will mit dem nächsten Konzert weiter machen
 
 StartNewSearchIntent eine neue suche starten
