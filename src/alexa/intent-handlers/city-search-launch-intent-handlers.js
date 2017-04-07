@@ -17,6 +17,12 @@ module.exports = Alexa.CreateStateHandler(STATES.CITY_SEARCH_LAUNCH_MODE, {
         this.handler.state = STATES.CITY_SEARCH_MODE;
         this.emit(':ask', speechOutput.CITY_SEARCH.ASK, speechOutput.CITY_SEARCH.ASK_REPROMT);
     },
+    'AMAZON.NextIntent'() {
+        this.emitWithState('WantToContinueIntent');
+    },
+    'AMAZON.YesIntent'() {
+        this.emitWithState('WantToContinueIntent');
+    },
     'WantToContinueIntent'() {
         this.handler.state = STATES.EVENT_BROWSING_MODE;
         this.emitWithState('NextEventIntent');
@@ -43,7 +49,7 @@ module.exports = Alexa.CreateStateHandler(STATES.CITY_SEARCH_LAUNCH_MODE, {
 
     // ----------------------- error handling
     'Unhandled'() {
-        console.error('Unhandled error during city search mode');
+        console.error('Unhandled error during city search launch mode');
         const city = this.attributes[SESSION_ATTRIBUTES.CITY];
         this.emit(':ask',
             speechOutput.CITY_SEARCH_LAUNCH.UNHANDLED + speechOutput.CITY_SEARCH_LAUNCH.ASK_TO_CONTINUE_OR_NOW(city),

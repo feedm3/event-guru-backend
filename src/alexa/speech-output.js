@@ -42,9 +42,10 @@ const germanOutput = {
         VERY_MUCH_CONCERTS_SUMMARY:(city) => `Ich habe sehr viele Konzerte in ${city} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Tipp - Mit dem Befehl - "Alexa Weiter" - kannst du direkt zum nächsten Konzert springen. Auf zum ersten Konzert - `,
         NO_MORE_CONCERTS: 'Ich habe leider keine weiteren Konzerte mehr für dich. ',
         CONCERT: (artist, date, location, trackUrl) => `${artist} am <say-as interpret-as="date" format="dm">${date}</say-as>, ${location} <audio src="${trackUrl}"></audio>`,
-        ASK_NEXT_CONCERT: '<break time="0.2s" /> Willst du die Infos zu diesem Konzert per E-Mail oder soll ich mit dem nächsten Konzert weiter machen? ',
-        MORE_INFOS_BEFORE_LOG_IN: 'Mehr Informationen kann ich dir per Mail zukommen lassen. Hierfür musst du dich in der Alexa App einloggen. Wenn du das gemacht hast starte mich einfach wieder mit - "Aleax öffne event guru". ',
-        MORE_INFOS: 'Ich hab dir mehr Infos per Mail geschickt. ',
+        ASK_NEXT_CONCERT: '<break time="0.2s" /> Soll ich mit dem nächsten Konzert weiter machen? ',
+        ASK_NEXT_CONCERT_OR_MAIL: '<break time="0.2s" /> Willst du die Infos zu diesem Konzert per E-Mail oder soll ich mit dem nächsten Konzert weiter machen? ',
+        MORE_INFOS_BEFORE_LOG_IN: 'Alles klar. Dafür brauche ich deine E-Mail Adresse. Bitte logge dich hierfür in der Alexa App ein. Wenn du mich daraufhin das nächste mal startest, schicke ich dir die E-Mail für das Konzert. ',
+        MORE_INFOS: 'Alles klar. Ich hab dir mehr Infos per Mail geschickt. ',
         HELP: 'Es wird ein Konzert nach dem anderen abgespielt, sortiert nach Beliebtheit. Wenn dir ein Konzert nicht gefällt sag - "Alexa weiter" - wenn du mehr Infos zu einem Konzert haben möchstest sag - "Alexa mehr Infos". ',
         UNHANDLED: 'Ich habe dich leider nicht verstanden. '
     },

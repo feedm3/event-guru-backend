@@ -45,6 +45,7 @@ MoreInformationIntent kaufe mir eine karte
 WantToContinueIntent ich möchte weiter machen
 WantToContinueIntent ich will weiter machen
 WantToContinueIntent ich möchte an der letzen stelle weiter machen
+WantToContinueIntent an der letzen stelle weiter machen
 WantToContinueIntent mach weiter
 WantToContinueIntent da wo ich das letzte mal war
 WantToContinueIntent mach an der stelle vom letzten mal weiter

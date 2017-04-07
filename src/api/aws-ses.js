@@ -3,7 +3,7 @@
 const AWS = require('aws-sdk');
 const ses = new AWS.SES({region: 'eu-west-1'});
 
-const sendMail = (recipient, subject, { html, text }) => {
+const sendMail = (recipient, subject, htmlContent, textContent) => {
     const options = {
         Destination: {
             BccAddresses: [],
@@ -15,11 +15,11 @@ const sendMail = (recipient, subject, { html, text }) => {
         Message: {
             Body: {
                 Html: {
-                    Data: html,
+                    Data: htmlContent,
                     Charset: 'UTF-8'
                 },
                 Text: {
-                    Data: text,
+                    Data: textContent,
                     Charset: 'UTF-8'
                 }
             },

@@ -7,16 +7,18 @@ const { SESSION_ATTRIBUTES, STATES } = require('../config');
 
 module.exports = Alexa.CreateStateHandler(STATES.CITY_SEARCH_MODE, {
     'LaunchRequest'() {
-        const lastVisit = this.attributes[SESSION_ATTRIBUTES.LAST_VISIT] || new Date();
-        this.attributes[SESSION_ATTRIBUTES.LAST_VISIT] = new Date();
+        this.emit('CheckForMailInQueueIntent', () => {
+            const lastVisit = this.attributes[SESSION_ATTRIBUTES.LAST_VISIT] || new Date();
+            this.attributes[SESSION_ATTRIBUTES.LAST_VISIT] = new Date();
 
-        const city = this.attributes[SESSION_ATTRIBUTES.CITY];
-        if (!city || moment().diff(moment(lastVisit), 'days') >= 1) {
-            this.emit('LaunchRequest');
-        } else {
-            this.handler.state = STATES.CITY_SEARCH_LAUNCH_MODE;
-            this.emitWithState('AskContinueOrNewIntent');
-        }
+            const city = this.attributes[SESSION_ATTRIBUTES.CITY];
+            if (!city || moment().diff(moment(lastVisit), 'days') >= 1) {
+                this.emit('LaunchRequest');
+            } else {
+                this.handler.state = STATES.CITY_SEARCH_LAUNCH_MODE;
+                this.emitWithState('AskContinueOrNewIntent');
+            }
+        });
     },
     'EventsInCityIntent' () {
         const city = this.event.request.intent.slots.city.value;

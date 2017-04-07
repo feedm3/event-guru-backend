@@ -4,11 +4,9 @@ const Alexa = require('alexa-sdk');
 const speechOutput = require('../speech-output');
 const eventsApi = require('../../events/events');
 const amazonLogin = require('../../api/amazon-login');
-const mailService = require('../../api/aws-ses');
+const mailService = require('../../mail/mail');
 const cardBuilder = require('../util/card-builder');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
-
-// "Wiederhole" Intent
 
 module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
     'FetchEventsIntent'() {
@@ -69,11 +67,11 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
                         }
                     }
 
-                    const eventSummary = speechOutput.EVENT_BROWSING.CONCERT(event.artist, event.dateAlexaDM, event.venue, event.topTrackPreviewUrl) + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT;
+                    const eventSummary = speechOutput.EVENT_BROWSING.CONCERT(event.artist, event.dateAlexaDM, event.venue, event.topTrackPreviewUrl) + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL;
                     const card = cardBuilder.buildEventCard(event, city);
                     this.emit(':askWithCard',
                         searchSummary + eventSummary,
-                        speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT,
+                        speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL,
                         card.title,
                         card.content,
                         card.images);
@@ -90,35 +88,33 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
 
     // ----------------------- more infos
     'MoreInformationIntent'() {
-        const accessToken = this.event.session.user.accessToken;
-        if (accessToken) {
-            amazonLogin.fetchUser(accessToken)
-                .then(user => {
-                    const currentEventIndex = this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] || 0;
-                    const events = this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA].events;
-                    const event = events[currentEventIndex];
+        const currentEventIndex = this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] || 0;
+        const events = this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA].events;
+        const event = events[currentEventIndex];
+        event.city = this.attributes[SESSION_ATTRIBUTES.CITY];
 
-                    eventsApi.improveExternalInformation(event)
-                        .then(() => mailService.sendMail(user.email,
-                            formatMailSubject(event),
-                            {
-                                html: formatMailHtml(user.name, event),
-                                text: formatMailText(user.name, event)
-                            }))
-                        .catch(err => console.error('Could not send mail to customer', err))
-                        .then(() => {
-                            this.emit(':ask', speechOutput.EVENT_BROWSING.MORE_INFOS + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
-                        });
-                })
-        }
-        else {
-            this.emit(':askWithLinkAccountCard', speechOutput.EVENT_BROWSING.MORE_INFOS_BEFORE_LOG_IN + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
-        }
+        eventsApi.improveExternalInformation(event)
+            .then(event => {
+                this.attributes[SESSION_ATTRIBUTES.MAIL_QUEUE] = event;
+
+                const accessToken = this.event.session.user.accessToken;
+                if (accessToken) {
+                    this.emit('CheckForMailInQueueIntent', 'MailSent');
+                } else {
+                    this.emit('CheckForMailInQueueIntent', 'LoginRequired');
+                }
+            });
+    },
+    'MailSent'() {
+        this.emit(':ask', speechOutput.EVENT_BROWSING.MORE_INFOS + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
+    },
+    'LoginRequired'() {
+        this.emit(':askWithLinkAccountCard', speechOutput.EVENT_BROWSING.MORE_INFOS_BEFORE_LOG_IN + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
     },
 
     // ----------------------- help handling
     'AMAZON.HelpIntent'(){
-        this.emit(':ask', speechOutput.EVENT_BROWSING.HELP + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT , speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
+        this.emit(':ask', speechOutput.EVENT_BROWSING.HELP + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL);
     },
 
     // ----------------------- cancel handling
@@ -140,32 +136,7 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
     // ----------------------- error handling
     'Unhandled'() {
         console.error('Unhandled error during event browsing mode');
-        this.emit(':ask', speechOutput.EVENT_BROWSING.UNHANDLED + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
+        this.emit(':ask', speechOutput.EVENT_BROWSING.UNHANDLED + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL);
     }
 });
 
-const formatMailSubject = (event) => {
-    return 'More infos from event guru for ' + event.artist + ' @ ' + event.venue;
-};
-
-const formatMailHtml = (username, event) => {
-    return 'Hi ' + username + '<br><br>' +
-        'you currently used Event Guru on Amazon Alexa® and requested more information to a concert. Here it is:<br><br>' +
-        event.artist + '<br>' +
-        event.venue + '<br>' +
-        '<a href="' + event.shortUrl + '">' + event.shortUrl + '</a><br>' +
-        event.poweredBy + '<br><br>' +
-        'Have a nice day,' + '<br>' +
-        'Event Guru'
-};
-
-const formatMailText = (username, event) => {
-    return 'Hi ' + username + ',\n' +
-            'you currently used Event Guru on Amazon Alexa® and requested more information to a concert. Here it is:\r\n\r\n' +
-            event.artist + '\r\n' +
-            event.venue + '\r\n' +
-            event.shortUrl + '\r\n' +
-            event.poweredBy + '\r\n\r\n' +
-            'Have a nice day,' + '\r\n' +
-            'Event Guru'
-};

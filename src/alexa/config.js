@@ -14,7 +14,8 @@ const SESSION_ATTRIBUTES = {
     EVENTS_DATA: 'eventsData',
     CITY: 'city',
     NUMBER_OF_VISITS: 'numberOfVisits',
-    LAST_VISIT: 'lastVisit'
+    LAST_VISIT: 'lastVisit',
+    MAIL_QUEUE: 'mailQueue'
 };
 
 module.exports = {
