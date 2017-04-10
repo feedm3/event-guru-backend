@@ -33,7 +33,7 @@
   "license": "MIT",
   "dependencies": {
     "alexa-sdk": "^1.0.8",
-    "aws-sdk": "^2.39.0",
+    "aws-sdk": "^2.40.0",
     "dotenv-safe": "^4.0.3",
     "moment": "^2.18.1",
     "randomstring": "^1.1.5",
