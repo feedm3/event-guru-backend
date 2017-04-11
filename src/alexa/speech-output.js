@@ -17,13 +17,13 @@ const englishUkOutput = {
 };
 
 const germanOutput = {
-    NO_SESSION: {
+    COMMON: {
         WELCOME: 'Willkommen beim Event Guru! Mit mir kannst du Konzerte in der Stadt deiner Wahl entdecken. Gesucht wird dabei immer für die nächsten 3 Monate. Fangen wir an. ',
         WELCOME_BACK: 'Willkommen zurück! ',
         HELP: 'Mit mir kannst du Konzerte in der Stadt deiner Wahl entdecken. Gesucht wird immer für die nächsten 3 Monate, die gefundenen ' +
               'Konzerte sind nach Bekanntheitsgrad sortiert. Sage zum Beispiel einfach - Alexa, frage Event Guru nach Konzerten in München. ',
         GOODBYE: 'Bis bald beim Event Guru! ',
-        UNHANDLED: 'Ich habe dich leider nicht verstanden. '
+        UNHANDLED: 'Ich habe dich leider nicht verstanden. Was hast du gesagt? '
     },
     CITY_SEARCH_LAUNCH: {
         ASK_TO_CONTINUE_OR_NOW:(city) => `Du hast zuletzt in ${city} nach Konzerten gesucht. Möchtest du an der letzen Stelle weiter machen oder willst du eine neue Suche starten?`,

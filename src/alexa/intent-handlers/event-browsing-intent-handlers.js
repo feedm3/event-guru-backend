@@ -1,14 +1,12 @@
 'use strict';
 
-const Alexa = require('alexa-sdk');
+const AlexaStateHandlerBuilder = require('../util/alexa-state-handler-builder');
 const speechOutput = require('../speech-output');
 const eventsApi = require('../../events/events');
-const amazonLogin = require('../../api/amazon-login');
-const mailService = require('../../mail/mail');
 const cardBuilder = require('../util/card-builder');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
-module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
+module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
     'FetchEventsIntent'() {
         const city = this.attributes[SESSION_ATTRIBUTES.CITY];
         const pageNumber = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER];
@@ -125,7 +123,7 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
     },
     'AMAZON.CancelIntent'(){
         this.handler.state = STATES.CITY_SEARCH_MODE;
-        this.emit(':tell', speechOutput.NO_SESSION.GOODBYE);
+        this.emit(':tell', speechOutput.COMMON.GOODBYE);
     },
     'SessionEndedRequest'() {
         this.handler.state = STATES.CITY_SEARCH_MODE;

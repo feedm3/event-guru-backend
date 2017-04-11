@@ -1,11 +1,11 @@
 'use strict';
 
-const Alexa = require('alexa-sdk');
+const AlexaStateHandlerBuilder = require('../util/alexa-state-handler-builder');
 const speechOutput = require('../speech-output');
 const moment = require('moment');
 const { SESSION_ATTRIBUTES, STATES } = require('../config');
 
-module.exports = Alexa.CreateStateHandler(STATES.CITY_SEARCH_MODE, {
+module.exports = AlexaStateHandlerBuilder.build(STATES.CITY_SEARCH_MODE, {
     'LaunchRequest'() {
         this.emit('CheckForMailInQueueIntent', () => {
             const lastVisit = this.attributes[SESSION_ATTRIBUTES.LAST_VISIT] || new Date();
@@ -39,24 +39,6 @@ module.exports = Alexa.CreateStateHandler(STATES.CITY_SEARCH_MODE, {
     // ----------------------- help handling
     'AMAZON.HelpIntent'(){
         this.emit(':ask', speechOutput.CITY_SEARCH.HELP + speechOutput.CITY_SEARCH.ASK_REPROMT, speechOutput.CITY_SEARCH.ASK_REPROMT);
-    },
-
-    // ----------------------- stop handling
-    'AMAZON.CancelIntent'(){
-        this.emitWithState('AMAZON.StopIntent');
-    },
-    'AMAZON.StopIntent'(){
-        this.handler.state = undefined;
-        this.emit('AMAZON.StopIntent');
-    },
-    'SessionEndedRequest'() {
-        this.handler.state = undefined;
-        this.emit(':saveState', true);
-    },
-
-    // ----------------------- direct intent handling
-    'DirectEventSearchIntent'() {
-        this.emit('EventsInCityIntent');
     },
 
     // ----------------------- error handling

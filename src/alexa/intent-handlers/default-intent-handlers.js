@@ -8,6 +8,9 @@ const amazonLogin = require('../../api/amazon-login');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
 module.exports = {
+    'NewSession'() {
+
+    },
     'LaunchRequest' () {
         this.emit('CheckForMailInQueueIntent', () => {
             const numberOfVisits = this.attributes[SESSION_ATTRIBUTES.NUMBER_OF_VISITS] || 1;
@@ -26,7 +29,7 @@ module.exports = {
         this.handler.state = STATES.CITY_SEARCH_MODE;
         const card = cardBuilder.buildWelcomeCard();
         this.emit(':askWithCard',
-            speechOutput.NO_SESSION.WELCOME + speechOutput.CITY_SEARCH.ASK,
+            speechOutput.COMMON.WELCOME + speechOutput.CITY_SEARCH.ASK,
             speechOutput.CITY_SEARCH.ASK_REPROMT,
             card.title,
             card.content);
@@ -35,7 +38,7 @@ module.exports = {
         this.handler.state = STATES.CITY_SEARCH_MODE;
         const card = cardBuilder.buildWelcomeCard();
         this.emit(':askWithCard',
-            speechOutput.NO_SESSION.WELCOME_BACK + speechOutput.CITY_SEARCH.ASK,
+            speechOutput.COMMON.WELCOME_BACK + speechOutput.CITY_SEARCH.ASK,
             speechOutput.CITY_SEARCH.ASK_REPROMT,
             card.title,
             card.content);
@@ -74,21 +77,32 @@ module.exports = {
         this.emitWithState('EventsInCityIntent');
     },
 
-    // ----------------------- stop handling
-    'AMAZON.CancelIntent'(){
-        this.emit('AMAZON.StopIntent');
+
+    /**
+     * This intent will be called when the user says "Stop" or "Cancel"
+     */
+    'ExitIntent'() {
+        this.emit(':tell', speechOutput.COMMON.GOODBYE);
     },
-    'AMAZON.StopIntent'(){
-        this.emit(':tell', speechOutput.NO_SESSION.GOODBYE);
+    'AMAZON.CancelIntent'() {
+        this.emit('ExitIntent');
+    },
+    'AMAZON.StopIntent'() {
+        this.emit('ExitIntent');
     },
 
-    // ----------------------- error handling
+    /**
+     * This intent will be called when the user says something that cannot be matched to an intent or the intent
+     * is not implemented in the current state.
+     *
+     * Every state handles it's own "I didn't understand" version so this intent just redirects.
+     */
     'Unhandled'() {
         if (this.handler.state) {
             this.emitWithState('Unhandled');
         } else {
-            console.error('Unhandled error during no session mode');
-            this.emit(':ask', speechOutput.NO_SESSION.UNHANDLED + speechOutput.NO_SESSION.WHAT_CITY, speechOutput.NO_SESSION.WHAT_CITY_REPROMT);
+            console.error('Unhandled error in default intent');
+            this.emit(':ask', speechOutput.COMMON.UNHANDLED, speechOutput.COMMON.UNHANDLED);
         }
     }
 };

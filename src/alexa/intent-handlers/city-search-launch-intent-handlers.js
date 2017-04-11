@@ -1,10 +1,10 @@
 'use strict';
 
-const Alexa = require('alexa-sdk');
+const AlexaStateHandlerBuilder = require('../util/alexa-state-handler-builder');
 const speechOutput = require('../speech-output');
 const { SESSION_ATTRIBUTES, STATES } = require('../config');
 
-module.exports = Alexa.CreateStateHandler(STATES.CITY_SEARCH_LAUNCH_MODE, {
+module.exports = AlexaStateHandlerBuilder.build(STATES.CITY_SEARCH_LAUNCH_MODE, {
     'AskContinueOrNewIntent'() {
         const city = this.attributes[SESSION_ATTRIBUTES.CITY];
         this.emit(':ask', speechOutput.CITY_SEARCH_LAUNCH.ASK_TO_CONTINUE_OR_NOW(city), speechOutput.CITY_SEARCH_LAUNCH.ASK_TO_CONTINUE_OR_NOW(city));
@@ -40,7 +40,7 @@ module.exports = Alexa.CreateStateHandler(STATES.CITY_SEARCH_LAUNCH_MODE, {
     'AMAZON.StopIntent'(){
         // currently you cannot set the session to undefined
         this.handler.state = STATES.CITY_SEARCH_MODE;
-        this.emit(':tell', speechOutput.NO_SESSION.GOODBYE);
+        this.emit(':tell', speechOutput.COMMON.GOODBYE);
     },
     'SessionEndedRequest'() {
         this.handler.state = STATES.CITY_SEARCH_MODE;
