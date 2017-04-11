@@ -44,11 +44,16 @@ MoreInformationIntent kaufe mir eine karte
 
 WantToContinueIntent ich möchte weiter machen
 WantToContinueIntent ich will weiter machen
+WantToContinueIntent ich will an der letzten stelle weiter machen
+WantToContinueIntent ich will an der letzten stelle weiter suchen
+WantToContinueIntent ich würde gerne an der letzten stelle weiter machen
 WantToContinueIntent ich möchte an der letzen stelle weiter machen
 WantToContinueIntent an der letzen stelle weiter machen
-WantToContinueIntent mach weiter
+WantToContinueIntent an der letzen stelle weiter suchen
 WantToContinueIntent da wo ich das letzte mal war
+WantToContinueIntent mach weiter
 WantToContinueIntent mach an der stelle vom letzten mal weiter
+WantToContinueIntent mach bitte an der letzen stelle weiter
 WantToContinueIntent mach mit dem nächsten Konzert weiter
 WantToContinueIntent nächstes Konzert
 WantToContinueIntent weitermachen
@@ -57,6 +62,7 @@ WantToContinueIntent ich will mit dem nächsten Konzert weiter machen
 
 StartNewSearchIntent eine neue suche starten
 StartNewSearchIntent ich will eine neue suche starten
+StartNewSearchIntent ich würde gerne eine neue suche starten
 StartNewSearchIntent neue suche starten
 StartNewSearchIntent suche starten
 StartNewSearchIntent ich will neu suchen
