@@ -87,7 +87,7 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
 
     // ----------------------- more infos
     'MoreInformationIntent'() {
-        const currentEventIndex = this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] || 0;
+        const currentEventIndex = this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] - 1;
         const events = this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA].events;
         const event = events[currentEventIndex];
         event.city = this.attributes[SESSION_ATTRIBUTES.CITY];
