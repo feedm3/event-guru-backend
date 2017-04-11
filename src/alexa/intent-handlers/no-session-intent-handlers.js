@@ -10,11 +10,10 @@ const { STATES, SESSION_ATTRIBUTES } = require('../config');
 module.exports = {
     'LaunchRequest' () {
         this.emit('CheckForMailInQueueIntent', () => {
-            this.attributes[SESSION_ATTRIBUTES.LAST_VISIT] = new Date();
             const numberOfVisits = this.attributes[SESSION_ATTRIBUTES.NUMBER_OF_VISITS] || 1;
             this.attributes[SESSION_ATTRIBUTES.NUMBER_OF_VISITS] = numberOfVisits + 1;
+            this.attributes[SESSION_ATTRIBUTES.LAST_VISIT] = new Date();
 
-            console.log('Number of visits', numberOfVisits);
             if (numberOfVisits === 1) {
                 // "Tip" nur die ersten 2-3 mal geben, dafür aber ein erweiterten Tip mit Email hinweis.
                 this.emit('GoToCitySearchFirstTimeIntent');
@@ -24,8 +23,8 @@ module.exports = {
         });
     },
     'GoToCitySearchFirstTimeIntent'() {
-        const card = cardBuilder.buildWelcomeCard();
         this.handler.state = STATES.CITY_SEARCH_MODE;
+        const card = cardBuilder.buildWelcomeCard();
         this.emit(':askWithCard',
             speechOutput.NO_SESSION.WELCOME + speechOutput.CITY_SEARCH.ASK,
             speechOutput.CITY_SEARCH.ASK_REPROMT,
@@ -33,8 +32,8 @@ module.exports = {
             card.content);
     },
     'GoToCitySearchIntent'() {
-        const card = cardBuilder.buildWelcomeCard();
         this.handler.state = STATES.CITY_SEARCH_MODE;
+        const card = cardBuilder.buildWelcomeCard();
         this.emit(':askWithCard',
             speechOutput.NO_SESSION.WELCOME_BACK + speechOutput.CITY_SEARCH.ASK,
             speechOutput.CITY_SEARCH.ASK_REPROMT,
@@ -80,7 +79,6 @@ module.exports = {
         this.emit('AMAZON.StopIntent');
     },
     'AMAZON.StopIntent'(){
-        this.handler.state = undefined;
         this.emit(':tell', speechOutput.NO_SESSION.GOODBYE);
     },
 

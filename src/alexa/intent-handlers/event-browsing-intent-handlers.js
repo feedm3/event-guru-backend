@@ -79,7 +79,7 @@ module.exports = Alexa.CreateStateHandler(STATES.EVENT_BROWSING_MODE, {
             if (pageCount === currentPageNumber) {
                 this.emit(':tell', speechOutput.EVENT_BROWSING.NO_MORE_CONCERTS);
             } else {
-                this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] + 1;
+                this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = currentPageNumber + 1;
                 this.emitWithState('FetchEventsIntent');
             }
         }

@@ -25,6 +25,8 @@ module.exports = {
 };
 
 const convertMp3 = (mp3Link) => {
+    // TODO Update command https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/speech-synthesis-markup-language-ssml-reference#h3_converting_mp3
+    // check if quality gets better
     return new Promise((resolve, reject) => {
         console.log('Converting ' + mp3Link);
 
