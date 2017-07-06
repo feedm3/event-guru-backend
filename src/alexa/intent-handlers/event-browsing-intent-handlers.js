@@ -7,6 +7,7 @@ const cardBuilder = require('../util/card-builder');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
 module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
+
     'FetchEventsIntent'() {
         const city = this.attributes[SESSION_ATTRIBUTES.CITY];
         const pageNumber = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER];
