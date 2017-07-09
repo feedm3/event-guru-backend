@@ -8,7 +8,7 @@
     "deploy:remove": "serverless remove",
     "deploy": "serverless deploy function --function alexaSkill",
     "invoke": "serverless invoke --function alexaSkill",
-    "logs:tail": "serverless logs --tail --function alexaSkill",
+    "logs:tail": "serverless logs --function alexaSkill",
     "test": "mocha --recursive"
   },
   "keywords": [

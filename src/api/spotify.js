@@ -20,10 +20,10 @@ const getArtistId = (artist) => {
             if (items && items[0]) {
                 return items[0].id;
             }
-            return '';
+            throw new Error('Could not get artist id from spotify from ' + artist);
         })
         .catch(err => {
-            console.error('Cant get artist id from spotify. Artist ' + artist, err);
+            console.error('Could not get artist id from spotify from ' + artist, err);
             return '';
         })
 };
@@ -38,7 +38,7 @@ const getArtistTopTrackPreviewUrl = (artistId) => {
                 const topTrack = tracks[0];
                 return topTrack.preview_url;
             }
-            return '';
+            throw new Error('Could not get preview URL for ', artistId);
         })
 };
 
