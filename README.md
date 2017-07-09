@@ -11,6 +11,7 @@ Requirements for _/src_:
 - Enable TTL on the `event-guru-events-cache` dynamodb table
 
 ## Notes
+
 - Only 500 events are stored to any location, even if there are more
 - Only german cities are used!
 

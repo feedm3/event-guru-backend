@@ -73,5 +73,6 @@ const refreshAccessToken = () => {
             spotify.setAccessToken(data.body['access_token']);
         }, (err) => {
             console.error('Could not refresh spotify access token', err);
+            throw err;
         });
 };

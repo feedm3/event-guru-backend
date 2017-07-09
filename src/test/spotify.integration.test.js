@@ -30,7 +30,7 @@ describe('Requesting artist info with an unpopular artist', function(){
         return spotify.getArtist(ARTIST_ID_UNPOPULAR)
             .then(artist => {
                 artist.should.have.any.keys('images', 'popularity', 'genres');
-                artist.popularity.should.equal(1);
+                artist.popularity.should.be.below(10);
                 artist.genres.should.be.empty;
             })
     });
