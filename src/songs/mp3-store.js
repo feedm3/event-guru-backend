@@ -19,6 +19,7 @@ const getPreviewTrackUrl = (artist) => {
             if (exists) {
                 return s3.getFileUrl(fileName);
             }
+            console.log(fileName + ' not yet downloaded and converted. Doing so now...');
             return spotify.getArtistId(artist)
                 .then(artistId => spotify.getArtistTopTrackPreviewUrl(artistId))
                 .then(url => mp3Converter.convert(url))
