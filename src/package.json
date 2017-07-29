@@ -8,7 +8,7 @@
     "deploy:remove": "serverless remove",
     "deploy": "serverless deploy function --function alexaSkill",
     "invoke": "serverless invoke --function alexaSkill",
-    "logs:tail": "serverless logs --function alexaSkill",
+    "logs:tail": "serverless logs --tail --function alexaSkill",
     "test": "mocha --recursive"
   },
   "keywords": [
@@ -33,7 +33,7 @@
   "license": "MIT",
   "dependencies": {
     "alexa-sdk": "^1.0.11",
-    "aws-sdk": "^2.82.0",
+    "aws-sdk": "^2.92.0",
     "dotenv-safe": "^4.0.4",
     "moment": "^2.18.1",
     "randomstring": "^1.1.5",
@@ -42,9 +42,9 @@
     "spotify-web-api-node": "^2.4.0"
   },
   "devDependencies": {
-    "chai": "^4.0.2",
+    "chai": "^4.1.0",
     "chai-string": "^1.4.0",
     "mocha": "^3.4.1",
-    "serverless": "^1.17.0"
+    "serverless": "^1.18.1"
   }
 }
