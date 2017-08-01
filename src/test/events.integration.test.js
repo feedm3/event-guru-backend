@@ -10,7 +10,6 @@ const chai = require('chai');
 chai.use(require('chai-string'));
 chai.should();
 
-
 describe('Getting the events', function(){
     it('should return a paged result', function() {
         const PAGE = 1;
