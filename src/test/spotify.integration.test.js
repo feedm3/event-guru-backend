@@ -32,6 +32,17 @@ describe('Requesting artist info', function(){
     });
 });
 
+describe('Requesting the top track of an artist', function() {
+    it('should return its top track', function () {
+        return spotify.getArtistId(ARTIST)
+            .then(id => spotify.getArtistTopTrackPreviewUrl(id))
+            .then(url => {
+                url.should.be.a('string');
+                url.should.startWith('https://');
+            })
+    })
+});
+
 describe('Requesting artist info with an unpopular artist', function(){
     it('should return a object with some artist info missing', function() {
         return spotify.getArtist(ARTIST_ID_UNPOPULAR)
@@ -43,7 +54,7 @@ describe('Requesting artist info with an unpopular artist', function(){
     });
 });
 
-describe('Requesting artist info with illigal artist id', function(){
+describe('Requesting artist info with illegal artist id', function(){
     it('should return an error', function() {
         return spotify.getArtist('????')
             .catch(err => {
