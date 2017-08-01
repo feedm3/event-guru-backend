@@ -28,7 +28,16 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
                     // to the next state
                     this.emitWithState('NextEventIntent');
                 }
-            });
+            })
+            .catch(err => {
+                console.error('Could not fetch events for ' + city, err);
+
+                this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = 0;
+                this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = {};
+
+                this.handler.state = STATES.CITY_SEARCH_MODE;
+                this.emit(':ask', speechOutput.CITY_SEARCH.NOTHING_FOUND(city), speechOutput.CITY_SEARCH.ASK_REPROMT);
+            })
     },
     'AMAZON.YesIntent'() {
         this.emitWithState('NextEventIntent');
@@ -67,7 +76,8 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
                         }
                     }
 
-                    const eventSummary = speechOutput.EVENT_BROWSING.CONCERT(event.artist, event.dateAlexaDM, event.venue, event.topTrackPreviewUrl) + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL;
+                    const eventSummary = speechOutput.EVENT_BROWSING.CONCERT(event.artist, event.dateAlexaDM, event.venue, event.topTrackPreviewUrl).replace(/&/g, " and ")
+                        + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL;
                     const card = cardBuilder.buildEventCard(event, city);
                     this.emit(':askWithCard',
                         searchSummary + eventSummary,
