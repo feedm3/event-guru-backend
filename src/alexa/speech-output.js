@@ -37,9 +37,9 @@ const germanOutput = {
         UNHANDLED: 'Es tut mir Leid, aber ich habe den Namen der Stadt nicht verstanden. '
     },
     EVENT_BROWSING: {
-        CONCERTS_SUMMARY: (city, count) => `Ich habe ${count} Konzerte in ${city} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Tipp - Mit dem Befehl - "Alexa Weiter" - kannst du direkt zum nächsten Konzert springen und mit dem Befehl - "Alexa, schick mir das Konzert per Mail" - bekommst du alle Infos zum aktuellen Konzert per Mail. Auf zum ersten Konzert - `,
-        MANY_CONCERTS_SUMMARY:(city) => `Ich habe viele Konzerte in ${city} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Tipp - Mit dem Befehl - "Alexa Weiter" - kannst du direkt zum nächsten Konzert springen und mit dem Befehl - "Alexa, schick mir das Konzert per Mail" - bekommst du alle Infos zum aktuellen Konzert per Mail. Auf zum ersten Konzert - `,
-        VERY_MUCH_CONCERTS_SUMMARY:(city) => `Ich habe sehr viele Konzerte in ${city} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Tipp - Mit dem Befehl - "Alexa Weiter" - kannst du direkt zum nächsten Konzert springen und mit dem Befehl - "Alexa, schick mir das Konzert per Mail" - bekommst du alle Infos zum aktuellen Konzert per Mail. Auf zum ersten Konzert - `,
+        CONCERTS_SUMMARY: (city, count) => `Ich habe ${count} Konzerte in ${city} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Auf zum ersten Konzert <break time="0.3s" />  `,
+        MANY_CONCERTS_SUMMARY:(city) => `Ich habe viele Konzerte in ${city} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Auf zum ersten Konzert <break time="0.3s" />  `,
+        VERY_MUCH_CONCERTS_SUMMARY:(city) => `Ich habe sehr viele Konzerte in ${city} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Auf zum ersten Konzert <break time="0.3s" />  `,
         NO_MORE_CONCERTS: 'Ich habe leider keine weiteren Konzerte mehr für dich. ',
         CONCERT: (artist, date, location, trackUrl) => `${artist} am <say-as interpret-as="date" format="dm">${date}</say-as>, ${location} <audio src="${trackUrl}"></audio>`,
         ASK_NEXT_CONCERT: '<break time="0.2s" /> Soll ich mit dem nächsten Konzert weiter machen? ',
@@ -47,7 +47,7 @@ const germanOutput = {
         MORE_INFOS_BEFORE_LOG_IN: 'Alles klar. Dafür brauche ich deine E-Mail Adresse. Bitte logge dich hierfür in der Alexa App ein. Wenn du mich daraufhin das nächste mal startest, schicke ich dir die E-Mail für das Konzert. ',
         MORE_INFOS: 'Alles klar. Ich hab dir mehr Infos per Mail geschickt. ',
         ERROR_TOO_MANY_FAILS: 'Es tut mir leid, aber aktuell kann ich keine Konzerte laden. Bitte versuche es später noch einmal. ',
-        HELP: 'Es wird ein Konzert nach dem anderen abgespielt, sortiert nach Beliebtheit. Wenn dir ein Konzert nicht gefällt sag - "Alexa weiter" - wenn du mehr Infos zu einem Konzert haben möchstest sag - "Alexa mehr Infos". ',
+        HELP: 'Ich stelle dir die Konzerte nacheinander vor, sortiert nach Beliebtheit. Wenn dir ein Konzert gefällt, kannst du dir weitere Infos per Email zukommen lassen. Sag dazu einfach "Alexa, mehr Infos". Wenn es dir nicht gefällt kannst du mit - "Alexa, weiter" - zum nächsten Konzert springen. ',
         UNHANDLED: 'Ich habe dich leider nicht verstanden. '
     },
     DEV_LOCALE: 'de'

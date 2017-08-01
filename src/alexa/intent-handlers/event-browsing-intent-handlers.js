@@ -57,7 +57,7 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
                 .then(event => {
                     this.attributes[SESSION_ATTRIBUTES.ERROR_COUNT] = 0;
                     let searchSummary = '';
-                    if (currentEventIndex === 0 && currentPageNumber === 1) {
+                    if ((currentEventIndex === 0 || currentEventIndex - errorCount === 0) && currentPageNumber === 1) {
                         if (eventCount < 20) {
                             searchSummary = speechOutput.EVENT_BROWSING.CONCERTS_SUMMARY(city, eventCount);
                         } else if (eventCount < 70) {
