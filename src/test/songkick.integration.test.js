@@ -2,6 +2,10 @@
 
 const songkick = require('../api/songkick');
 
+const chai = require('chai');
+chai.use(require('chai-string'));
+chai.should();
+
 require('dotenv-safe').load({
     path: '.env.test',
     allowEmptyValues: true

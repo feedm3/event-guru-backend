@@ -6,6 +6,13 @@ const ARTIST = 'Boys Noize';
 const ARTIST_ID = '62k5LKMhymqlDNo2DWOvvv';
 const ARTIST_ID_UNPOPULAR = '1C847G9FZEG2PkHLMPjJWS';
 
+// some artist don't have a preview mp3 when we access the api with the credentials flow (https://github.com/spotify/web-api/issues/148)
+const ARTIST_ID_MISSING_PREVIEW = '22bE4uQ6baNwSHPVcDxLCe'; // rolling stones
+
+const chai = require('chai');
+chai.use(require('chai-string'));
+chai.should();
+
 describe('Requesting an artist id', function(){
     it('should return a string', function() {
         return spotify.getArtistId(ARTIST)
@@ -41,6 +48,15 @@ describe('Requesting artist info with illigal artist id', function(){
         return spotify.getArtist('????')
             .catch(err => {
                 err.should.be.an('object')
+            })
+    });
+});
+
+describe('Requesting the top track for an artist where there is no preview top track', function() {
+    it('should throw an error', function () {
+        return spotify.getArtistTopTrackPreviewUrl(ARTIST_ID_MISSING_PREVIEW)
+            .catch(err => {
+                err.should.be.an('object');
             })
     });
 });

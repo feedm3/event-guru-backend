@@ -8,9 +8,6 @@ const amazonLogin = require('../../api/amazon-login');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
 module.exports = {
-    'NewSession'() {
-
-    },
     'LaunchRequest' () {
         this.emit('CheckForMailInQueueIntent', () => {
             const numberOfVisits = this.attributes[SESSION_ATTRIBUTES.NUMBER_OF_VISITS] || 1;
@@ -76,7 +73,6 @@ module.exports = {
         this.handler.state = STATES.CITY_SEARCH_MODE;
         this.emitWithState('EventsInCityIntent');
     },
-
 
     /**
      * This intent will be called when the user says "Stop" or "Cancel"
