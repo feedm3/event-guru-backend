@@ -44,6 +44,7 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
         const currentPageNumber = this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] || 1;
         const eventsData = this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA];
         const city = this.attributes[SESSION_ATTRIBUTES.CITY];
+        const errorCount = this.attributes[SESSION_ATTRIBUTES.ERROR_COUNT] || 0;
         const events = eventsData.events;
         const eventCount = eventsData.eventCount;
         const pageCount = eventsData.pageCount;
@@ -54,6 +55,7 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
             const event = events[currentEventIndex];
             eventsApi.improveExternalInformation(event)
                 .then(event => {
+                    this.attributes[SESSION_ATTRIBUTES.ERROR_COUNT] = 0;
                     let searchSummary = '';
                     if (currentEventIndex === 0 && currentPageNumber === 1) {
                         if (eventCount < 20) {
@@ -73,7 +75,19 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
                         card.title,
                         card.content,
                         card.images);
-                });
+                })
+                .catch(err => {
+                    console.error("Could not improve external information of " + event.artist + " - " + city, err);
+                    if (errorCount < 10) {
+                        this.attributes[SESSION_ATTRIBUTES.ERROR_COUNT] = errorCount + 1;
+                        this.emitWithState('NextEventIntent');
+                    } else {
+                        console.error("FATAL: More then 10 artists in a row that could not be loaded! " + city);
+                        this.attributes[SESSION_ATTRIBUTES.ERROR_COUNT] = 0;
+                        this.handler.state = STATES.CITY_SEARCH_MODE;
+                        this.emit(':tell', speechOutput.EVENT_BROWSING.ERROR_TOO_MANY_FAILS);
+                    }
+                })
         } else {
             if (pageCount === currentPageNumber) {
                 this.emit(':tell', speechOutput.EVENT_BROWSING.NO_MORE_CONCERTS);

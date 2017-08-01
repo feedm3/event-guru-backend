@@ -46,6 +46,7 @@ const germanOutput = {
         ASK_NEXT_CONCERT_OR_MAIL: '<break time="0.2s" /> Willst du die Infos zu diesem Konzert per E-Mail oder soll ich mit dem nächsten Konzert weiter machen? ',
         MORE_INFOS_BEFORE_LOG_IN: 'Alles klar. Dafür brauche ich deine E-Mail Adresse. Bitte logge dich hierfür in der Alexa App ein. Wenn du mich daraufhin das nächste mal startest, schicke ich dir die E-Mail für das Konzert. ',
         MORE_INFOS: 'Alles klar. Ich hab dir mehr Infos per Mail geschickt. ',
+        ERROR_TOO_MANY_FAILS: 'Es tut mir leid, aber aktuell kann ich keine Konzerte laden. Bitte versuche es später noch einmal. ',
         HELP: 'Es wird ein Konzert nach dem anderen abgespielt, sortiert nach Beliebtheit. Wenn dir ein Konzert nicht gefällt sag - "Alexa weiter" - wenn du mehr Infos zu einem Konzert haben möchstest sag - "Alexa mehr Infos". ',
         UNHANDLED: 'Ich habe dich leider nicht verstanden. '
     },

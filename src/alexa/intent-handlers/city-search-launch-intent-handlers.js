@@ -14,6 +14,7 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.CITY_SEARCH_LAUNCH_MODE, 
         this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = 0;
         this.attributes[SESSION_ATTRIBUTES.CITY] = undefined;
         this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = {};
+        this.attributes[SESSION_ATTRIBUTES.ERROR_COUNT] = 0;
         this.handler.state = STATES.CITY_SEARCH_MODE;
         this.emit(':ask', speechOutput.CITY_SEARCH.ASK, speechOutput.CITY_SEARCH.ASK_REPROMT);
     },

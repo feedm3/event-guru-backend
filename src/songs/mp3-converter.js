@@ -25,8 +25,10 @@ module.exports = {
 };
 
 const convertMp3 = (mp3Link) => {
-    // TODO Update command https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/speech-synthesis-markup-language-ssml-reference#h3_converting_mp3
-    // check if quality gets better
+    if (!mp3Link) {
+        return Promise.reject(new Error('URL to download mp3 must not be null!'));
+    }
+
     return new Promise((resolve, reject) => {
         console.log('Converting ' + mp3Link);
 
@@ -37,6 +39,8 @@ const convertMp3 = (mp3Link) => {
         execFile(process.env.PATH_FFMPEG_BIN, [
             '-i', mp3Link,
             '-b:a', '48k',
+            '-ac', '2',
+            '-codec:a', 'libmp3lame',
             '-y',
             '-ar', '16000',
             resultFileUri
