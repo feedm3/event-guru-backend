@@ -54,12 +54,14 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
         const eventsData = this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA];
         const city = this.attributes[SESSION_ATTRIBUTES.CITY];
         const errorCount = this.attributes[SESSION_ATTRIBUTES.ERROR_COUNT] || 0;
-        const events = eventsData.events;
+        const events = eventsData.events || [];
         const eventCount = eventsData.eventCount;
         const pageCount = eventsData.pageCount;
 
         if (events.length > currentEventIndex) {
             this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] = currentEventIndex + 1;
+
+            // TODO: for example "ravensburg" still not working completely
 
             const event = events[currentEventIndex];
             eventsApi.improveExternalInformation(event)
