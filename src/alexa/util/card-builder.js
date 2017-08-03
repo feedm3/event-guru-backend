@@ -8,7 +8,7 @@ const buildWelcomeCard = () => {
         'Sage zum Beispiel einfach "Alexa, frage Event Guru nach Konzerten in München" um ' +
         'Konzerte in München zu entdecken. Es wird immer für die nächsten 3 Monate gesucht ' +
         'und dann nach Bekanntheit des Künstlers sortiert. \n' +
-        'Concerts by Songkick';
+        'Konzerte von Songkick, Cover und Vorschau des Künstlers von Spotify';
 
     return {
         title,

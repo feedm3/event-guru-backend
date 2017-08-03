@@ -6,7 +6,7 @@ const LOCALE = require('../alexa/speech-output').DEV_LOCALE;
 
 const ALLOWED_COUNTRY = 'Germany';
 
-const POWERED_BY = "Concerts by Songkick";
+const POWERED_BY = 'Konzerte von Songkick, Cover und Vorschau des Künstlers von Spotify';
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 5;
 
