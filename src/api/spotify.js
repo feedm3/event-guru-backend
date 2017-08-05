@@ -2,7 +2,6 @@
 
 const SpotifyWebApi = require('spotify-web-api-node');
 const url = require('url');
-const request = require('request-promise');
 const DEFAULT_COUNTRY = 'DE'; // format: ISO 3166-1 alpha-2
 
 const spotify = new SpotifyWebApi({
@@ -54,17 +53,10 @@ const getArtist = (artistId) => {
         })
 };
 
-const getIdFromPreviewUrl = (mp3PreviewUrl) => {
-    // example: https://p.scdn.co/mp3-preview/d0a77a3229af6dc37420db230c92d5d96a2da78
-    const path = url.parse(mp3PreviewUrl).pathname;
-    return path.split('/')[2];
-};
-
 module.exports = {
     getArtistId,
     getArtist,
-    getArtistTopTrackPreviewUrl,
-    getIdFromPreviewUrl
+    getArtistTopTrackPreviewUrl
 };
 
 const refreshAccessToken = () => {
