@@ -98,12 +98,21 @@ resources:
                     - '/*'
 
 functions:
-  # Alexa
+  # Alexa skill
   alexaSkill:
     handler: alexa/skill.handler
     description: Event Guru - Alexa Skill
     events:
       - alexaSkill
+
+  # Cron job to preload events
+  events-preload:
+    handler: events/events-preload.run
+    description: Event Guru - Event cron preloader
+    timeout: 300
+    events:
+      - schedule: cron(1 0 * * ? *) # 00:01 every midnight
+
   # EMail bounce and complaint handling
   email-bounce-handler:
     handler: mail/aws-ses-notifications.handler
@@ -112,10 +121,3 @@ functions:
       - sns: email-bounces
       - sns: email-complaints
       - sns: email-deliveries
-
-  events-preload:
-    handler: events/events-preload.run
-    description: Event Guru - Event cron preloader
-    timeout: 300
-    events:
-      - schedule: cron(1 0 * * ? *) # 00:01 every midnight
