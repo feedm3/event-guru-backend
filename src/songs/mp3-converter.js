@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const execFile = require('child_process').execFile;
-const lambda = require('../api/aws-lambda');
 const randomString = require('randomstring');
 
 // the path must be relative to the root project src path for aws lambda. on local you

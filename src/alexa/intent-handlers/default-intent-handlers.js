@@ -2,7 +2,6 @@
 
 const speechOutput = require('../speech-output');
 const cardBuilder = require('../util/card-builder');
-const moment = require('moment');
 const mailService = require('../../mail/mail');
 const amazonLogin = require('../../api/amazon-login');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
