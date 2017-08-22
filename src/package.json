@@ -27,16 +27,15 @@
     "spotify",
     "event",
     "songkick",
-    "7digital",
     "explore",
     "exploration"
   ],
   "license": "MIT",
   "dependencies": {
-    "7digital-api": "^0.37.0",
     "alexa-sdk": "^1.0.12",
-    "aws-sdk": "^2.100.0",
+    "aws-sdk": "^2.101.0",
     "dotenv-safe": "^4.0.4",
+    "limiter": "^1.1.2",
     "moment": "^2.18.1",
     "randomstring": "^1.1.5",
     "request": "^2.81.0",
