@@ -2,7 +2,7 @@
 
 const eventsStore = require('./events-store');
 const mp3Store = require('../songs/mp3-store');
-const spotify = require('../api/spotify');
+const deezer = require('../api/deezer');
 const bitly = require('../api/bitly');
 
 const fetchPagedEvents = (location, pageNumber) => {
@@ -32,11 +32,11 @@ const addPreviewTrack = (event) => {
 };
 
 const addArtistImages = (event) => {
-    return spotify.getArtistId(event.artist)
-        .then(id => spotify.getArtist(id))
+    return deezer.getArtist(event.artist)
         .then(artist => {
             artist.images
-                .sort(image => image.width) // smallest image first
+                .sort(image => image.width)
+                .reverse() // smallest image first
                 .forEach(image => {
                     if (image.width < 720) {
                         event.imageMediumUrl = image.url;

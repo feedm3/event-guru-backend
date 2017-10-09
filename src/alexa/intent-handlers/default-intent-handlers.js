@@ -14,7 +14,7 @@ module.exports = {
             this.attributes[SESSION_ATTRIBUTES.LAST_VISIT] = new Date();
 
             if (numberOfVisits === 1) {
-                // "Tip" nur die ersten 2-3 mal geben, dafür aber ein erweiterten Tip mit Email hinweis.
+                // "Tipp" nur die ersten 2-3 mal geben, dafür aber ein erweiterten Tipp mit Email hinweis.
                 this.emit('GoToCitySearchFirstTimeIntent');
             } else {
                 this.emit('GoToCitySearchIntent');

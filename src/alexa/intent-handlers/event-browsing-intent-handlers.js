@@ -87,7 +87,7 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
                         card.images);
                 })
                 .catch(err => {
-                    console.error("Could not improve external information of " + event.artist + " - " + city, err);
+                    console.error("Could not improve external information of " + event.artist + " (in " + city + ")", err.message);
                     if (errorCount < 10) {
                         this.attributes[SESSION_ATTRIBUTES.ERROR_COUNT] = errorCount + 1;
                         this.emitWithState('NextEventIntent');
