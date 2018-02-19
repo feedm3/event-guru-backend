@@ -23,4 +23,4 @@ describe('Getting the events', function(){
     });
 });
 
-// test hinzufügen für fehlerhandling, wie zB Orte die es nicht gibt
+// todo add test for error handling like locations that don't exist
