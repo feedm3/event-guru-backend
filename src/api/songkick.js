@@ -138,5 +138,8 @@ const formatDateForAlexa = (date) => {
 };
 
 const formatDateForUser = (date) => {
-    return moment(date).locale(LOCALE).format('dddd, Do MMMM YYYY');
+    // todo: improve performance here by not creating a new instance for every date
+    const localeMoment = moment(date);
+    localeMoment.locale(LOCALE);
+    return localeMoment.format('dddd, Do MMMM YYYY');
 };
