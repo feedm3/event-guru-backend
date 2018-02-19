@@ -1,6 +1,6 @@
 'use strict';
 
-const npmRun = require('npm-run');
+const askCli = require('ask-cli/lib/api/api-wrapper');
 const async = require('async');
 
 const SKILL_ID = 'amzn1.ask.skill.baee0e61-2728-43f5-97d5-b8e3d43cbc63';
@@ -8,25 +8,31 @@ const LOCALE = 'de-DE';
 
 const speak = (text) => {
     return new Promise((fulfill, reject) => {
-        npmRun.exec(`npx ask api simulate-skill --skill-id ${ SKILL_ID } --locale ${ LOCALE } --text "${ text }"`, (err, data) => {
-            if (err) {
+
+        // todo error is currently not consistently an error. should be resolved by ask cli in further releases
+        askCli.callSimulateSkill('', text, SKILL_ID, LOCALE, 'default', false, (err, data) => {
+
+            if (typeof err === 'number' && err > 300) {
                 return reject(new Error(err));
             }
-            const simulationId = JSON.parse(data).id;
+            const body = err.body;
+            const simulationId = body.id;
 
             async.retry(
                 { times: 6, interval: 1000 },
                 (cb) => {
-                    npmRun.exec(`npx ask api get-simulation --simulation-id ${ simulationId } --skill-id ${ SKILL_ID }`, (err, data, stderr) => {
-                        if (err) {
+
+                    // todo err is currently the response of a request, should be resolved by ask cli in further release
+                    askCli.callGetSimulation(simulationId, SKILL_ID, 'default', false, (err, data) => {
+                        if (typeof err === 'number' && err > 300) {
                             return reject(new Error(err));
                         }
-                        const dataJson = JSON.parse(data);
-                        if (dataJson.status === 'IN_PROGRESS') {
+                        const body = JSON.parse(err.body);
+                        if (body.status === 'IN_PROGRESS') {
                             console.log('simulation not yet ready, trying...');
-                            cb(new Error('simulation not yet ready: ' + dataJson));
+                            cb(new Error('simulation not yet ready: ' + body));
                         } else {
-                            cb(null, dataJson);
+                            cb(null, body);
                         }
                     })
                 }, (err, skillResponse) => {
