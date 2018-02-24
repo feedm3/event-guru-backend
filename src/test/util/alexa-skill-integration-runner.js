@@ -1,9 +1,14 @@
 'use strict';
 
+require('dotenv-safe').load({
+    path: '.env.test',
+    allowEmptyValues: true
+});
+
 const askCli = require('ask-cli/lib/api/api-wrapper');
 const async = require('async');
 
-const SKILL_ID = 'amzn1.ask.skill.baee0e61-2728-43f5-97d5-b8e3d43cbc63';
+const SKILL_ID = process.env.ALEXA_APP_ID;
 const LOCALE = 'de-DE';
 
 const speak = (text) => {
