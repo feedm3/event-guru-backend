@@ -7,13 +7,13 @@ const englishUsOutput = {
         STOP_MESSAGE: 'See you soon on event guru!',
     },
     EVENT_BROWSING: {
-        VERY_MUCH_CONCERTS_SUMMARY: (city) => 'I have found a lot of concerts.',
+        VERY_MUCH_CONCERTS_SUMMARY: 'I have found a lot of concerts in {{ city }}.',
     },
-    DEV_LOCALE: 'en'
+    DEV_LOCALE: 'en-US'
 };
 
 const englishUkOutput = {
-    DEV_LOCALE: 'en-gb'
+    DEV_LOCALE: 'en-GB'
 };
 
 const germanOutput = {
@@ -26,22 +26,22 @@ const germanOutput = {
         UNHANDLED: 'Ich habe dich leider nicht verstanden. Was hast du gesagt? '
     },
     CITY_SEARCH_LAUNCH: {
-        ASK_TO_CONTINUE_OR_NOW:(city) => `Du hast zuletzt in ${city} nach Konzerten gesucht. Möchtest du an der letzen Stelle weiter machen oder willst du eine neue Suche starten?`,
+        ASK_TO_CONTINUE_OR_NOW: 'Du hast zuletzt in {{ city }} nach Konzerten gesucht. Möchtest du an der letzen Stelle weiter machen oder willst du eine neue Suche starten?',
         UNHANDLED: 'Das habe ich leider nicht verstanden. '
     },
     CITY_SEARCH: {
         ASK: 'In welcher Stadt möchtest du gerne auf ein Konzert gehen? ',
         ASK_REPROMT: 'In welcher Stadt soll ich für dich nach Konzerten suchen? ',
-        NOTHING_FOUND:(city) => `Es tut mir Leid, aber ich habe für ${city} leider keine Konzerte gefunden. In welcher anderen Stadt soll ich suchen? `,
+        NOTHING_FOUND: 'Es tut mir Leid, aber ich habe für {{ city }} leider keine Konzerte gefunden. In welcher anderen Stadt soll ich suchen? ',
         HELP: 'Sag einfach in welcher Stadt du auf ein Konzert gehen möchtest. ',
         UNHANDLED: 'Es tut mir Leid, aber ich habe den Namen der Stadt nicht verstanden. '
     },
     EVENT_BROWSING: {
-        CONCERTS_SUMMARY: (city, count) => `Ich habe ${count} Konzerte in ${city} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Auf zum ersten Konzert <break time="0.3s" />  `,
-        MANY_CONCERTS_SUMMARY:(city) => `Ich habe viele Konzerte in ${city} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Auf zum ersten Konzert <break time="0.3s" />  `,
-        VERY_MUCH_CONCERTS_SUMMARY:(city) => `Ich habe sehr viele Konzerte in ${city} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Auf zum ersten Konzert <break time="0.3s" />  `,
+        CONCERTS_SUMMARY: 'Ich habe {{ count }} Konzerte in {{ city }} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Auf zum ersten Konzert <break time="0.3s" />  ',
+        MANY_CONCERTS_SUMMARY: 'Ich habe viele Konzerte in {{ city }} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Auf zum ersten Konzert <break time="0.3s" />  ',
+        VERY_MUCH_CONCERTS_SUMMARY: 'Ich habe sehr viele Konzerte in {{ city }} für die nächsten 3 Monate gefunden, und sie nach Bekanntheitsgrad sortiert. Auf zum ersten Konzert <break time="0.3s" />  ',
         NO_MORE_CONCERTS: 'Ich habe leider keine weiteren Konzerte mehr für dich. ',
-        CONCERT: (artist, date, location, trackUrl) => `${artist} am <say-as interpret-as="date" format="dm">${date}</say-as>, ${location} <audio src="${trackUrl}"></audio>`,
+        CONCERT: '{{ artist }} am <say-as interpret-as="date" format="dm">{{ date }}</say-as>, {{ location }} <audio src="{{ trackUrl }}"></audio>',
         ASK_NEXT_CONCERT: '<break time="0.2s" /> Soll ich mit dem nächsten Konzert weiter machen? ',
         ASK_NEXT_CONCERT_OR_MAIL: '<break time="0.2s" /> Willst du die Infos zu diesem Konzert per E-Mail oder soll ich mit dem nächsten Konzert weiter machen? ',
         MORE_INFOS_BEFORE_LOG_IN: 'Alles klar. Dafür brauche ich deine E-Mail Adresse. Bitte logge dich hierfür in der Alexa App ein. Wenn du mich daraufhin das nächste mal startest, schicke ich dir die E-Mail für das Konzert. ',
@@ -50,7 +50,7 @@ const germanOutput = {
         HELP: 'Ich stelle dir die Konzerte nacheinander vor, sortiert nach Beliebtheit. Wenn dir ein Konzert gefällt, kannst du dir weitere Infos per Email zukommen lassen. Sag dazu einfach "Alexa, mehr Infos". Wenn es dir nicht gefällt kannst du mit - "Alexa, weiter" - zum nächsten Konzert springen. ',
         UNHANDLED: 'Ich habe dich leider nicht verstanden. '
     },
-    DEV_LOCALE: 'de'
+    DEV_LOCALE: 'de-DE'
 };
 
 const speechOutput = {
@@ -66,4 +66,4 @@ const speechOutput = {
     }
 };
 
-module.exports = germanOutput;
+module.exports = speechOutput;

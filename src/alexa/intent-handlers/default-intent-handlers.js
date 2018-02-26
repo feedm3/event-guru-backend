@@ -1,9 +1,9 @@
 'use strict';
 
-const speechOutput = require('../speech-output');
 const cardBuilder = require('../util/card-builder');
 const mailService = require('../../mail/mail');
 const amazonLogin = require('../../api/amazon-login');
+const functions = require('../util/functions');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
 
 module.exports = {
@@ -24,9 +24,10 @@ module.exports = {
     'GoToCitySearchFirstTimeIntent'() {
         this.handler.state = STATES.CITY_SEARCH_MODE;
         const card = cardBuilder.buildWelcomeCard();
+
         this.emit(':askWithCard',
-            speechOutput.COMMON.WELCOME + speechOutput.CITY_SEARCH.ASK,
-            speechOutput.CITY_SEARCH.ASK_REPROMT,
+            this.t('COMMON.WELCOME') + this.t('CITY_SEARCH.ASK'),
+            this.t('CITY_SEARCH.ASK_REPROMT'),
             card.title,
             card.content);
     },
@@ -34,8 +35,8 @@ module.exports = {
         this.handler.state = STATES.CITY_SEARCH_MODE;
         const card = cardBuilder.buildWelcomeCard();
         this.emit(':askWithCard',
-            speechOutput.COMMON.WELCOME_BACK + speechOutput.CITY_SEARCH.ASK,
-            speechOutput.CITY_SEARCH.ASK_REPROMT,
+            this.t('COMMON.WELCOME_BACK') + this.t('CITY_SEARCH.ASK'),
+            this.t('CITY_SEARCH.ASK_REPROMT'),
             card.title,
             card.content);
     },
@@ -52,14 +53,14 @@ module.exports = {
                 }))
                 .then(() => {
                     this.attributes[SESSION_ATTRIBUTES.MAIL_QUEUE] = undefined;
-                    if (isFunction(callbackIntent)) {
+                    if (functions.isFunction(callbackIntent)) {
                         callbackIntent();
                     } else {
                         this.emitWithState(callbackIntent);
                     }
                 });
         } else {
-            if (isFunction(callbackIntent)) {
+            if (functions.isFunction(callbackIntent)) {
                 callbackIntent();
             } else {
                 this.emitWithState(callbackIntent);
@@ -68,16 +69,16 @@ module.exports = {
     },
 
     // ----------------------- direct intent
-    'DirectEventSearchIntent'() {
+    'StartEventSearchWithCityIntent'() {
         this.handler.state = STATES.CITY_SEARCH_MODE;
-        this.emitWithState('EventsInCityIntent');
+        this.emitWithState('StartEventSearchWithCityIntent'); // todo remove '*Intent' from all functions that are not actual intents (can be activated via speech)
     },
 
     /**
      * This intent will be called when the user says "Stop" or "Cancel"
      */
     'ExitIntent'() {
-        this.emit(':tell', speechOutput.COMMON.GOODBYE);
+        this.emit(':tell', this.t('COMMON.GOODBYE'));
     },
     'AMAZON.CancelIntent'() {
         this.emit('ExitIntent');
@@ -97,11 +98,8 @@ module.exports = {
             this.emitWithState('Unhandled');
         } else {
             console.error('Unhandled error in default intent');
-            this.emit(':ask', speechOutput.COMMON.UNHANDLED, speechOutput.COMMON.UNHANDLED);
+            this.emit(':ask', this.t('COMMON.UNHANDLED'), this.t('COMMON.UNHANDLED'));
         }
     }
 };
 
-const isFunction = function(obj) {
-    return !!(obj && obj.constructor && obj.call && obj.apply);
-};

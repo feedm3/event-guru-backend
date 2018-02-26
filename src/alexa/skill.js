@@ -13,9 +13,6 @@ const intentHandlers = [
     require('./intent-handlers/event-browsing-intent-handlers')
 ];
 
-// set the global date format
-require('moment').locale(speechOutput.DEV_LOCALE);
-
 // needed for aws lambda to find our binaries
 process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'];
 

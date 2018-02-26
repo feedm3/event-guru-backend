@@ -1,7 +1,6 @@
 'use strict';
 
 const AlexaStateHandlerBuilder = require('../util/alexa-state-handler-builder');
-const speechOutput = require('../speech-output');
 const moment = require('moment');
 const { SESSION_ATTRIBUTES, STATES } = require('../config');
 
@@ -20,7 +19,7 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.CITY_SEARCH_MODE, {
             }
         });
     },
-    'EventsInCityIntent' () {
+    'StartEventSearchWithCityIntent' () {
         const city = this.event.request.intent.slots.city.value;
         if (!city) {
             this.emitWithState('Unhandled');
@@ -38,12 +37,16 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.CITY_SEARCH_MODE, {
 
     // ----------------------- help handling
     'AMAZON.HelpIntent'(){
-        this.emit(':ask', speechOutput.CITY_SEARCH.HELP + speechOutput.CITY_SEARCH.ASK_REPROMT, speechOutput.CITY_SEARCH.ASK_REPROMT);
+        this.emit(':ask',
+            this.t('CITY_SEARCH.HELP') + this.t('CITY_SEARCH.ASK_REPROMT'),
+            this.t('CITY_SEARCH.ASK_REPROMT'));
     },
 
     // ----------------------- error handling
     'Unhandled'() {
         console.error('Unhandled error during city search mode');
-        this.emit(':ask', speechOutput.CITY_SEARCH.UNHANDLED + speechOutput.CITY_SEARCH.ASK_REPROMT, speechOutput.CITY_SEARCH.ASK_REPROMT);
+        this.emit(':ask',
+            this.t('CITY_SEARCH.UNHANDLED') + this.t('CITY_SEARCH.ASK_REPROMT'),
+            this.t('CITY_SEARCH.ASK_REPROMT'));
     }
 });

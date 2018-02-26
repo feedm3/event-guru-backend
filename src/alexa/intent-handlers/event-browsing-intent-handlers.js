@@ -1,7 +1,6 @@
 'use strict';
 
 const AlexaStateHandlerBuilder = require('../util/alexa-state-handler-builder');
-const speechOutput = require('../speech-output');
 const eventsApi = require('../../events/events');
 const cardBuilder = require('../util/card-builder');
 const { STATES, SESSION_ATTRIBUTES } = require('../config');
@@ -20,7 +19,7 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
                     this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = {};
 
                     this.handler.state = STATES.CITY_SEARCH_MODE;
-                    this.emit(':ask', speechOutput.CITY_SEARCH.NOTHING_FOUND(city), speechOutput.CITY_SEARCH.ASK_REPROMT);
+                    this.emit(':ask', this.t('CITY_SEARCH.NOTHING_FOUND', { city }), this.t('CITY_SEARCH.ASK_REPROMT'));
                 } else {
                     this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = pageNumber;
                     this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = data;
@@ -36,7 +35,7 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
                 this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA] = {};
 
                 this.handler.state = STATES.CITY_SEARCH_MODE;
-                this.emit(':ask', speechOutput.CITY_SEARCH.NOTHING_FOUND(city), speechOutput.CITY_SEARCH.ASK_REPROMT);
+                this.emit(':ask', this.t('CITY_SEARCH.NOTHING_FOUND', { city }), this.t('CITY_SEARCH.ASK_REPROMT'));
             })
     },
     'AMAZON.YesIntent'() {
@@ -45,7 +44,7 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
     'AMAZON.NextIntent'() {
         this.emitWithState('NextEventIntent');
     },
-    'WantToContinueIntent'() {
+    'ContinueLastSearchIntent'() {
         this.emitWithState('NextEventIntent');
     },
     'NextEventIntent'() {
@@ -68,20 +67,20 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
                     let searchSummary = '';
                     if ((currentEventIndex === 0 || currentEventIndex - errorCount === 0) && currentPageNumber === 1) {
                         if (eventCount < 20) {
-                            searchSummary = speechOutput.EVENT_BROWSING.CONCERTS_SUMMARY(city, eventCount);
+                            searchSummary = this.t('EVENT_BROWSING.CONCERTS_SUMMARY', { city, count: eventCount });
                         } else if (eventCount < 70) {
-                            searchSummary = speechOutput.EVENT_BROWSING.MANY_CONCERTS_SUMMARY(city);
+                            searchSummary = this.t('EVENT_BROWSING.MANY_CONCERTS_SUMMARY', { city });
                         } else {
-                            searchSummary = speechOutput.EVENT_BROWSING.VERY_MUCH_CONCERTS_SUMMARY(city);
+                            searchSummary = this.t('EVENT_BROWSING.VERY_MUCH_CONCERTS_SUMMARY', { city });
                         }
                     }
 
-                    const eventSummary = speechOutput.EVENT_BROWSING.CONCERT(event.artist, event.dateAlexaDM, event.venue, event.topTrackPreviewUrl).replace(/&/g, " and ")
-                        + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL;
+                    const eventSummary = this.t('EVENT_BROWSING.CONCERT', { artist: event.artist, date: event.dateAlexaDM, location: event.venue, trackUrl: event.topTrackPreviewUrl}).replace(/&/g, " and ")
+                        + this.t('EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL');
                     const card = cardBuilder.buildEventCard(event, city);
                     this.emit(':askWithCard',
                         searchSummary + eventSummary,
-                        speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL,
+                        this.t('EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL'),
                         card.title,
                         card.content,
                         card.images);
@@ -95,12 +94,12 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
                         console.error("FATAL: More then 10 artists in a row that could not be loaded! " + city);
                         this.attributes[SESSION_ATTRIBUTES.ERROR_COUNT] = 0;
                         this.handler.state = STATES.CITY_SEARCH_MODE;
-                        this.emit(':tell', speechOutput.EVENT_BROWSING.ERROR_TOO_MANY_FAILS);
+                        this.emit(':tell', this.t('EVENT_BROWSING.ERROR_TOO_MANY_FAILS'));
                     }
                 })
         } else {
             if (pageCount === currentPageNumber) {
-                this.emit(':tell', speechOutput.EVENT_BROWSING.NO_MORE_CONCERTS);
+                this.emit(':tell', this.t('EVENT_BROWSING.NO_MORE_CONCERTS'));
             } else {
                 this.attributes[SESSION_ATTRIBUTES.CURRENT_PAGE_NUMBER] = currentPageNumber + 1;
                 this.emitWithState('FetchEventsIntent');
@@ -109,7 +108,7 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
     },
 
     // ----------------------- more infos
-    'MoreInformationIntent'() {
+    'SendEventDetailsEmailIntent'() {
         const currentEventIndex = this.attributes[SESSION_ATTRIBUTES.CURRENT_EVENT_INDEX] - 1;
         const events = this.attributes[SESSION_ATTRIBUTES.EVENTS_DATA].events;
         const event = events[currentEventIndex];
@@ -128,15 +127,15 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
             });
     },
     'MailSent'() {
-        this.emit(':ask', speechOutput.EVENT_BROWSING.MORE_INFOS + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
+        this.emit(':ask', this.t('EVENT_BROWSING.MORE_INFOS') + this.t('EVENT_BROWSING.ASK_NEXT_CONCERT'), this.t('EVENT_BROWSING.ASK_NEXT_CONCERT'));
     },
     'LoginRequired'() {
-        this.emit(':askWithLinkAccountCard', speechOutput.EVENT_BROWSING.MORE_INFOS_BEFORE_LOG_IN + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT);
+        this.emit(':askWithLinkAccountCard', this.t('EVENT_BROWSING.MORE_INFOS_BEFORE_LOG_IN') + this.t('EVENT_BROWSING.ASK_NEXT_CONCERT'), this.t('EVENT_BROWSING.ASK_NEXT_CONCERT'));
     },
 
     // ----------------------- help handling
     'AMAZON.HelpIntent'(){
-        this.emit(':ask', speechOutput.EVENT_BROWSING.HELP + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL);
+        this.emit(':ask', this.t('EVENT_BROWSING.HELP') + this.t('EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL'), this.t('EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL'));
     },
 
     // ----------------------- cancel handling
@@ -148,7 +147,7 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
     },
     'AMAZON.CancelIntent'(){
         this.handler.state = STATES.CITY_SEARCH_MODE;
-        this.emit(':tell', speechOutput.COMMON.GOODBYE);
+        this.emit(':tell', this.t('COMMON.GOODBYE'));
     },
     'SessionEndedRequest'() {
         this.handler.state = STATES.CITY_SEARCH_MODE;
@@ -158,7 +157,7 @@ module.exports = AlexaStateHandlerBuilder.build(STATES.EVENT_BROWSING_MODE, {
     // ----------------------- error handling
     'Unhandled'() {
         console.error('Unhandled error during event browsing mode');
-        this.emit(':ask', speechOutput.EVENT_BROWSING.UNHANDLED + speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL, speechOutput.EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL);
+        this.emit(':ask', this.t('EVENT_BROWSING.UNHANDLED') + this.t('EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL'), this.t('EVENT_BROWSING.ASK_NEXT_CONCERT_OR_MAIL'));
     }
 });
 
