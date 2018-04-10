@@ -1,4 +1,4 @@
-# Event Guru
+# Event Guru Backend
 
 [![Build Status](https://semaphoreci.com/api/v1/projects/0c730be4-c759-40da-a795-105e61ed54af/1444297/shields_badge.svg)](https://semaphoreci.com/codecrafters/alexa-skill-event-guru)
 
