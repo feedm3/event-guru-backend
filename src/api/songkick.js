@@ -2,6 +2,7 @@
 
 const request = require('request-promise');
 const moment = require('moment');
+const config = require('../config/config');
 
 const ALLOWED_COUNTRY = 'Germany';
 
@@ -33,7 +34,7 @@ const getPagedEventsByLocationLongLat = (locationLongLat, pageNumber, pageSize) 
         method: 'get',
         url: 'http://api.songkick.com/api/3.0/events.json',
         qs: {
-            apikey: process.env.SONGKICK_API_KEY,
+            apikey: config.SONGKICK_API_KEY,
             location: 'geo:' + locationLongLat.lat + ',' + locationLongLat.long,
             min_date: FROM,
             max_date: TO,
@@ -71,7 +72,7 @@ const getLongLatFromLocation = (locationName) => {
         method: 'get',
         url: 'http://api.songkick.com/api/3.0/search/locations.json',
         qs: {
-            apikey: process.env.SONGKICK_API_KEY,
+            apikey: config.SONGKICK_API_KEY,
             query: locationName
         },
         json: true

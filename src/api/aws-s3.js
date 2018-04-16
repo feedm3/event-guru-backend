@@ -3,6 +3,7 @@
 const fs = require('fs');
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
+const config = require('../config/config');
 
 /**
  * Upload a file to S3
@@ -27,7 +28,7 @@ const uploadData = (data, fileName) => {
         const s3FileParams = {
             Key: fileName,
             Body: data,
-            Bucket: process.env.EVENT_GURU_BUCKET
+            Bucket: config.EVENT_GURU_BUCKET
         };
         s3.upload(s3FileParams, (err, data) => {
             if (err) {
@@ -51,7 +52,7 @@ const fileExists = (fileName) => {
     return new Promise((resolve, reject) => {
         const s3FileParams = {
             Key: fileName,
-            Bucket: process.env.EVENT_GURU_BUCKET
+            Bucket: config.EVENT_GURU_BUCKET
         };
         s3.headObject(s3FileParams, (err, data) => {
             if (err) {
@@ -67,7 +68,7 @@ const getFileUrl = (fileName) => {
     return new Promise((resolve, reject) => {
         const s3FileParams = {
             Key: fileName,
-            Bucket: process.env.EVENT_GURU_BUCKET
+            Bucket: config.EVENT_GURU_BUCKET
         };
         s3.headObject(s3FileParams, (err, data) => {
             if (err) {

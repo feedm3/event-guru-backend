@@ -1,13 +1,14 @@
 'use strict';
 
 const request = require('request-promise');
+const config = require('../config/config');
 
 const shorten = (url) => {
     const options = {
         method: 'get',
         url: 'https://api-ssl.bitly.com/v3/shorten',
         qs: {
-            access_token: process.env.BITLY_ACCESS_TOKEN,
+            access_token: config.BITLY_ACCESS_TOKEN,
             longUrl: url
         },
         json: true

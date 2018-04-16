@@ -75,7 +75,7 @@ jspm_packages
 
 ## Custom
 .serverless
-src/config
+src/config/config-*.json
 .env
 .env.test
 config-prod.json

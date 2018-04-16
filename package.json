@@ -1,31 +1,17 @@
 {
   "name": "event-guru-backend",
   "version": "0.0.1",
-  "description": "Event Guru Backend",
-  "main": "index.js",
+  "description": "Event Guru. Get inforamtions about upcoming concerts",
   "repository": "https://github.com/feedm3/event-guru-backend",
+  "author": "Fabian Dietenberger <fabian@dietenberger.me> (http://dietenberger.me)",
+  "license": "MIT",
   "scripts": {
     "deploy:init": "serverless deploy",
     "deploy:remove": "serverless remove",
     "deploy": "serverless deploy function --function alexaSkill",
     "logs:tail": "serverless logs --tail --function alexaSkill",
-    "test": "mocha --recursive",
-    "info": "serverless info --verbose"
+    "test": "jest"
   },
-  "keywords": [
-    "concerts",
-    "musik",
-    "music",
-    "charts",
-    "event",
-    "events",
-    "genius",
-    "event",
-    "songkick",
-    "explore",
-    "exploration"
-  ],
-  "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.224.1",
     "moment": "^2.22.1",

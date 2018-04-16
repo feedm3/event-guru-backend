@@ -1,7 +1,5 @@
 'use strict';
 
-require('dotenv-safe').load();
-
 const eventsStore = require('./events-store');
 
 const CITIES_TO_PRELOAD = [

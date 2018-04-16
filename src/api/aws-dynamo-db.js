@@ -5,7 +5,7 @@ const moment = require('moment');
 AWS.config.update({
     region: "eu-west-1", // Ireland
 });
-const TABLE_NAME = process.env.EVENT_GURU_EVENTS_CACHE_TABLE;
+const config = require('../config/config');
 const dynamoDbClient = new AWS.DynamoDB.DocumentClient();
 
 const getEvents = (location) => {
@@ -14,7 +14,7 @@ const getEvents = (location) => {
     }
 
     const searchParams = {
-        TableName: TABLE_NAME,
+        TableName: config.EVENT_GURU_EVENTS_CACHE_TABLE,
         KeyConditionExpression: "#location = :location",
         ExpressionAttributeNames: {
             "#location": "location"
@@ -50,7 +50,7 @@ const putEvents = (location, eventsData) => {
 
     const endOfTodayInSeconds = moment().endOf('day').utc(true).unix();
     const params = {
-        TableName: TABLE_NAME,
+        TableName: config.EVENT_GURU_EVENTS_CACHE_TABLE,
         Item: {
             location: location.toLowerCase(),
             eventsData: eventsData,

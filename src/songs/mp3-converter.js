@@ -3,6 +3,7 @@
 const fs = require('fs');
 const execFile = require('child_process').execFile;
 const randomString = require('randomstring');
+const config = require('../config/config');
 
 // the path must be relative to the root project src path for aws lambda. on local you
 // need the relative path from the executing js script
@@ -35,7 +36,7 @@ const convertMp3 = (mp3Link) => {
         const resultFileUri = RESULT_DIR + '/' + resultFileName;
 
         // note: if you upload the binary from a windows machine it can result in conflicts and errors!
-        execFile(process.env.PATH_FFMPEG_BIN, [
+        execFile(config.PATH_FFMPEG_BIN, [
             '-i', mp3Link,
             '-b:a', '48k',
             '-ac', '2',
