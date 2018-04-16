@@ -23,7 +23,13 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
-        - '*'
+        - 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.vars.EVENT_GURU_EVENTS_CACHE_TABLE}'
+
+plugins:
+  - serverless-webpack
+
+custom:
+  vars: ${file(./src/config/config.json)}
 
 resources:
   Resources:
@@ -42,12 +48,12 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 5
               WriteCapacityUnits: 5
-            TableName: event-guru-event-caches
+            TableName: ${self:custom.vars.EVENT_GURU_EVENTS_CACHE_TABLE}
 
     EventGuruBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: event-guru-store
+        BucketName: ${self:custom.vars.EVENT_GURU_BUCKET}
         AccessControl: PublicReadWrite
         CorsConfiguration:
           CorsRules:
@@ -76,8 +82,10 @@ resources:
                     - '/*'
 
 functions:
+  # http rest interface
   events-rest-api:
-    handler: src/lambda/handler.getEvents
+    handler: src/lambda/events-rest-handler.getEvents
+    description: Event Guru - REST API
     events:
       - http:
           path: events
@@ -89,19 +97,10 @@ functions:
                 page: true
                 pageSize: false
 
-  # Cron job to preload events
+  # cron job to preload events
   events-preload:
-    handler: events/events-preload.run
-    description: Event Guru - Event cron preloader
-    timeout: 300
+    handler: src/lambda/events-preload-handler.run
+    description: Event Guru - CronJob Event Preloader
+    timeout: 600s
     events:
       - schedule: cron(1 0 * * ? *) # 00:01 every midnight
-
-  # EMail bounce and complaint handling
-  email-bounce-handler:
-    handler: mail/aws-ses-notifications.handler
-    description: Event Guru - Email bounce handler
-    events:
-      - sns: email-bounces
-      - sns: email-complaints
-      - sns: email-deliveries

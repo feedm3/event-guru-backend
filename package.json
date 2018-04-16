@@ -8,8 +8,8 @@
   "scripts": {
     "deploy:init": "serverless deploy",
     "deploy:remove": "serverless remove",
-    "deploy": "serverless deploy function --function alexaSkill",
-    "logs:tail": "serverless logs --tail --function alexaSkill",
+    "deploy": "serverless deploy function --function events-rest-api",
+    "logs:tail": "serverless logs --tail --function events-rest-api",
     "test": "jest"
   },
   "dependencies": {
