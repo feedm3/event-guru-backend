@@ -26,6 +26,8 @@ To test your skill run
 npm test
 ```
 
+---
+
 > next lines are outdated!
 
 ## Development
