@@ -1,6 +1,6 @@
 'use strict';
 
-const events = require('../events/events-store');
+const events = require('../src/events/events-store');
 
 require('dotenv-safe').load({
     path: '.env.test',

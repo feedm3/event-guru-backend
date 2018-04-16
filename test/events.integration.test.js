@@ -5,7 +5,7 @@ require('dotenv-safe').load({
     allowEmptyValues: true
 });
 
-const events = require('../events/events');
+const events = require('../src/events/events');
 const chai = require('chai');
 chai.use(require('chai-string'));
 chai.should();

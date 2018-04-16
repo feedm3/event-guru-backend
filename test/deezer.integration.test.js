@@ -1,6 +1,6 @@
 'use strict';
 
-const deezer = require('../api/deezer');
+const deezer = require('../src/api/deezer');
 
 const chai = require('chai');
 chai.use(require('chai-string'));
