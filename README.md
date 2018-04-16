@@ -5,6 +5,27 @@
 
 Get upcoming concerts for a location of your choice with a bunch of additional data.
 
+## How to run
+
+Prerequisites:
+- make sure you are logged in with your aws cli
+- create a `src/config/config-prod.json` file and make sure following variables are set 
+(it's also possible to set these variables via environment variables):
+
+```
+{
+    "SONGKICK_API_KEY": "YOUR_SONGKICK_API_KEY",
+    "BITLY_ACCESS_TOKEN": "YOUR_BITLY_ACCESS_TOKEN"
+}
+```
+
+### Test
+
+To test your skill run
+```
+npm test
+```
+
 > next lines are outdated!
 
 ## Development
