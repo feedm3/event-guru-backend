@@ -1,6 +1,11 @@
 # Event Guru Backend
 
+[![Build Status](https://img.shields.io/travis/feedm3/event-guru-backend.svg?style=flat-square)](https://travis-ci.org/feedm3/event-guru-backend)
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
+
 Get upcoming concerts for a location of your choice with a bunch of additional data.
+
+> next lines are outdated!
 
 ## Development
 
