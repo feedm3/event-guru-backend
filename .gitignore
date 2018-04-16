@@ -2,6 +2,7 @@
 
 .idea
 *.iws
+*.iml
 
 ## Plugin-specific files:
 
@@ -77,3 +78,5 @@ jspm_packages
 src/config
 .env
 .env.test
+config-prod.json
+.webpack

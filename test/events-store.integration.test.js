@@ -1,6 +1,6 @@
 'use strict';
 
-const events = require('../events/events-store');
+const events = require('../src/events/events-store');
 
 require('dotenv-safe').load({
     path: '.env.test',
@@ -9,7 +9,6 @@ require('dotenv-safe').load({
 const chai = require('chai');
 chai.use(require('chai-string'));
 chai.should();
-
 
 describe('Getting the events the first time', function(){
     it('should should store them in dynamodb', function() {

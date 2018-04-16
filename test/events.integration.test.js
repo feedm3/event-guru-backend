@@ -1,11 +1,11 @@
 'use strict';
 
-const events = require('../events/events');
-
 require('dotenv-safe').load({
     path: '.env.test',
     allowEmptyValues: true
 });
+
+const events = require('../src/events/events');
 const chai = require('chai');
 chai.use(require('chai-string'));
 chai.should();
@@ -23,4 +23,4 @@ describe('Getting the events', function(){
     });
 });
 
-// test hinzufügen für fehlerhandling, wie zB Orte die es nicht gibt
+// todo add test for error handling like locations that don't exist

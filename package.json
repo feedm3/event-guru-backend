@@ -1,0 +1,43 @@
+{
+  "name": "event-guru-backend",
+  "version": "0.0.1",
+  "description": "Event Guru Backend",
+  "main": "index.js",
+  "repository": "https://github.com/feedm3/event-guru-backend",
+  "scripts": {
+    "deploy:init": "serverless deploy",
+    "deploy:remove": "serverless remove",
+    "deploy": "serverless deploy function --function alexaSkill",
+    "logs:tail": "serverless logs --tail --function alexaSkill",
+    "test": "mocha --recursive",
+    "info": "serverless info --verbose"
+  },
+  "keywords": [
+    "concerts",
+    "musik",
+    "music",
+    "charts",
+    "event",
+    "events",
+    "genius",
+    "event",
+    "songkick",
+    "explore",
+    "exploration"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.224.1",
+    "moment": "^2.22.1",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2",
+    "randomstring": "^1.1.5"
+  },
+  "devDependencies": {
+    "jest": "^22.4.3",
+    "jest-extended": "^0.6.0",
+    "serverless": "^1.26.1",
+    "serverless-webpack": "^5.1.1",
+    "webpack": "^4.5.0"
+  }
+}

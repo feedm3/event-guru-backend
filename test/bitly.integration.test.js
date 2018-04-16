@@ -1,6 +1,6 @@
 'use strict';
 
-const bitly = require('../api/bitly');
+const bitly = require('../src/api/bitly');
 
 require('dotenv-safe').load({
     path: '.env.test',

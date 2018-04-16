@@ -1,6 +1,6 @@
 'use strict';
 
-const songkick = require('../api/songkick');
+const songkick = require('../src/api/songkick');
 
 const chai = require('chai');
 chai.use(require('chai-string'));

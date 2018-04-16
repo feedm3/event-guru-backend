@@ -1,25 +1,19 @@
-service: alexa-skill-event-guru
+service: event-guru-backend
 
 package:
   exclude:
-    - bin/ffmpeg_mac
-    - bin/ffmpeg_win.exe
+    - src/bin/ffmpeg_mac
+    - src/bin/ffmpeg_win.exe
     - test
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   stage: prod
   region: eu-west-1
   memorySize: 512
   cfLogs: true
   iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - ses:SendEmail
-        - ses:SendRawEmail
-      Resource:
-        - '*'
     - Effect: Allow
       Action:
         - dynamodb:Query
@@ -33,24 +27,7 @@ provider:
 
 resources:
   Resources:
-    EventGuruSessionDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: userId
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: userId
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
-        TableName: event-guru-session
-
-    EventGuruEventsCacheDynamoDbTable:
+    EventGuruEventsCacheTable:
           Type: 'AWS::DynamoDB::Table'
           DeletionPolicy: Retain
           Properties:
@@ -65,7 +42,7 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 5
               WriteCapacityUnits: 5
-            TableName: event-guru-events-cache
+            TableName: event-guru-event-caches
 
     EventGuruBucket:
       Type: AWS::S3::Bucket
@@ -78,6 +55,7 @@ resources:
               - GET
             AllowedOrigins:
               - http://ask-ifr-download.s3.amazonaws.com
+              - https://eventguru.io
 
     EventGuruBucketPolicy:
       Type: AWS::S3::BucketPolicy
@@ -98,12 +76,27 @@ resources:
                     - '/*'
 
 functions:
-  # Alexa
-  alexaSkill:
-    handler: alexa/skill.handler
-    description: Event Guru - Alexa Skill
+  events-rest-api:
+    handler: src/lambda/handler.getEvents
     events:
-      - alexaSkill
+      - http:
+          path: events
+          method: get
+          request:
+            parameters:
+              querystrings:
+                location: true
+                page: true
+                pageSize: false
+
+  # Cron job to preload events
+  events-preload:
+    handler: events/events-preload.run
+    description: Event Guru - Event cron preloader
+    timeout: 300
+    events:
+      - schedule: cron(1 0 * * ? *) # 00:01 every midnight
+
   # EMail bounce and complaint handling
   email-bounce-handler:
     handler: mail/aws-ses-notifications.handler
@@ -112,10 +105,3 @@ functions:
       - sns: email-bounces
       - sns: email-complaints
       - sns: email-deliveries
-
-  events-preload:
-    handler: events/events-preload.run
-    description: Event Guru - Event cron preloader
-    timeout: 300
-    events:
-      - schedule: cron(1 0 * * ? *) # 00:01 every midnight

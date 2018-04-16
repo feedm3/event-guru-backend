@@ -2,7 +2,6 @@
 
 const request = require('request-promise');
 const moment = require('moment');
-const LOCALE = require('../alexa/speech-output').DEV_LOCALE;
 
 const ALLOWED_COUNTRY = 'Germany';
 
@@ -85,7 +84,10 @@ const getLongLatFromLocation = (locationName) => {
             }
             if (data.resultsPage.results.location) {
                 const locations = data.resultsPage.results.location;
-                const germanLocations = locations.filter(location => location.city && location.city.country && location.city.country.displayName === ALLOWED_COUNTRY)
+                const germanLocations = locations
+                    .filter(location => location.city)
+                    .filter(location => location.city.country)
+                    .filter(location => location.city.country.displayName === ALLOWED_COUNTRY)
                     .filter(location => location.city.lat);
                 const city = germanLocations[0].city;
                 return {
@@ -115,7 +117,7 @@ const extractRelevantEventInfo = (events) => {
             const venue = event.venue.displayName;
             const title = event.displayName;
             const date = event.start.datetime || event.start.date; // event.start.date is formatted with YYYY-MM-DD
-            const dateAlexaDM = formatDateForAlexa(date);
+            const dateAlexaDM = formatDateForAlexa(date); // todo: this doesn't belong here. it needs users locale
             const dateUser = formatDateForUser(date);
             const url = event.uri;
             return {
@@ -138,5 +140,9 @@ const formatDateForAlexa = (date) => {
 };
 
 const formatDateForUser = (date) => {
-    return moment(date).locale(LOCALE).format('dddd, Do MMMM YYYY');
+    // todo: improve performance here by not creating a new instance for every date
+    const localeMoment = moment(date);
+    // console.log('locale', this.t('DEV_LOCALE')); // https://www.i18next.com/api.html# // todo: fix locale handling
+    localeMoment.locale('de-DE');
+    return localeMoment.format('dddd, Do MMMM YYYY');
 };

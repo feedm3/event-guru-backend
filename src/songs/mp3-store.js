@@ -2,7 +2,7 @@
 
 const mp3Converter = require('./mp3-converter');
 const s3 = require('../api/aws-s3');
-const spotify = require('../api/spotify');
+const deezer = require('../api/deezer');
 
 const FOLDER_PREFIX = 'music/';
 
@@ -19,9 +19,8 @@ const getPreviewTrackUrl = (artist) => {
             if (exists) {
                 return s3.getFileUrl(fileName);
             }
-            console.log(fileName + ' not yet downloaded and converted. Doing so now...');
-            return spotify.getArtistId(artist)
-                .then(artistId => spotify.getArtistTopTrackPreviewUrl(artistId))
+            console.log(artist + ' not yet downloaded and converted. Doing so now...');
+            return deezer.getPreviewTrackUrl(artist)
                 .then(url => mp3Converter.convert(url))
                 .then(fileUri => s3.uploadFile(fileUri, fileName));
         });
