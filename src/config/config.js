@@ -8,7 +8,16 @@ const DEFAULT_STAGE = 'prod';
 const STAGE = process.env.STAGE || DEFAULT_STAGE;
 
 const defaultConfigFile = require('./config.json');
-const stageConfigFile  = require('./config-'+ STAGE + '.json');
+const stageConfigFile  = optionalRequire('./config-'+ STAGE + '.json');
 const config =  Object.assign({}, defaultConfigFile, stageConfigFile, process.env);
 
 module.exports = config;
+
+function optionalRequire(modulePath) {
+    try {
+        return require(modulePath);
+    }
+    catch (e) {
+        return null;
+    }
+}
