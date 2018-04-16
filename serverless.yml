@@ -8,18 +8,12 @@ package:
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   stage: prod
   region: eu-west-1
   memorySize: 512
   cfLogs: true
   iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - ses:SendEmail
-        - ses:SendRawEmail
-      Resource:
-        - '*'
     - Effect: Allow
       Action:
         - dynamodb:Query
