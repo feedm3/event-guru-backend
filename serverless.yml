@@ -1,10 +1,12 @@
 service: event-guru-backend
 
 package:
+  individually: true
   exclude:
     - src/bin/ffmpeg_mac
     - src/bin/ffmpeg_win.exe
     - test
+    - docs
 
 provider:
   name: aws
@@ -24,9 +26,6 @@ provider:
         - dynamodb:DeleteItem
       Resource:
         - 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.vars.EVENT_GURU_EVENTS_CACHE_TABLE}'
-
-plugins:
-  - serverless-webpack
 
 custom:
   vars: ${file(./src/config/config.json)}

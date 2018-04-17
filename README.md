@@ -19,6 +19,8 @@ Prerequisites:
 }
 ```
 
+> Architectural decisions are tracked in [ARCHITECTURAL_DECISIONS.md](docs/ARCHITECTURAL_DECISIONS.md).
+
 ### Test
 
 To test your skill run
