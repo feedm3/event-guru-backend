@@ -6,16 +6,19 @@ const path = require('path');
 module.exports = {
     entry: slsw.lib.entries,
     target: 'node',
+    node: {
+        __dirname: true,
+    },
     mode: 'development',
     stats: 'minimal',
     plugins: [
         new CopyWebpackPlugin([{
-            from: 'src/bin/ffmpeg_linux64',
-            to: 'src/bin/'
+            from: 'node_modules/ffmpeg-static/bin/linux/x64/ffmpeg',
+            to: 'node_modules/ffmpeg-static/bin/linux/x64/'
         }], {}),
         new PermissionsOutputPlugin({
             buildFiles: [{
-                path: path.resolve(__dirname, '.webpack/events-rest-api/src/bin/ffmpeg_linux64'),
+                path: path.resolve(__dirname, '.webpack/events-rest-api/node_modules/ffmpeg-static/bin/linux/x64/ffmpeg'),
                 fileMode: '755'
             }]
         })

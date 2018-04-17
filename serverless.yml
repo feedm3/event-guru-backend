@@ -3,8 +3,6 @@ service: event-guru-backend
 package:
   individually: true
   exclude:
-    - src/bin/ffmpeg_mac
-    - src/bin/ffmpeg_win.exe
     - test
     - docs
 

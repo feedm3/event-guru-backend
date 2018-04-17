@@ -1,5 +1,4 @@
 {
     "EVENT_GURU_EVENTS_CACHE_TABLE": "event-guru-events",
-    "EVENT_GURU_BUCKET": "event-guru-public-store",
-    "PATH_FFMPEG_BIN": "./src/bin/ffmpeg_linux64"
+    "EVENT_GURU_BUCKET": "event-guru-public-store"
 }
