@@ -35,8 +35,6 @@ To deploy the app run
 npm run deploy
 ```
 
-> Note: This does not work on windows because the ffmpeg binary gets copied without execution permissions!
-
 ---
 
 > next lines are outdated!
