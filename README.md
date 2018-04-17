@@ -23,10 +23,19 @@ Prerequisites:
 
 ### Test
 
-To test your skill run
+To test the app run
 ```
 npm test
 ```
+
+### Deploy
+
+To deploy the app run
+``` 
+npm run deploy
+```
+
+> Note: This does not work on windows because the ffmpeg binary gets copied without execution permissions!
 
 ---
 

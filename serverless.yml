@@ -30,6 +30,9 @@ provider:
 custom:
   vars: ${file(./src/config/config.json)}
 
+plugins:
+  - serverless-webpack
+
 resources:
   Resources:
     EventGuruEventsCacheTable:
