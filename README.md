@@ -36,7 +36,7 @@ npm run deploy
 ```
 
 Make sure to set the environment variables after your deployment. You need to set the 
-variables mentioned in the "[How to run](#how-to-run)" section.
+variables mentioned in the "[Prerequisites](#how-to-run)" section.
 
 > You cannot deploy from a windows machine, as the execution permissions for linux cannot be copied!
 
