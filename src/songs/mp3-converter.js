@@ -1,9 +1,9 @@
 'use strict';
 
 const fs = require('fs');
-const execFile = require('child_process').execFile;
 const randomString = require('randomstring');
 const ffmpeg = require('ffmpeg-static');
+const execFile = require('child_process').execFile;
 
 // the path must be relative to the root project src path for aws lambda. on local you
 // need the relative path from the executing js script

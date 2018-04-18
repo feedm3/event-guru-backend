@@ -35,6 +35,8 @@ To deploy the app run
 npm run deploy
 ```
 
+> You cannot deploy from a windows machine, as the execution permissions for linux cannot be copied!
+
 ---
 
 > next lines are outdated!
