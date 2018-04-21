@@ -3,7 +3,7 @@
 const bitly = require('../api/bitly');
 const isUrl = require('is-url');
 
-module.exports.createUrl = (event, context, callback) => {
+module.exports.getUrl = (event, context, callback) => {
     const queryStringParameters = event.queryStringParameters;
     const url = queryStringParameters ? queryStringParameters.url : '';
 

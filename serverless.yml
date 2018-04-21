@@ -82,7 +82,7 @@ resources:
                     - '/*'
 
 functions:
-  # http rest interface
+  # http rest interfaces
   events-rest-api:
     handler: src/lambda/events-rest-handler.getEvents
     description: Event Guru - Get events REST API
@@ -98,18 +98,30 @@ functions:
                 pageSize: false
 
   url-shorter-rest-api:
-    handler: src/lambda/url-shorter-rest-handler.createUrl
+    handler: src/lambda/url-shorter-rest-handler.getUrl
     description: Event Guru - Shorten URL REST API
     events:
       - http:
-          path: url
+          path: urls
           method: get
           request:
             parameters:
               querystrings:
                 url: true
 
-  # cron job to preload events
+  artist-rest-api:
+      handler: src/lambda/artist-rest-handler.getArtist
+      description: Event Guru - Artist REST API
+      events:
+        - http:
+            path: artists
+            method: get
+            request:
+              parameters:
+                querystrings:
+                  name: true
+
+  # cron jobs
   events-preload:
     handler: src/lambda/events-preload-handler.run
     description: Event Guru - CronJob Event Preloader

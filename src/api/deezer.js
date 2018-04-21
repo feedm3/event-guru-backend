@@ -17,76 +17,76 @@ const ORDER = {
 };
 
 /**
- * Get tracks (at maximum 10) from an artist. The tracks are ordered by popularity desc.
- *
- * If nothing gets found an error will be thrown.
+ * @typedef {Object} DeezerArtistSearchResult
+ * @property {string} name - artist name
+ * @property {string} link - url to the artist on deezer
+ * @property {string} previewTrackUrl - mp3 url for the preview track
+ * @property {object[]} images - list with images (url, width, height)
  */
-const getTracks = (artist) => {
+
+/**
+ * Get informations about an artist.
+ *
+ * @param artistName - the artist to search for
+ * @returns {Promise<DeezerArtistSearchResult>} - artist information or throw error
+ */
+const getArtist = (artistName) => {
+
+    // https://developers.deezer.com/api/search
     const options = {
         method: 'get',
         url: 'https://api.deezer.com/search',
         qs: {
-            q: `artist:"${ artist }"`,
+            q: `artist:"${ artistName }"`,
             order: ORDER.RATING_DESC,
             limit: 10
         },
         json: true
     };
-
     return request(options)
         .then(response => {
             const amount = response.total;
 
             if (amount <= 0) {
-                throw new Error(`Artist ${ artist } not found on deezer`);
+                throw new Error(`artist ${ artistName } not found on deezer`);
             }
 
-            const filteredTracks = response.data
+            // sort tracks by popularity and only keep the one's that the user wants
+            const mostPopularTrack = response.data
                 .sort((a, b) => b.rank - a.rank) // most popular first
                 .filter(track => {
                     const normalizedDeezer = normalize(track.artist.name);
-                    const normalizedArtist = normalize(artist);
+                    const normalizedArtist = normalize(artistName);
                     return normalizedArtist === normalizedDeezer;
-                });
+                })
+                .find(track => track);
 
-            if (!filteredTracks || filteredTracks.length === 0) {
-                throw new Error(`All found tracks from ${ artist } don't have the correct artist name. Example: ${ response.data[0].artist.name }`);
+            if (!mostPopularTrack) {
+                throw new Error(`artist ${ artist } was found on deezer but did not match the search results`);
             }
-            return filteredTracks;
-        });
-};
 
-const getPreviewTrackUrl = (artist) => {
-    return getTracks(artist)
-        .then(tracks => {
-            return tracks[0].preview;
-        });
-};
-
-const getArtist = (artist) => {
-    return getTracks(artist)
-        .then(tracks => {
-            const artist = tracks[0].artist;
+            const artist = mostPopularTrack.artist;
             const images = [];
             images.push({ url: artist.picture_small });
             images.push({ url: artist.picture_medium });
             images.push({ url: artist.picture_big });
             images.push({ url: artist.picture_xl });
-
             images.forEach(image => {
                 const fileName = image.url.split('/')[6];
-                image.width = fileName.split('x')[0];
-                image.height = fileName.split('x')[0]; // can be improved
+                const size = fileName.split('-')[0];
+                image.width = size.split('x')[0];
+                image.height = size.split('x')[1];
             });
-
-            artist.images = images;
-
-            return artist;
+            return {
+                name: artist.name,
+                link: artist.link,
+                images: images,
+                previewTrackUrl: mostPopularTrack.preview
+            };
         });
 };
 
 module.exports = {
-    getPreviewTrackUrl,
     getArtist
 };
 

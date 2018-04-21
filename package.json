@@ -9,9 +9,13 @@
     "deploy": "serverless deploy",
     "remove": "serverless remove",
     "deploy:events": "serverless deploy function --function events-rest-api",
-    "deploy:url": "serverless deploy function --function url-shorter-rest-api",
+    "deploy:urls": "serverless deploy function --function url-shorter-rest-api",
+    "deploy:artists": "serverless deploy function --function artist-rest-api",
+    "deploy:events-preload": "serverless deploy function --function events-preload",
     "logs:tail:events": "serverless logs --tail --function events-rest-api",
-    "logs:tail:url": "serverless logs --tail --function url-shorter-rest-api",
+    "logs:tail:urls": "serverless logs --tail --function url-shorter-rest-api",
+    "logs:tail:artists": "serverless logs --tail --function artist-rest-api",
+    "logs:tail:events-preload": "serverless logs --tail --function events-preload",
     "test": "jest"
   },
   "dependencies": {
