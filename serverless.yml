@@ -94,8 +94,8 @@ functions:
             parameters:
               querystrings:
                 location: true
-                page: true
-                pageSize: false
+                from: true
+                to: false
 
   url-shorter-rest-api:
     handler: src/lambda/url-shorter-rest-handler.getUrl

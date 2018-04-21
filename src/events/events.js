@@ -1,57 +1,58 @@
 'use strict';
 
-const eventsStore = require('./events-store');
-const mp3Store = require('../songs/mp3-store');
-const deezer = require('../api/deezer');
-const bitly = require('../api/bitly');
+const songkick = require('../api/songkick');
 
-const fetchPagedEvents = (location, pageNumber) => {
-    return eventsStore.fetchPagedEvents(location, pageNumber);
-};
+const getEvents = ({ location, from, to }) => {
+    let locationGeo = {};
 
-const improveExternalInformation = (event) => {
-    return addPreviewTrack(event)
-        .then(event => addArtistImages(event))
-        .then(event => shortenUrl(event));
+    return songkick.getGeoCoordination({ location: location })
+        .then(geoData => {
+            const locationName = geoData.name; // todo: use this name (and 'from'/'to') for caching as it is the normalized metro area name
+            locationGeo = geoData;
+            return songkick.getEvents({
+                long: geoData.long,
+                lat: geoData.lat,
+                from: from,
+                to: to
+            })
+        })
+        .then(initalEventsData => {
+            const pageCount = initalEventsData.pageCount;
+            const eventPromises = [];
+            for (let i = 2; i <= pageCount; i++) {
+                eventPromises.push(songkick.getEvents({
+                    long: locationGeo.long,
+                    lat: locationGeo.lat,
+                    from: from,
+                    to: to,
+                    page: i
+                }));
+            }
+            return Promise.all(eventPromises)
+                .then(eventDatas => [ ...eventDatas, initalEventsData ]);
+        })
+        .then(eventDatas => {
+            // aggregate all events to one big array
+            return eventDatas.reduce((allEvents, eventData) => allEvents.concat(eventData.events), []);
+        })
+        .then(events => {
+            // throw out duplicates
+            // todo: better solution is to put all the dates into one event and use a date array instead of a single object
+            return events.filter((event, index, self) => {
+                return index === self.findIndex((selfEvent) => selfEvent.artist === event.artist)
+            })
+        })
+        .then(events => {
+            // put the most popular events on top
+            return events.sort((a, b) => b.popularity - a.popularity);
+        })
+        .catch(error => {
+            console.error(`could not fetch events for ${ location } from ${ from } to ${ to } `);
+            console.error(error.message);
+            return [];
+        })
 };
 
 module.exports = {
-    fetchPagedEvents,
-    improveExternalInformation
-};
-
-const addPreviewTrack = (event) => {
-    if (!event) {
-        return Promise.resolve({});
-    }
-    return mp3Store.getPreviewTrackUrl(event.artist)
-        .then(url => {
-            event.topTrackPreviewUrl = url;
-            return event;
-        });
-};
-
-const addArtistImages = (event) => {
-    return deezer.getArtist(event.artist)
-        .then(artist => {
-            artist.images
-                .sort(image => image.width)
-                .reverse() // smallest image first
-                .forEach(image => {
-                    if (image.width < 720) {
-                        event.imageMediumUrl = image.url;
-                    } else {
-                        event.imageLargeUrl = image.url;
-                    }
-                });
-            return event;
-        });
-};
-
-const shortenUrl = (event) => {
-    return bitly.shorten(event.url)
-        .then(shortUrl => {
-            event.shortUrl = shortUrl;
-            return event;
-        })
+    getEvents
 };

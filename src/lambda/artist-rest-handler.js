@@ -1,5 +1,8 @@
 'use strict';
 
+// needed for aws lambda to find our binaries
+process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'];
+
 const deezer = require('../api/deezer');
 const mp3Store = require('../songs/mp3-store');
 

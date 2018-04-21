@@ -12,7 +12,7 @@ module.exports = {
     mode: 'development',
     stats: 'minimal',
     plugins: [
-        // todo: only include this plugins in the events rest handler
+        // todo: only include this plugins in the artists rest handler
         new CopyWebpackPlugin([{
             from: 'node_modules/ffmpeg-static/bin/linux/x64/ffmpeg',
             to: 'node_modules/ffmpeg-static/bin/linux/x64/'
