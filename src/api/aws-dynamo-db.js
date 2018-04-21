@@ -2,9 +2,9 @@
 
 const AWS = require('aws-sdk');
 const moment = require('moment');
-AWS.config.update({
-    region: "eu-west-1", // Ireland
-});
+// AWS.config.update({
+//     region: "eu-west-1", // Ireland
+// });
 const config = require('../config/config');
 const dynamoDbClient = new AWS.DynamoDB.DocumentClient();
 
@@ -30,20 +30,16 @@ const getEvents = (location) => {
                 reject(err);
             } else {
                 if (data.Count === 0) {
-                    resolve({
-                        eventCount: 0,
-                        events: [],
-                        pageCount: 0
-                    });
+                    resolve([]);
                 } else {
-                    resolve(data.Items[0].eventsData);
+                    resolve(data.Items[0].events);
                 }
             }
         });
     });
 };
 
-const putEvents = (location, eventsData) => {
+const putEvents = (location, events) => {
     if (!location) {
         return Promise.reject(new Error('Location must be set'));
     }
@@ -53,7 +49,7 @@ const putEvents = (location, eventsData) => {
         TableName: config.EVENT_GURU_EVENTS_CACHE_TABLE,
         Item: {
             location: location.toLowerCase(),
-            eventsData: eventsData,
+            events: events,
             ttl: endOfTodayInSeconds
         }
     };

@@ -2,17 +2,58 @@
 
 const songkick = require('../api/songkick');
 const dyanmoDb = require('../api/aws-dynamo-db');
+const moment = require('moment');
+
+const timeToLive = moment().add(1, 'days').unix();
 
 const PAGE_SIZE = 5;
 
-const fetchPagedEvents = (location, pageNumber) => {
-    pageNumber = pageNumber < 1 ? 1 : pageNumber;
+/**
+ * Get events from songkick and cache them in dynamodb.
+ *
+ * @param location
+ * @returns {PromiseLike<{events: *, eventCount: *, pageCount: number}>}
+ */
+const getEvents = ({ location, from, to }) => {
 
-    return dyanmoDb.getEvents(location)
+
+    songkick.getGeoCoordination({location: location })
+        .then(geoLocation => {
+            const metroAreaName = geoLocation.name;
+            const locationKey = formatLocationKey({ location: metroAreaName, from , to });
+
+            return dyanmoDb.getEvents(locationKey)
+                .then(eventsFromDb => {
+                    if (eventsFromDb.length === 0) {
+
+                        // data is not in db
+                        // todo: continue here
+                        /**
+                        return songkick.getEvents({ })
+
+                        return songkick.getGeoCoordination(location)
+                            .then(eventsData => {
+                                return dyanmoDb.putEvents(location, eventsData)
+                                    .then(() => eventsData)
+                            })
+                         *
+                         */
+                    } else {
+                        // data was in db
+                        return eventsFromDb;
+                    }
+                })
+                .then(events => {
+
+                })
+        });
+
+    // todo: delete this
+    return dyanmoDb.getEvents(locationKey)
         .then(eventsDataFromDb => {
-            if (!eventsDataFromDb || eventsDataFromDb.eventCount === 0) {
+            if (!Array.isArray(eventsDataFromDb) || eventsDataFromDb.length === 0) {
                 // data is not in db
-                return fetchAllEvents(location)
+                return songkick.getGeoCoordination(location)
                     .then(eventsData => {
                         return dyanmoDb.putEvents(location, eventsData)
                             .then(() => eventsData)
@@ -21,13 +62,6 @@ const fetchPagedEvents = (location, pageNumber) => {
                 // data was in db
                 return eventsDataFromDb;
             }
-        })
-        .then(eventsData => {
-            return {
-                events: eventsData.events.slice((pageNumber - 1) * PAGE_SIZE, pageNumber * PAGE_SIZE),
-                eventCount: eventsData.events.length,
-                pageCount: eventsData.pageCount
-            };
         })
 };
 
@@ -42,34 +76,10 @@ const updateEvents = (location) => {
 };
 
 module.exports = {
-    fetchPagedEvents,
+    getEvents,
     updateEvents
 };
 
-const fetchAllEvents = (location) => {
-    const SONGKICK_MAX_PAGE_SIZE = 50;
-    const MAX_PAGES = 10;
-    return songkick.getPagedEventsByLocation(location, 1, SONGKICK_MAX_PAGE_SIZE)
-        .then(eventsData => {
-            const pageCount = eventsData.pageCount;
-            const eventsPromises = [];
-            for (let page = 2; page <= pageCount; page++) {
-                eventsPromises.push(songkick.getPagedEventsByLocation(location, page, SONGKICK_MAX_PAGE_SIZE)
-                    .then(pagedEventsData => {
-                        eventsData.events.push(...pagedEventsData.events)
-                    }));
-            }
-            return Promise.all(eventsPromises)
-                .then(() => {
-                    eventsData.events.sort((a, b) => b.popularity - a.popularity);
-                    return {
-                        events: eventsData.events.slice(0, SONGKICK_MAX_PAGE_SIZE * MAX_PAGES),
-                        eventCount: eventsData.events.length,
-                        pageCount: pageCount
-                    };
-                })
-        })
-        .catch((error) => {
-            console.log('Error getting events', error);
-        });
+const formatLocationKey = ({ location, from, to }) => {
+    return location + from + to;
 };
