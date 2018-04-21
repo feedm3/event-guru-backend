@@ -17,7 +17,16 @@ module.exports.getUrl = (event, context, callback) => {
                     body: JSON.stringify({ url: shortUrl }),
                 };
                 callback(null, response);
-            });
+            })
+            .catch(error => {
+                console.log(error);
+
+                const response = {
+                    statusCode: 500,
+                    body: JSON.stringify({ message: 'error requesting bitly' }),
+                };
+                callback(null, response);
+            })
     } else {
         const response = {
             statusCode: 400,
