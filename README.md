@@ -33,10 +33,14 @@ npm test
 To deploy the app run
 ``` 
 npm run deploy
+
+// do to an suboptimal webpack configuration we have to deploy the artists function separately
+npm run deploy:artists
 ```
 
 Make sure to set the environment variables after your deployment. You need to set the 
-variables mentioned in the "[Prerequisites](#how-to-run)" section.
+variables mentioned in the "[Prerequisites](#how-to-run)" section. They are also already defined
+for every function. 
 
 > You cannot deploy from a windows machine, as the execution permissions for linux cannot be copied!
 

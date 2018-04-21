@@ -86,6 +86,8 @@ functions:
   events-rest-api:
     handler: src/lambda/events-rest-handler.getEvents
     description: Event Guru - Get events REST API
+    environment:
+      SONGKICK_API_KEY: YOUR_KEY
     events:
       - http:
           path: events
@@ -97,9 +99,11 @@ functions:
                 from: true
                 to: false
 
-  url-shorter-rest-api:
+  urls-rest-api:
     handler: src/lambda/url-shorter-rest-handler.getUrl
     description: Event Guru - Shorten URL REST API
+    environment:
+      BITLY_ACCESS_TOKEN: YOUR_KEY
     events:
       - http:
           path: urls
@@ -109,7 +113,7 @@ functions:
               querystrings:
                 url: true
 
-  artist-rest-api:
+  artists-rest-api:
       handler: src/lambda/artist-rest-handler.getArtist
       description: Event Guru - Artist REST API
       events:
@@ -125,6 +129,8 @@ functions:
   events-preload:
     handler: src/lambda/events-preload-handler.run
     description: Event Guru - CronJob Event Preloader
+    environment:
+      SONGKICK_API_KEY: YOUR_KEY
     timeout: 600s
     events:
       - schedule: cron(1 0 * * ? *) # 00:01 every midnight
