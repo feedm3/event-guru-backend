@@ -6,15 +6,18 @@
   "author": "Fabian Dietenberger <fabian@dietenberger.me> (http://dietenberger.me)",
   "license": "MIT",
   "scripts": {
-    "deploy:init": "serverless deploy",
-    "deploy:remove": "serverless remove",
-    "deploy": "serverless deploy function --function events-rest-api",
-    "logs:tail": "serverless logs --tail --function events-rest-api",
+    "deploy": "serverless deploy",
+    "remove": "serverless remove",
+    "deploy:events": "serverless deploy function --function events-rest-api",
+    "deploy:url": "serverless deploy function --function url-shorter-rest-api",
+    "logs:tail:events": "serverless logs --tail --function events-rest-api",
+    "logs:tail:url": "serverless logs --tail --function url-shorter-rest-api",
     "test": "jest"
   },
   "dependencies": {
-    "aws-sdk": "^2.224.1",
+    "aws-sdk": "^2.226.1",
     "ffmpeg-static": "^2.2.1",
+    "is-url": "^1.2.4",
     "moment": "^2.22.1",
     "randomstring": "^1.1.5",
     "request": "^2.85.0",
@@ -23,7 +26,7 @@
   "devDependencies": {
     "copy-webpack-plugin": "^4.5.1",
     "jest": "^22.4.3",
-    "jest-extended": "^0.6.0",
+    "jest-extended": "^0.7.1",
     "serverless": "^1.26.1",
     "serverless-webpack": "^5.1.1",
     "webpack": "^4.5.0",

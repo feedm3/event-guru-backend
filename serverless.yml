@@ -85,7 +85,7 @@ functions:
   # http rest interface
   events-rest-api:
     handler: src/lambda/events-rest-handler.getEvents
-    description: Event Guru - REST API
+    description: Event Guru - Get events REST API
     events:
       - http:
           path: events
@@ -96,6 +96,18 @@ functions:
                 location: true
                 page: true
                 pageSize: false
+
+  url-shorter-rest-api:
+    handler: src/lambda/url-shorter-rest-handler.createUrl
+    description: Event Guru - Shorten URL REST API
+    events:
+      - http:
+          path: url
+          method: get
+          request:
+            parameters:
+              querystrings:
+                url: true
 
   # cron job to preload events
   events-preload:
