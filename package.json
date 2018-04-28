@@ -19,7 +19,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "aws-sdk": "^2.226.1",
+    "aws-sdk": "^2.229.1",
     "ffmpeg-static": "^2.2.1",
     "is-url": "^1.2.4",
     "moment": "^2.22.1",
@@ -32,7 +32,7 @@
     "jest": "^22.4.3",
     "jest-extended": "^0.7.1",
     "serverless": "^1.26.1",
-    "serverless-webpack": "^5.1.1",
+    "serverless-webpack": "^5.1.2",
     "webpack": "^4.5.0",
     "webpack-permissions-plugin": "^1.0.0"
   }
