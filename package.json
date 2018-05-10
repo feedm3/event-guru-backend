@@ -12,10 +12,10 @@
     "deploy:urls": "serverless deploy function --function urls-rest-api",
     "deploy:artists": "serverless deploy function --function artists-rest-api",
     "deploy:events-preload": "serverless deploy function --function events-preload",
-    "logs:tail:events": "serverless logs --tail --function events-rest-api",
-    "logs:tail:urls": "serverless logs --tail --function urls-rest-api",
-    "logs:tail:artists": "serverless logs --tail --function artists-rest-api",
-    "logs:tail:events-preload": "serverless logs --tail --function events-preload",
+    "logs:events": "serverless logs --tail --function events-rest-api",
+    "logs:urls": "serverless logs --tail --function urls-rest-api",
+    "logs:artists": "serverless logs --tail --function artists-rest-api",
+    "logs:events-preload": "serverless logs --tail --function events-preload",
     "test": "jest"
   },
   "dependencies": {
