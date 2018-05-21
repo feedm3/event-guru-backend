@@ -15,7 +15,8 @@ module.exports = config;
 
 function optionalRequire(modulePath) {
     try {
-        return require(modulePath);
+        // we use a string literal to suppress a webpack warning, that a dependency is required dynamically
+        return require(`${ modulePath }`);
     }
     catch (e) {
         return null;

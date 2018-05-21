@@ -3,11 +3,11 @@
 const events = require('../events/events');
 
 module.exports.getEvents = (event, context, callback) => {
-    const queryStringParameters = event.queryStringParameters;  // can be null if no query param is set!
+    const queryStringParameters = event.queryStringParameters;  // todo: check for null. is null if no query param is set!
 
     const location = queryStringParameters.location;
-    const from = queryStringParameters.from;
-    const to = queryStringParameters.to;
+    const from = queryStringParameters.from; // todo: check max time range
+    const to = queryStringParameters.to; // todo: implement global date util to verify date string and create one from date object
 
     events.getEvents({ location, from , to })
         .then(events => {

@@ -1,35 +1,57 @@
 'use strict';
 
 const songkick = require('../api/songkick');
+const eventsCache = require('./events-cache');
 
 const getEvents = ({ location, from, to }) => {
     let locationGeo = {};
 
+    // todo: cache getGeoCoordination request
     return songkick.getGeoCoordination({ location: location })
         .then(geoData => {
-            const locationName = geoData.name; // todo: use this name (and 'from'/'to') for caching as it is the normalized metro area name
             locationGeo = geoData;
-            return songkick.getEvents({
-                long: geoData.long,
-                lat: geoData.lat,
-                from: from,
-                to: to
-            })
+            return getCachedEvents({ location: geoData.name, from, to })
         })
+        .then(events => {
+            if (events.length > 0) {
+                return events;
+            } else {
+                return getEventsFromSongkick({ long: locationGeo.long, lat: locationGeo.lat, from, to })
+                    .then(events => {
+                        return cacheEvents({ events, location: locationGeo.name, from, to });
+                    })
+            }
+        });
+};
+
+module.exports = {
+    getEvents
+};
+
+const cacheEvents = ({ events, location, from, to }) => {
+    return eventsCache.updateEvents({ events, location, from, to });
+};
+
+const getCachedEvents = ({ location, from, to }) => {
+    return eventsCache.getEvents({ location, from, to });
+};
+
+const getEventsFromSongkick = ({ long, lat, from, to }) => {
+    return songkick.getEvents({ long, lat, from, to })
         .then(initalEventsData => {
             const pageCount = initalEventsData.pageCount;
             const eventPromises = [];
             for (let i = 2; i <= pageCount; i++) {
                 eventPromises.push(songkick.getEvents({
-                    long: locationGeo.long,
-                    lat: locationGeo.lat,
+                    long: long,
+                    lat: lat,
                     from: from,
                     to: to,
                     page: i
                 }));
             }
             return Promise.all(eventPromises)
-                .then(eventDatas => [ ...eventDatas, initalEventsData ]);
+                .then(eventDatas => [...eventDatas, initalEventsData]);
         })
         .then(eventDatas => {
             // aggregate all events to one big array
@@ -51,8 +73,4 @@ const getEvents = ({ location, from, to }) => {
             console.error(error.message);
             return [];
         })
-};
-
-module.exports = {
-    getEvents
 };

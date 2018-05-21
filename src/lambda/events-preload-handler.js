@@ -1,6 +1,6 @@
 'use strict';
 
-const eventsStore = require('../events/events-store');
+const events = require('../events/events');
 
 const CITIES_TO_PRELOAD = [
     'München',
@@ -20,7 +20,10 @@ module.exports.run = (event, context, callback) => {
 
     const fetchEventsPromises = [];
     CITIES_TO_PRELOAD.forEach(city => {
-        fetchEventsPromises.push(eventsStore.updateEvents(city));
+        fetchEventsPromises.push(events.getEvents({
+            location: city,
+
+        }));
     });
     return Promise.all(fetchEventsPromises)
         .then(() => {

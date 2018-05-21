@@ -1,10 +1,10 @@
 'use strict';
 
 const AWS = require('aws-sdk');
+AWS.config.update({
+     region: "eu-west-1", // Ireland // todo: replace constant with config
+});
 const moment = require('moment');
-// AWS.config.update({
-//     region: "eu-west-1", // Ireland
-// });
 const config = require('../config/config');
 const dynamoDbClient = new AWS.DynamoDB.DocumentClient();
 
@@ -55,11 +55,11 @@ const putEvents = (location, events) => {
     };
 
     return new Promise((resolve, reject) => {
-        dynamoDbClient.put(params, (err, data) => {
+        dynamoDbClient.put(params, (err) => {
             if (err) {
                 reject(err);
             } else {
-                resolve(data);
+                resolve(events);
             }
         });
     });
