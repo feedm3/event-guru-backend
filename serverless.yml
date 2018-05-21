@@ -23,10 +23,11 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
-        - 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.vars.EVENT_GURU_EVENTS_CACHE_TABLE}'
+        - 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.basicVars.EVENT_GURU_EVENTS_CACHE_TABLE}'
 
 custom:
-  vars: ${file(./src/config/config.json)}
+  basicVars: ${file(./src/config/config.json)}
+  stageVars: ${file(./src/config/config-${self:provider.stage}.json)}
 
 plugins:
   - serverless-webpack
@@ -48,12 +49,12 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 5
               WriteCapacityUnits: 5
-            TableName: ${self:custom.vars.EVENT_GURU_EVENTS_CACHE_TABLE}
+            TableName: ${self:custom.basicVars.EVENT_GURU_EVENTS_CACHE_TABLE}
 
     EventGuruBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:custom.vars.EVENT_GURU_BUCKET}
+        BucketName: ${self:custom.basicVars.EVENT_GURU_BUCKET}
         AccessControl: PublicReadWrite
         CorsConfiguration:
           CorsRules:
@@ -87,7 +88,7 @@ functions:
     handler: src/lambda/events-rest-handler.getEvents
     description: Event Guru - Get events REST API
     environment:
-      SONGKICK_API_KEY: YOUR_KEY
+      SONGKICK_API_KEY: ${self:custom.stageVars.SONGKICK_API_KEY}
     events:
       - http:
           path: events
@@ -103,7 +104,7 @@ functions:
     handler: src/lambda/url-shorter-rest-handler.getUrl
     description: Event Guru - Shorten URL REST API
     environment:
-      BITLY_ACCESS_TOKEN: YOUR_KEY
+      BITLY_ACCESS_TOKEN: ${self:custom.stageVars.BITLY_API_KEY}
     events:
       - http:
           path: urls

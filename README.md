@@ -9,8 +9,8 @@ Get upcoming concerts for a location of your choice with a bunch of additional d
 
 Prerequisites:
 - make sure you are logged in with your aws cli
-- create a `src/config/config-prod.json` file and make sure following variables are set 
-(it's also possible to set these variables via environment variables):
+- create a `src/config/config-prod.json` file (or `-dev`, depending on the stage) and make sure following variables 
+are set:
 
 ```
 {
@@ -38,9 +38,8 @@ npm run deploy
 npm run deploy:artists
 ```
 
-Make sure to set the environment variables after your deployment. You need to set the 
-variables mentioned in the "[Prerequisites](#how-to-run)" section. They are also already defined
-for every function. 
+Make sure to have a proper config file for every stage, like mentioned in the "[Prerequisites](#how-to-run)" section.
+You can also set all variables as environment variables.
 
 > You cannot deploy from a windows machine, as the execution permissions for linux cannot be copied!
 
