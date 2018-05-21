@@ -10,7 +10,7 @@ Get upcoming concerts for a location of your choice with a bunch of additional d
 Prerequisites:
 - make sure you are logged in with your aws cli
 - create a `src/config/config-prod.json` file (or `-dev`, depending on the stage) and make sure following variables 
-are set:
+are set (can also be set as environment variable):
 
 ```
 {
@@ -18,6 +18,8 @@ are set:
     "BITLY_ACCESS_TOKEN": "YOUR_BITLY_ACCESS_TOKEN"
 }
 ```
+
+Also make sure that `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are set as environment variable.
 
 > Architectural decisions are tracked in [ARCHITECTURAL_DECISIONS.md](docs/ARCHITECTURAL_DECISIONS.md).
 
@@ -39,26 +41,15 @@ npm run deploy:artists
 ```
 
 Make sure to have a proper config file for every stage, like mentioned in the "[Prerequisites](#how-to-run)" section.
-You can also set all variables as environment variables.
+
+Enable the TTL feature in the DynamoDB tables manually in the AWS console for the events cache table.
+The TTL attribute is `ttl`.
 
 > You cannot deploy from a windows machine, as the execution permissions for linux cannot be copied!
 
 ---
 
 > next lines are outdated!
-
-## Development
-
-Requirements for _/src_:
-- AWS credentials as environment variables
-- A .env file with all variables from the .env.example
-- For tests a .env.test file with all variables from the .env.example
-- Enable TTL on the `event-guru-events-cache` dynamodb table
-
-## Notes
-
-- Only 500 events are stored to any location, even if there are more
-- Only german cities are used!
 
 ### Mail with AWS SES
 
