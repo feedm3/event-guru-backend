@@ -20,8 +20,8 @@ describe('valid location search', () => {
         test('should return geo data', () => {
             return songkick.getGeoCoordination({ location: 'munich' })
                 .then(data => {
-                    expect(data.lat).toBeNumber();
-                    expect(data.long).toBeNumber();
+                    expect(data.lat).toBeString();
+                    expect(data.long).toBeString();
                     expect(data.name).not.toBeEmpty();
                 })
         });

@@ -1,16 +1,19 @@
 'use strict';
 
+global.console = {
+    error: jest.fn()
+};
+
 const events = require('../../src/events/events');
 
 const TIMEOUT_MILLIS = 10000;
-console.error = jest.fn();
 
 describe('get events for a valid location', () => {
     test('should return an array of events for popular location', () => {
         return events.getEvents({
             location: 'munich',
-            from: '2018-04-20',
-            to: '2018-05-20'
+            from: '2018-06-20',
+            to: '2018-07-20'
         }).then(events => {
             expect(events).toBeArray();
             expect(events.length).toBePositive();

@@ -104,7 +104,7 @@ functions:
     handler: src/lambda/url-shorter-rest-handler.getUrl
     description: Event Guru - Shorten URL REST API
     environment:
-      BITLY_ACCESS_TOKEN: ${self:custom.stageVars.BITLY_API_KEY}
+      BITLY_ACCESS_TOKEN: ${self:custom.stageVars.BITLY_ACCESS_TOKEN}
     events:
       - http:
           path: urls

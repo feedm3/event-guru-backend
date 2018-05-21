@@ -21,7 +21,11 @@ const getEvents = ({ location, from, to }) => {
                         return cacheEvents({ events, location: locationGeo.name, from, to });
                     })
             }
-        });
+        })
+        .catch((error) => {
+            console.error('could not find location ' + location, error);
+            return [];
+        })
 };
 
 module.exports = {

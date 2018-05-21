@@ -13,8 +13,8 @@ describe('valid search', () => {
 
                 artist.images.forEach(image => {
                     expect(image.url).toBeString();
-                    expect(image.width).toBeNumber();
-                    expect(image.height).toBeNumber();
+                    expect(image.width).toBeString();
+                    expect(image.height).toBeString();
 
                 })
             })
