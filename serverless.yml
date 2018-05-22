@@ -88,7 +88,7 @@ functions:
     handler: src/lambda/events-rest-handler.getEvents
     description: Event Guru - Get events REST API
     environment:
-      SONGKICK_API_KEY: ${self:custom.stageVars.SONGKICK_API_KEY}
+      SONGKICK_API_KEY: ${self:custom.stageVars.SONGKICK_API_KEY, env:SONGKICK_API_KEY}
     events:
       - http:
           path: events
@@ -104,7 +104,7 @@ functions:
     handler: src/lambda/url-shorter-rest-handler.getUrl
     description: Event Guru - Shorten URL REST API
     environment:
-      BITLY_ACCESS_TOKEN: ${self:custom.stageVars.BITLY_ACCESS_TOKEN}
+      BITLY_ACCESS_TOKEN: ${self:custom.stageVars.BITLY_ACCESS_TOKEN, env:BITLY_ACCESS_TOKEN}
     events:
       - http:
           path: urls
