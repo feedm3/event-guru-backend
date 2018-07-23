@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Event Guru. Get inforamtions about upcoming concerts",
   "repository": "https://github.com/feedm3/event-guru-backend",
-  "author": "Fabian Dietenberger <fabian@dietenberger.me> (http://dietenberger.me)",
+  "author": "Fabian Dietenberger <fabian@dietenberger.me> (https://dietenberger.me)",
   "license": "MIT",
   "scripts": {
     "deploy": "serverless deploy",
