@@ -16,8 +16,7 @@
     "logs:urls": "serverless logs --tail --function urls-rest-api",
     "logs:artists": "serverless logs --tail --function artists-rest-api",
     "logs:events-preload": "serverless logs --tail --function events-preload",
-    "test": "jest",
-    "sls-login": "serverless login"
+    "test": "jest"
   },
   "dependencies": {
     "aws-sdk": "^2.302.0",

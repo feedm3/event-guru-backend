@@ -5,6 +5,8 @@
 
 Get upcoming concerts for a location of your choice with a bunch of additional data.
 
+API documentation can be found here: https://documenter.getpostman.com/view/4279998/RWaC1rD5
+
 ## How to run
 
 Prerequisites:
