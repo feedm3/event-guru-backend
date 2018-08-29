@@ -1,6 +1,7 @@
 'use strict';
 
 const songkick = require('../../src/api/songkick');
+const util = require('../util');
 
 const TIMEOUT_MILLIS = 20000;
 
@@ -14,6 +15,9 @@ const LOCATION_RAV = {
     LONG: 47.782,
     LAT: 9.614
 };
+
+const START_OF_NEXT_MONTH = util.startNextMonthDate();
+const END_OF_NEXT_MONTH = util.endNextMonthDate();
 
 describe('valid location search', () => {
     describe('search for munich', () => {
@@ -74,8 +78,8 @@ describe('valid event search', () => {
         return songkick.getEvents({
             lat: LOCATION_MUC.LAT,
             long: LOCATION_MUC.LONG,
-            from: '2018-05-01',
-            to: '2018-06-01'
+            from: START_OF_NEXT_MONTH,
+            to: END_OF_NEXT_MONTH
         }).then(data => {
             expect(data.events).not.toBeEmpty();
             expect(data.eventCount).toBeNumber();

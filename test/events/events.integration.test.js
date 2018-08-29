@@ -5,15 +5,19 @@ global.console = {
 };
 
 const events = require('../../src/events/events');
+const util = require('../util');
 
 const TIMEOUT_MILLIS = 10000;
+
+const START_OF_NEXT_MONTH = util.startNextMonthDate();
+const END_OF_NEXT_MONTH = util.endNextMonthDate();
 
 describe('get events for a valid location', () => {
     test('should return an array of events for popular location', () => {
         return events.getEvents({
             location: 'munich',
-            from: '2018-06-20',
-            to: '2018-07-20'
+            from: START_OF_NEXT_MONTH,
+            to: END_OF_NEXT_MONTH
         }).then(events => {
             expect(events).toBeArray();
             expect(events.length).toBePositive();
