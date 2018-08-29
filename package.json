@@ -6,7 +6,7 @@
   "author": "Fabian Dietenberger <fabian@dietenberger.me> (https://dietenberger.me)",
   "license": "MIT",
   "scripts": {
-    "deploy": "serverless deploy",
+    "deploy": "serverless deploy -v",
     "remove": "serverless remove",
     "deploy:events": "serverless deploy function --function events-rest-api",
     "deploy:urls": "serverless deploy function --function urls-rest-api",
