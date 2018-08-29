@@ -16,24 +16,25 @@
     "logs:urls": "serverless logs --tail --function urls-rest-api",
     "logs:artists": "serverless logs --tail --function artists-rest-api",
     "logs:events-preload": "serverless logs --tail --function events-preload",
-    "test": "jest"
+    "test": "jest",
+    "sls-login": "serverless login"
   },
   "dependencies": {
-    "aws-sdk": "^2.243.1",
+    "aws-sdk": "^2.302.0",
     "ffmpeg-static": "^2.3.0",
     "is-url": "^1.2.4",
-    "moment": "^2.22.1",
+    "moment": "^2.22.2",
     "randomstring": "^1.1.5",
-    "request": "^2.86.0",
+    "request": "^2.88.0",
     "request-promise": "^4.2.2"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^4.5.1",
-    "jest": "^22.4.4",
-    "jest-extended": "^0.7.2",
-    "serverless": "^1.27.2",
-    "serverless-webpack": "^5.1.5",
-    "webpack": "^4.8.3",
+    "copy-webpack-plugin": "^4.5.2",
+    "jest": "^23.5.0",
+    "jest-extended": "^0.8.1",
+    "serverless": "^1.30.1",
+    "serverless-webpack": "^5.2.0",
+    "webpack": "^4.17.1",
     "webpack-permissions-plugin": "^1.0.0"
   }
 }
