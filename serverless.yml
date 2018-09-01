@@ -1,7 +1,7 @@
 service: event-guru-backend
 
-app: ${self:custom.stageVars.SLS_APP, env:SLS_APP}
-tenant: ${self:custom.stageVars.SLS_TENANT, env:SLS_TENANT}
+app: ${env:SLS_APP, self:custom.stageVars.SLS_APP}
+tenant: ${env:SLS_TENANT, self:custom.stageVars.SLS_TENANT}
 
 package:
   individually: true
@@ -91,7 +91,7 @@ functions:
     handler: src/lambda/events-rest-handler.getEvents
     description: Event Guru - Get events REST API
     environment:
-      SONGKICK_API_KEY: ${self:custom.stageVars.SONGKICK_API_KEY, env:SONGKICK_API_KEY}
+      SONGKICK_API_KEY: ${env:SONGKICK_API_KEY, self:custom.stageVars.SONGKICK_API_KEY}
     events:
       - http:
           path: events
@@ -107,7 +107,7 @@ functions:
     handler: src/lambda/url-shorter-rest-handler.getUrl
     description: Event Guru - Shorten URL REST API
     environment:
-      BITLY_ACCESS_TOKEN: ${self:custom.stageVars.BITLY_ACCESS_TOKEN, env:BITLY_ACCESS_TOKEN}
+      BITLY_ACCESS_TOKEN: ${env:BITLY_ACCESS_TOKEN, self:custom.stageVars.BITLY_ACCESS_TOKEN}
     events:
       - http:
           path: urls
@@ -134,7 +134,7 @@ functions:
     handler: src/lambda/events-preload-handler.run
     description: Event Guru - CronJob Event Preloader
     environment:
-      SONGKICK_API_KEY: ${self:custom.stageVars.SONGKICK_API_KEY, env:SONGKICK_API_KEY}
+      SONGKICK_API_KEY: ${env:SONGKICK_API_KEY, self:custom.stageVars.SONGKICK_API_KEY}
     timeout: 600s
     events:
       - schedule: cron(1 0 * * ? *) # 00:01 every midnight
