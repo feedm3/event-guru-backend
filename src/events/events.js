@@ -23,7 +23,7 @@ const getEvents = ({ location, from, to }) => {
             }
         })
         .catch((error) => {
-            console.error('could not find location ' + location, error);
+            console.error(`events: could not find location ${ location }`, error);
             return [];
         })
 };
@@ -73,8 +73,7 @@ const getEventsFromSongkick = ({ long, lat, from, to }) => {
             return events.sort((a, b) => b.popularity - a.popularity);
         })
         .catch(error => {
-            console.error(`could not fetch events for ${ location } from ${ from } to ${ to } `);
-            console.error(error.message);
+            console.error(`events: could not fetch events for ${ location } from ${ from } to ${ to } `, error.message);
             return [];
         })
 };

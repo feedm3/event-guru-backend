@@ -15,8 +15,7 @@ const getEvents = ({ location, from, to }) => {
 
     return dyanmoDb.getEvents(locationKey)
         .catch(error => {
-            console.error('error getting events from dynamodb');
-            console.error(error);
+            console.error('events cache: error getting events from dynamodb', error);
             return [];
         });
 };
@@ -29,7 +28,7 @@ const updateEvents = ({ events, location, from, to }) => {
             return data;
         })
         .catch(error => {
-            console.error('error putting events into dynamodb', error);
+            console.error('events cache: error putting events into dynamodb', error);
             return [];
         });
 };

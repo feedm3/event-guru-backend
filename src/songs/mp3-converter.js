@@ -17,7 +17,7 @@ const RESULT_DIR = '/tmp';
  */
 const convert = (mp3ToConvertUri) => {
     return convertMp3(mp3ToConvertUri)
-        .catch(error => console.error('File could not be converted', error));
+        .catch(error => console.error('mp3 converter: file could not be converted', error));
 };
 
 module.exports = {
@@ -30,7 +30,7 @@ const convertMp3 = (mp3Link) => {
     }
 
     return new Promise((resolve, reject) => {
-        console.log('Converting ' + mp3Link);
+        console.log(`mp3 converter: converting ${ mp3Link }`);
 
         const resultFileName = randomString.generate({ length:10, charset: 'alphabetic'}) + '.mp3';
         const resultFileUri = RESULT_DIR + '/' + resultFileName;
@@ -58,12 +58,12 @@ const logFileStats = (fileUri) => {
     return new Promise((resolve, reject) => {
         fs.stat(fileUri, (err, stats) => {
             if (err || !stats) {
-                reject('No file stats for ' + fileUri, err);
+                reject(`mp3 converter: no file stats for ${ fileUri }. error: ${ JSON.stringify(err) }`);
                 return;
             }
             const fileSizeInBytes = stats["size"];
             const fileSizeInMegabytes = parseFloat(fileSizeInBytes / 1000000).toFixed(3);
-            console.log(`File stats for ${fileUri}: size: ${fileSizeInMegabytes}mb`);
+            console.log(`mp3 converter: file stats for ${ fileUri }: size: ${ fileSizeInMegabytes }mb`);
             resolve(fileUri);
         });
     });

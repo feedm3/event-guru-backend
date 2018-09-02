@@ -19,7 +19,7 @@ const getPreviewTrackUrl = (artist) => {
             if (exists) {
                 return s3.getFileUrl(fileName);
             }
-            console.log(artist + ' not yet downloaded and converted. Doing so now...');
+            console.log(`mp3 store: ${ artist } not yet downloaded and converted. Doing so now...`);
             return deezer.getPreviewTrackUrl(artist)
                 .then(url => mp3Converter.convert(url))
                 .then(fileUri => s3.uploadFile(fileUri, fileName));

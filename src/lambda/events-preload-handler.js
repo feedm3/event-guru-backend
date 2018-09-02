@@ -16,7 +16,7 @@ const CITIES_TO_PRELOAD = [
 ];
 
 module.exports.run = (event, context, callback) => {
-    console.log('preloading events data...');
+    console.log('events preload handler: preloading events data...');
 
     const fetchEventsPromises = [];
     CITIES_TO_PRELOAD.forEach(city => {
