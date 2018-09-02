@@ -10,7 +10,7 @@ const dynamoDbClient = new AWS.DynamoDB.DocumentClient();
 
 const getEvents = (location) => {
     if (!location) {
-        return Promise.reject(new Error('Location must be set'));
+        return Promise.reject(new Error('dynamoDb: Location must be set'));
     }
 
     const searchParams = {
@@ -41,7 +41,7 @@ const getEvents = (location) => {
 
 const putEvents = (location, events) => {
     if (!location) {
-        return Promise.reject(new Error('Location must be set'));
+        return Promise.reject(new Error('dynamoDb: Location must be set'));
     }
 
     const endOfTodayInSeconds = moment().endOf('day').utc(true).unix();

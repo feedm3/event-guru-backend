@@ -32,7 +32,7 @@ const uploadData = (data, fileName) => {
         };
         s3.upload(s3FileParams, (err, data) => {
             if (err) {
-                console.error('Error uploading file to S3', err);
+                console.error(`S3: error uploading file. error: ${ JSON.stringify(err) }`);
                 reject(err);
             } else {
                 resolve(data.Location);
@@ -72,7 +72,7 @@ const getFileUrl = (fileName) => {
         };
         s3.headObject(s3FileParams, (err, data) => {
             if (err) {
-                reject(new Error('Could not find file ' + fileName + ' on S3.', err.statusCode));
+                reject(new Error(`S3: could not find file ${ fileName }. error: ${  JSON.stringify(err) }`));
             } else {
                 s3.getSignedUrl('getObject', s3FileParams, (err, url) => {
                     resolve(removeParameterFromUrl(url));

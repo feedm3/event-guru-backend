@@ -48,7 +48,7 @@ const getArtist = (artistName) => {
             const amount = response.total;
 
             if (amount <= 0) {
-                throw new Error(`artist ${ artistName } not found on deezer`);
+                throw new Error(`deezer: artist ${ artistName } not found`);
             }
 
             // sort tracks by popularity and only keep the one's that the user wants
@@ -62,7 +62,7 @@ const getArtist = (artistName) => {
                 .find(track => track);
 
             if (!mostPopularTrack) {
-                throw new Error(`artist ${ artist } was found on deezer but did not match the search results`);
+                throw new Error(`deezer: artist ${ artist } was found but did not match the search results`);
             }
 
             const artist = mostPopularTrack.artist;

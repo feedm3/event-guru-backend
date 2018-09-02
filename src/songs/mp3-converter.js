@@ -26,7 +26,7 @@ module.exports = {
 
 const convertMp3 = (mp3Link) => {
     if (!mp3Link) {
-        return Promise.reject(new Error('URL to download mp3 must not be null!'));
+        return Promise.reject(new Error('mp3 converter: URL to download mp3 must not be null!'));
     }
 
     return new Promise((resolve, reject) => {

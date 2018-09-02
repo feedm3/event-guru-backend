@@ -17,7 +17,7 @@ const shorten = (url) => {
     return request(options)
         .then(response => {
             if (response.status_code !== 200) {
-                throw new Error('bitly api error: ' + JSON.stringify(response));
+                throw new Error(`bitly: api error: ${ JSON.stringify(response) }`);
             }
             return response.data.url;
         });

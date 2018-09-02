@@ -42,7 +42,7 @@ const getGeoCoordination = ({location}) => {
     return request(options)
         .then(data => {
             if (data.error) {
-                return Promise.reject(new Error('songkick location api could not be requested', data));
+                return Promise.reject(new Error(`songkick: location api could not be requested: ${ data }`));
             }
 
             const results = data.resultsPage.results;
@@ -60,7 +60,7 @@ const getGeoCoordination = ({location}) => {
                     .find(location => location); // find first
 
                 if (!filteredLocation) {
-                    throw new Error('could not find location ' + location);
+                    throw new Error(`songkick: could not find location ${ location }`);
                 }
 
                 return {
@@ -69,7 +69,7 @@ const getGeoCoordination = ({location}) => {
                     name: filteredLocation.metroArea.displayName
                 };
             } else {
-                throw new Error('could not find location ' + location);
+                throw new Error(`songkick: could not find location ${ location }`);
             }
         })
 };
@@ -109,7 +109,7 @@ const getGeoCoordination = ({location}) => {
  */
 const getEvents = ({ long, lat, from, to, page = 1, pageSize = 50 }) => {
     if (!long || !lat) {
-        return Promise.reject(new Error('parameters missing'));
+        return Promise.reject(new Error('songkick: parameters missing'));
     }
 
     // https://www.songkick.com/developer/upcoming-events-for-metro-area
@@ -130,7 +130,7 @@ const getEvents = ({ long, lat, from, to, page = 1, pageSize = 50 }) => {
     return request(options)
         .then(data => {
             if (data.error) {
-                throw new Error('songkick events api could not be requested', data);
+                throw new Error(`songkick: events api could not be requested: ${ JSON.stringify(data) }`);
             }
 
             const result = data.resultsPage;
