@@ -12,20 +12,19 @@ module.exports.getArtist = (event, context, callback) => {
 
     deezer.getArtist(artistName)
         .then(artist => {
+            return mp3Store.getConvertedMp3(artist.name, artist.previewTrackUrl)
+                .then(url => {
+                    artist.previewTrackUrlCompressed = url;
+                    return artist;
+                })
+        })
+        .then(artist => {
             const response = {
                 statusCode: 200,
                 body: JSON.stringify(artist),
             };
             callback(null, response);
         })
-        /**
-         *
-         mp3Store.getPreviewTrackUrl(artistName)
-           .then(url => {
-             event.topTrackPreviewUrlCrompressed = url;
-             return event;
-           });
-         * */
         .catch(() => {
             const response = {
                 statusCode: 404,
